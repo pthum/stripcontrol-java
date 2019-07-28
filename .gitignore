@@ -1,0 +1,45 @@
+*.class
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+# Eclipse #
+.settings
+.project
+.classpath
+.studio
+target
+
+# Apple # 
+.DS_Store
+
+# Intellij #
+.idea
+*.iml
+*.log
+
+# VSCode
+.vscode
+
+# logback
+logback.out.xml
+
+stripcontrol-javabackend/src/main/resources/public/
+stripcontrol-backend/target
+stripcontrol-frontend/dist/
+stripcontrol-frontend/node/
+stripcontrol-frontend/node_modules/
+stripcontrol-frontend/npm-debug.log
+stripcontrol-frontend/target
+stripcontrol-frontend/test-output
+stripcontrol-frontend/tests/e2e/reports
+stripcontrol-frontend/tests/unit/coverage
+stripcontrol-frontend/yarn-error.log
+stripcontrol-frontend/yarn.lock
+security/target/
+selenium-debug.log
+
+!.mvn/wrapper/maven-wrapper.jar
+
