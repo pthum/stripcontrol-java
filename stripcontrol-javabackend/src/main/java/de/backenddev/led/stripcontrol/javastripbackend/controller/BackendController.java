@@ -6,10 +6,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping ( "/api" )
+@RequestMapping ( BackendController.API_BASE )
 public class BackendController
 {
-
+	public static final String API_BASE = "/api";
 	private static final Logger LOG = LoggerFactory.getLogger( BackendController.class );
 
 	// Forwards all routes to FrontEnd except: '/', '/index.html', '/api', '/api/**'
