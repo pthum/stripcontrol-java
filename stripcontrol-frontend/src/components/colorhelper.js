@@ -25,5 +25,18 @@ export default {
     }
     var rgb = b | (g << 8) | (r << 16)
     return '#' + (0x1000000 + rgb).toString(16).slice(1)
+  },
+  rgbToHex2 (colorProfile) {
+    if (typeof colorProfile.red === 'undefined') {
+      colorProfile.red = 0
+    }
+    if (typeof colorProfile.green === 'undefined') {
+      colorProfile.green = 0
+    }
+    if (typeof colorProfile.blue === 'undefined') {
+      colorProfile.blue = 0
+    }
+    var rgb = colorProfile.blue | (colorProfile.green << 8) | (colorProfile.red << 16)
+    return '#' + (0x1000000 + rgb).toString(16).slice(1)
   }
 }
