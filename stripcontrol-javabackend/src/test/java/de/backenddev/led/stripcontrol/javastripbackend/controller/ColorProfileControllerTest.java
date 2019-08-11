@@ -2,6 +2,7 @@ package de.backenddev.led.stripcontrol.javastripbackend.controller;
 
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -116,6 +117,31 @@ public class ColorProfileControllerTest
 		this.mockMvc.perform( get( CP_PATH + "/1" ) ).andExpect( status( ).isOk( ) )
 				.andExpect( content( ).contentType( "application/json;charset=UTF-8" ) )
 				.andExpect( content( ).json( toJson( cp ) ) );
+	}
+
+	/**
+	 * Test the DELETE /api/colorprofile/{id} for a non-existing object
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void testDeleteNotExistingObject( ) throws Exception
+	{
+		when( service.getById( 1 ) ).thenReturn( Optional.empty( ) );
+		this.mockMvc.perform( delete( CP_PATH + "/1" ) ).andExpect( status( ).isNotFound( ) );
+	}
+
+	/**
+	 * Test the DELETE /api/colorprofile/{id} for a non-existing object
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void testDeleteExistingObject( ) throws Exception
+	{
+		final ColorProfile cp = new ColorProfile( 255, 255, 255, 100 );
+		when( service.getById( 1 ) ).thenReturn( Optional.of( cp ) );
+		this.mockMvc.perform( delete( CP_PATH + "/1" ) ).andExpect( status( ).isNoContent( ) );
 	}
 
 	private String toJson(Object object ) throws Exception
