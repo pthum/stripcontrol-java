@@ -14,5 +14,8 @@ export default {
   },
   postColorProfile (colorProfile) {
     return AXIOS.post(`/colorprofile`, colorProfile)
+  },
+  deleteColorProfile (colorProfile) {
+    return AXIOS.delete(`/colorprofile/${colorProfile.id}`)
   }
 }

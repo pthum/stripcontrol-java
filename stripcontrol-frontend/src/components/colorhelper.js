@@ -23,6 +23,7 @@ export default {
     if (typeof b === 'undefined') {
       b = 0
     }
+    console.log('rgb2Hex: r:' + r + ' g:' + g + ' b:' + b)
     var rgb = b | (g << 8) | (r << 16)
     return '#' + (0x1000000 + rgb).toString(16).slice(1)
   },

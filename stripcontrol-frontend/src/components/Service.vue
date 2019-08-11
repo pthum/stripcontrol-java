@@ -77,11 +77,26 @@ export default {
     },
     updateSelect (e) {
       console.log(e)
-      this.$store.commit('updateEditableColorProfile', {type: 'editableColorProfile', object: e})
+      this.$store.commit('updateColorProfile', {type: 'editableColorProfile', object: e})
+    },
+    makeSuccessNotification (text) {
+      EventBus.$emit('MakeToast', {variant: 'success', content: text})
+    },
+    makeErrorNotification (error) {
+      console.log(error)
+      EventBus.$emit('MakeToast', {variant: 'danger', content: error.message})
+    },
+    makeToast (obj) {
+      this.$bvToast.toast(obj.content, {
+        title: ` ${obj.variant || 'default'}`,
+        variant: obj.variant,
+        solid: true
+      })
     }
   },
   mounted () {
     EventBus.$on('CPupdate', this.callGetColorProfiles)
+    EventBus.$on('MakeToast', this.makeToast)
   }
 }
 </script>

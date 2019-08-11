@@ -23,10 +23,7 @@ export const store = new Vuex.Store({
     updateBackendProfiles (state, loadedBackendProfiles) {
       state.backendProfiles = loadedBackendProfiles
     },
-    // updateEditableColorProfile (state, editableColorProfile) {
-    //  state.editableColorProfile = editableColorProfile
-    // }
-    updateEditableColorProfile (state, obj) {
+    updateColorProfile (state, obj) {
       state[obj.type] = obj.object
     }
   },

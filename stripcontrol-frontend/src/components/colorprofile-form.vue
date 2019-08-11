@@ -4,15 +4,15 @@
       <form v-on:submit.prevent="saveEntry">
           <b-row class="my-1" >
               <b-col sm="3"><label>red</label></b-col>
-              <b-col sm="9"><b-form-input id="redValue" type="number" :value="red" @input="handleColorRGB" /></b-col>
+              <b-col sm="9"><b-form-input id="redValue" type="number" :value="red" @input="handleColorRed" /></b-col>
           </b-row>
           <b-row class="my-1">
               <b-col sm="3"><label>green</label></b-col>
-              <b-col sm="9"><b-form-input id="greenValue" type="number" :value="green" @input="handleColorRGB" /></b-col>
+              <b-col sm="9"><b-form-input id="greenValue" type="number" :value="green" @input="handleColorGreen" /></b-col>
           </b-row>
           <b-row class="my-1">
               <b-col sm="3"><label>blue</label></b-col>
-              <b-col sm="9"><b-form-input id="blueValue"  type="number" :value="blue" @input="handleColorRGB" /></b-col>
+              <b-col sm="9"><b-form-input id="blueValue"  type="number" :value="blue" @input="handleColorBlue" /></b-col>
           </b-row>
           <b-row class="my-1">
               <b-col sm="3"><label>brightness</label></b-col>
@@ -24,6 +24,7 @@
           </b-row>
           <b-button block variant="success" type="submit" v-if="typeof id !== 'undefined'">Edit {{id}}</b-button>
           <b-button block variant="success" type="submit" v-else>Create ColorProfile</b-button>
+          <b-button block variant="danger" v-on:click="deleteEntry" v-if="typeof id !== 'undefined'">Delete {{id}}</b-button>
       </form>
     </b-container>
   </div>
@@ -56,26 +57,33 @@ export default {
   data () {
     return {
       errors: [],
-      // colorprofile: this.$store.getters.findColorProfile(this.formProfileName),
       ctest: colorhelper.rgbToHex2(this.$store.getters.findColorProfile(this.formProfileName))
     }
   },
   methods: {
-    logSelectr () {
-      console.log(this.formProfileName)
-      // console.log(this.colorprofile)
+    commitColorProfileRGB (red, green, blue) {
+      var obj = { red: red, green: green, blue: blue, brightness: this.brightness, id: this.id }
+      this.$store.commit('updateColorProfile', {type: this.formProfileName, object: obj})
     },
-    handleColorRGB () {
-      var result = colorhelper.rgbToHex(this.red, this.green, this.blue)
-      console.log('rgb2hex, oldValue: ' + this.ctest + ' newValue: ' + result + ' with: r=' + this.red + ' g=' + this.green + ' b=' + this.blue)
-      this.ctest = result
-      this.$store.commit('updateEditableColorProfile', {type: this.formProfileName, object: this.colorprofile})
+    handleColorRed (e) {
+      console.log(e)
+      this.ctest = colorhelper.rgbToHex(e, this.green, this.blue)
+      this.commitColorProfileRGB(e, this.green, this.blue)
+    },
+    handleColorGreen (e) {
+      console.log(e)
+      this.ctest = colorhelper.rgbToHex(this.red, e, this.blue)
+      this.commitColorProfileRGB(this.red, e, this.blue)
+    },
+    handleColorBlue (e) {
+      console.log(e)
+      this.ctest = colorhelper.rgbToHex(this.red, this.green, e)
+      this.commitColorProfileRGB(this.red, this.green, e)
     },
     handleColorHex () {
       var result = colorhelper.hexToRgb(this.ctest)
-      var obj = { red: result.r, green: result.g, blue: result.b, brightness: this.brightness, id: this.id }
       console.log('hex: ' + this.ctest)
-      this.$store.commit('updateEditableColorProfile', {type: this.formProfileName, object: obj})
+      this.commitColorProfileRGB(result.r, result.g, result.b)
     },
     saveEntry () {
       if (typeof this.id !== 'undefined') {
@@ -91,8 +99,9 @@ export default {
       console.log('updating entry' + obj.id)
       api.putColorProfile(obj).then(response => {
         this.callGetColorProfiles()
+        this.makeSuccessNotification('Successfully updated color profile with id ' + this.id)
       }).catch(error => {
-        console.log(error)
+        this.makeErrorNotification(error)
         this.errors.push(error)
       })
     },
@@ -100,14 +109,33 @@ export default {
       var obj = { red: this.red, green: this.green, blue: this.blue, brightness: this.brightness, id: this.id }
       console.log('creating entry' + obj.id)
       api.postColorProfile(obj).then(response => {
+        this.makeSuccessNotification('Successfully created color profile')
         this.callGetColorProfiles()
       }).catch(error => {
-        console.log(error)
+        this.makeErrorNotification(error)
         this.errors.push(error)
       })
     },
+    makeSuccessNotification (text) {
+      EventBus.$emit('MakeToast', {variant: 'success', content: text})
+    },
+    makeErrorNotification (error) {
+      console.log(error)
+      EventBus.$emit('MakeToast', {variant: 'danger', content: error.message})
+    },
     callGetColorProfiles () {
       EventBus.$emit('CPupdate', {})
+    },
+    deleteEntry () {
+      var obj = { id: this.id }
+      console.log('deleting entry' + obj.id)
+      api.deleteColorProfile(obj).then(response => {
+        this.callGetColorProfiles()
+        this.makeSuccessNotification('Deleted color profile with id ' + obj.id)
+      }).catch(error => {
+        this.makeErrorNotification(error)
+        this.errors.push(error)
+      })
     }
   }
 }
