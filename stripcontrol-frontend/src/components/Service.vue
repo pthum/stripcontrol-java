@@ -1,39 +1,45 @@
 <template>
   <div class="service">
-    <h1>{{ msg }}</h1>
-
+    <h1>ColorProfiles</h1>
     <b-container fluid>
-        <b-row class="my-1">
-            <b-col sm="3"></b-col>
-            <b-col sm="6">
-                <b-button block variant="outline-primar" @click="callGetColorProfiles()">Update Color Profiles</b-button>
-            </b-col>
-            <b-col sm="3"></b-col>
-        </b-row>
-        <b-row class="my-1" >
-            <b-col sm="9">
+      <b-row class="my-1" >
+        <b-col sm="3">
+          Select Profile
+        </b-col>
+        <b-col sm="4">
+          <b-button-group >
             <b-form-select @input="updateSelect">
-                <option v-for="profile in $store.getters.backendProfiles" :key="profile.id" :value="profile">r:{{profile.red}},g:{{profile.green}},b:{{profile.blue}},brightness:{{profile.brightness}}</option>
+              <option v-for="profile in $store.getters.backendProfiles" :key="profile.id" :value="profile">r:{{profile.red}},g:{{profile.green}},b:{{profile.blue}},brightness:{{profile.brightness}}</option>
             </b-form-select>
-            </b-col>
-            <b-col sm="3">
-                <b-button  block variant="primary" @click="toggleEdit()">Edit</b-button>
-            </b-col>
-        </b-row>
-        <b-row v-if="toggleEditFlag">
-            <colorprofileform v-bind:selectr="selected" formProfileName="editableColorProfile"/>
-        </b-row>
+            <b-button variant="outline-primary" @click="callGetColorProfiles()"><font-awesome-icon icon="sync" /></b-button>
+            <b-button variant="primary" @click="toggleEdit()">Edit</b-button>
+          </b-button-group>
+        </b-col>
+        <b-col>
+        </b-col>
+      </b-row>
+      <b-row v-if="toggleEditFlag">
+        <b-col>
+        <colorprofileform v-bind:selectr="selected" formProfileName="editableColorProfile"/>
+        </b-col>
+      </b-row>
     </b-container>
-
+    <p></p>
     <h4>Create new ColorProfile</h4>
-
-    <div>
-        <button @click="toggleCreate()">Create new ColorProfile</button>
-        <div v-if="toggleCreateFlag">
-            <colorprofileform v-bind:selectr="createable"  formProfileName="creatableColorProfile"/>
-        </div>
-    </div>
+    <b-container fluid>
+      <b-row class="my-1" >
+        <b-col sm="12">
+            <b-button block variant="primary" @click="toggleCreate()">Create new ColorProfile</b-button>
+        </b-col>
+      </b-row>
+      <b-row v-if="toggleCreateFlag">
+        <b-col>
+          <colorprofileform v-bind:selectr="createable" formProfileName="creatableColorProfile"/>
+        </b-col>
+      </b-row>
+    </b-container>
   </div>
+
 </template>
 
 <script>
@@ -50,7 +56,6 @@ export default {
   },
   data () {
     return {
-      msg: 'ColorProfile handling:',
       errors: [],
       selected: {},
       createable: { red: 0, green: 0, blue: 0, brightness: 0 },
@@ -80,11 +85,11 @@ export default {
       this.$store.commit('updateColorProfile', {type: 'editableColorProfile', object: e})
     },
     makeSuccessNotification (text) {
-      EventBus.$emit('MakeToast', {variant: 'success', content: text})
+      this.makeToast({variant: 'success', content: text})
     },
     makeErrorNotification (error) {
       console.log(error)
-      EventBus.$emit('MakeToast', {variant: 'danger', content: error.message})
+      this.makeToast({variant: 'danger', content: error.message})
     },
     makeToast (obj) {
       this.$bvToast.toast(obj.content, {
@@ -96,7 +101,6 @@ export default {
   },
   mounted () {
     EventBus.$on('CPupdate', this.callGetColorProfiles)
-    EventBus.$on('MakeToast', this.makeToast)
   }
 }
 </script>

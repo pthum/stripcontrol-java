@@ -4,27 +4,34 @@
       <form v-on:submit.prevent="saveEntry">
           <b-row class="my-1" >
               <b-col sm="3"><label>red</label></b-col>
-              <b-col sm="9"><b-form-input id="redValue" type="number" :value="red" @input="handleColorRed" /></b-col>
+              <b-col sm="9"><b-form-input id="redValue" type="number" :value="red" @input="handleColorRed"/></b-col>
           </b-row>
           <b-row class="my-1">
               <b-col sm="3"><label>green</label></b-col>
-              <b-col sm="9"><b-form-input id="greenValue" type="number" :value="green" @input="handleColorGreen" /></b-col>
+              <b-col sm="9"><b-form-input id="greenValue" type="number" :value="green" @input="handleColorGreen"/></b-col>
           </b-row>
           <b-row class="my-1">
               <b-col sm="3"><label>blue</label></b-col>
-              <b-col sm="9"><b-form-input id="blueValue"  type="number" :value="blue" @input="handleColorBlue" /></b-col>
+              <b-col sm="9"><b-form-input id="blueValue"  type="number" :value="blue" @input="handleColorBlue"/></b-col>
           </b-row>
           <b-row class="my-1">
               <b-col sm="3"><label>brightness</label></b-col>
-              <b-col sm="9"><b-form-input id="brightnessValue" type="number" :value="brightness" /></b-col>
+              <b-col sm="8"><b-form-input id="brightnessValue" type="range" min="0" max="100" :value="brightness" @input="handleBrightness"/></b-col>
+              <b-col sm="1">{{ brightness }}</b-col>
           </b-row>
           <b-row class="my-1">
               <b-col sm="3"><label>color</label></b-col>
               <b-col sm="9"><b-form-input id="colorValue" v-model="ctest" type="color" @input="handleColorHex"/></b-col>
           </b-row>
-          <b-button block variant="success" type="submit" v-if="typeof id !== 'undefined'">Edit {{id}}</b-button>
-          <b-button block variant="success" type="submit" v-else>Create ColorProfile</b-button>
-          <b-button block variant="danger" v-on:click="deleteEntry" v-if="typeof id !== 'undefined'">Delete {{id}}</b-button>
+          <b-row>
+            <b-col>
+              <b-button-group>
+                <b-button variant="danger" v-on:click="deleteEntry" v-if="typeof id !== 'undefined'">Delete {{id}}</b-button>
+                <b-button variant="success" type="submit" v-if="typeof id !== 'undefined'">Edit {{id}}</b-button>
+                <b-button variant="success" type="submit" v-else>Create ColorProfile</b-button>
+              </b-button-group>
+            </b-col>
+          </b-row>
       </form>
     </b-container>
   </div>
@@ -85,6 +92,10 @@ export default {
       console.log('hex: ' + this.ctest)
       this.commitColorProfileRGB(result.r, result.g, result.b)
     },
+    handleBrightness (e) {
+      var obj = { red: this.red, green: this.green, blue: this.blue, brightness: e, id: this.id }
+      this.$store.commit('updateColorProfile', {type: this.formProfileName, object: obj})
+    },
     saveEntry () {
       if (typeof this.id !== 'undefined') {
         console.log('update entry with id ' + this.id)
@@ -117,14 +128,18 @@ export default {
       })
     },
     makeSuccessNotification (text) {
-      EventBus.$emit('MakeToast', {variant: 'success', content: text})
+      this.makeToast({variant: 'success', content: text})
     },
     makeErrorNotification (error) {
       console.log(error)
-      EventBus.$emit('MakeToast', {variant: 'danger', content: error.message})
+      this.makeToast({variant: 'danger', content: error.message})
     },
-    callGetColorProfiles () {
-      EventBus.$emit('CPupdate', {})
+    makeToast (obj) {
+      this.$bvToast.toast(obj.content, {
+        title: ` ${obj.variant || 'default'}`,
+        variant: obj.variant,
+        solid: true
+      })
     },
     deleteEntry () {
       var obj = { id: this.id }
@@ -136,6 +151,9 @@ export default {
         this.makeErrorNotification(error)
         this.errors.push(error)
       })
+    },
+    callGetColorProfiles () {
+      EventBus.$emit('CPupdate', {})
     }
   }
 }
