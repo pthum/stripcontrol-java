@@ -8,7 +8,8 @@
         <b-col sm="5">
           <b-button-group >
             <b-dropdown v-model="selected" class="selectpicker" variant="dark" :text="stringSelected">
-              <b-dropdown-item v-for="profile in storedBackendProfiles" :key="profile.id" :value="profile" @click="selected = profile">
+              <b-dropdown-item v-if="storedBackendProfiles.length === 0" disabled>No profiles available</b-dropdown-item>
+              <b-dropdown-item v-else v-for="profile in storedBackendProfiles" :key="profile.id" :value="profile" @click="selected = profile">
                 <div class="foo" :style="{backgroundColor: getHexColor(profile) }">&nbsp;</div><font-awesome-icon icon="sun"></font-awesome-icon>: {{profile.brightness}}
               </b-dropdown-item>
             </b-dropdown>
@@ -43,6 +44,8 @@ export default {
   },
   created () {
     this.callGetColorProfiles()
+    this.toggleCreate()
+    this.disabledEdit = true
   },
   data () {
     return {
@@ -83,6 +86,9 @@ export default {
     callGetColorProfiles () {
       api.getColorProfiles().then(response => {
         this.updateStoreProfiles(response.data)
+        if (response.data.length === 0) {
+          this.disabledEdit = true
+        }
       }).catch(error => {
         this.errors.push(error)
       })
@@ -106,19 +112,21 @@ export default {
     /** set the created object as selected profile, update the colorprofiles, inform user  */
     handleCPCreate (event) {
       this.updateStoreProfile({type: 'selectedProfile', object: event.object})
+      this.toggleEdit()
       this.callGetColorProfiles()
       this.makeToast(event)
     },
     /** reset the selected profile, update the colorprofiles, inform user */
     handleCPDelete (event) {
-      this.updateStoreProfile({type: 'selectedProfile', object: {}})
+      this.resetStoreProfile({type: 'selectedProfile'})
       this.callGetColorProfiles()
+      this.toggleCreate()
       this.makeToast(event)
     },
     /** makes a toast, expects an object with content field and variant field */
     makeToast (toastData) {
       this.$bvToast.toast(toastData.content, {
-        title: ` ${toastData.variant || 'default'}`,
+        title: `${toastData.variant || 'default'}`,
         variant: toastData.variant,
         solid: true
       })
