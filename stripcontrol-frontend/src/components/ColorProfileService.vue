@@ -1,5 +1,5 @@
 <template>
-  <div class="service">
+  <div class="colorProfileService">
     <h1>ColorProfiles</h1>
     <b-container fluid>
       <b-row class="my-1" >
@@ -38,7 +38,7 @@ import colorhelper from './colorhelper'
 import {mapMutations, mapGetters} from 'vuex'
 
 export default {
-  name: 'service',
+  name: 'colorprofileservice',
   components: {
     colorprofileform
   },

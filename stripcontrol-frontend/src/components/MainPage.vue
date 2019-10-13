@@ -1,18 +1,14 @@
 <template>
   <div class="hello">
-    <h1>{{ msg }}</h1>
-    <router-link to="/callservice">/callservice</router-link>
+    <router-link to="/colorprofileservice">ColorProfiles</router-link>
+    <br/>
+    <router-link to="/ledstripservice">LedStrips</router-link>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'HelloWorld',
-  data () {
-    return {
-      msg: 'MyTestApp'
-    }
-  }
+  name: 'MainPage'
 }
 </script>
 
