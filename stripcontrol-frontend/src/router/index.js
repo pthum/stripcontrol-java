@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
-import Service from '@/components/Service'
+import MainPage from '@/components/MainPage'
+import ColorProfileService from '@/components/ColorProfileService'
+import LedStripService from '@/components/LedStripService'
 
 Vue.use(Router)
 
@@ -9,9 +10,10 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'HelloWorld',
-      component: HelloWorld
+      name: 'MainPage',
+      component: MainPage
     },
-    { path: '/callservice', component: Service }
+    { path: '/colorprofileservice', component: ColorProfileService },
+    { path: '/ledstripservice', component: LedStripService }
   ]
 })
