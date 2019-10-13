@@ -48,8 +48,8 @@ public class LEDStripControllerTest
 		final List<LEDStrip> profiles = new ArrayList<>( );
 		final LEDStrip cp1 = new LEDStrip( "testStrip", "testdescription", 1, 2, 5, 8000000 );
 		final LEDStrip cp2 = new LEDStrip( "testStrip2", "testdescription", 3, 4, 5, 8000000 );
-		cp1.setId( 1 );
-		cp2.setId( 2 );
+		cp1.setId( 1L );
+		cp2.setId( 2L );
 		profiles.add( cp1 );
 		profiles.add( cp2 );
 		when( service.getAllLEDStrips( ) ).thenReturn( profiles );
@@ -66,7 +66,7 @@ public class LEDStripControllerTest
 	{
 		final LEDStrip cp = new LEDStrip( "testStrip", "testdescription", 1, 2, 5, 8000000 );
 		final LEDStrip cpWithId = new LEDStrip( "testStrip", "testdescription", 1, 2, 5, 8000000 );
-		cpWithId.setId( 1 );
+		cpWithId.setId( 1L );
 		when( service.saveLEDStrip( cp ) ).thenReturn( cpWithId );
 
 		this.mockMvc.perform( post( CP_PATH ).contentType( MediaType.APPLICATION_JSON ).content( toJson( cp ) ) )

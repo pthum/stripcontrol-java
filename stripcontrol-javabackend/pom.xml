@@ -25,7 +25,12 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-
+		<!-- led control -->
+		<dependency>
+			<groupId>de.backenddev</groupId>
+			<artifactId>apa102lib</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 		<!--  db connection -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
