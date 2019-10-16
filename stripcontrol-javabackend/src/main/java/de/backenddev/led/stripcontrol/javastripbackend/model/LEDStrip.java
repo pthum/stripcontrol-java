@@ -8,6 +8,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * An LED Strip
@@ -221,6 +222,30 @@ public class LEDStrip
 	public void setProfile(ColorProfile profile )
 	{
 		this.profile = profile;
+	}
+
+	@JsonProperty
+	public boolean hasProfile( )
+	{
+		return this.profile != null;
+	}
+
+	@JsonIgnore
+	public void setHasProfile(boolean unused )
+	{
+		// empty setter to prevent jackson errors
+	}
+
+	@JsonProperty
+	public Long profileId( )
+	{
+		return this.profile == null ? null : this.profile.getId( );
+	}
+
+	@JsonIgnore
+	public void setProfileId(Long unused )
+	{
+		// empty setter to prevent jackson errors
 	}
 
 	@Override

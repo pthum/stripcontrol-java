@@ -25,6 +25,13 @@ public class Apa102Factory
 		{
 			// TODO
 			e.printStackTrace( );
+		} catch ( UnsatisfiedLinkError ule )
+		{
+			/*
+			 * occurs, when wiringpi is not available (f.i. on a dev system which is not a
+			 * raspi) at the moment, just log this -> TODO
+			 */
+			ule.printStackTrace( );
 		}
 		return apaStrip;
 	}
