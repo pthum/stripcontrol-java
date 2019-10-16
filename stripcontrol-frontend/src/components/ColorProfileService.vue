@@ -7,6 +7,8 @@
         </b-col>
         <b-col sm="5">
           <b-button-group >
+
+           <colorprofileselect formProfileName="editableProfile"/>
             <b-dropdown v-model="selected" class="selectpicker" variant="dark" :text="stringSelected">
               <b-dropdown-item v-if="storedBackendProfiles.length === 0" disabled>No profiles available</b-dropdown-item>
               <b-dropdown-item v-else v-for="profile in storedBackendProfiles" :key="profile.id" :value="profile" @click="selected = profile">
@@ -33,6 +35,7 @@
 <script>
 import api from './backend-api'
 import colorprofileform from './colorprofile-form'
+import colorprofileselect from './colorprofile-select'
 import EventBus from './eventbus'
 import colorhelper from './colorhelper'
 import {mapMutations, mapGetters} from 'vuex'
@@ -40,7 +43,8 @@ import {mapMutations, mapGetters} from 'vuex'
 export default {
   name: 'colorprofileservice',
   components: {
-    colorprofileform
+    colorprofileform,
+    colorprofileselect
   },
   created () {
     this.callGetColorProfiles()
@@ -123,6 +127,10 @@ export default {
       this.toggleCreate()
       this.makeToast(event)
     },
+    handleCPSelect (event) {
+      console.log('got cp select')
+      this.toggleEdit()
+    },
     /** makes a toast, expects an object with content field and variant field */
     makeToast (toastData) {
       this.$bvToast.toast(toastData.content, {
@@ -141,6 +149,7 @@ export default {
     EventBus.$on('CPupdate', this.handleCPCreate)
     EventBus.$on('CPcreate', this.handleCPCreate)
     EventBus.$on('CPdelete', this.handleCPDelete)
+    EventBus.$on('CPselect', this.handleCPSelect)
   }
 }
 </script>
