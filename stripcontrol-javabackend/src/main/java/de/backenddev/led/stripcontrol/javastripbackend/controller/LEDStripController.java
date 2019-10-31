@@ -73,6 +73,7 @@ public class LEDStripController
 			return ResponseEntity.notFound( ).build( );
 		}
 		ledStrip.setId( strip.get( ).getId( ) );
+		ledStrip.setProfile( strip.get( ).getProfile( ) );
 		service.saveLEDStrip( ledStrip );
 		return ResponseEntity.ok( ).build( );
 	}
