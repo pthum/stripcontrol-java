@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
@@ -21,6 +22,9 @@ public class ApplicationEventComponent
 	@Autowired
 	private LEDStripRepository repo;
 
+	@Value ( "${strips.enabled}" )
+	private boolean stripsEnabled;
+
 	@EventListener ( ApplicationReadyEvent.class )
 	public void doSomethingAfterStartup( )
 	{
@@ -30,7 +34,7 @@ public class ApplicationEventComponent
 			try
 			{
 				System.out.println( "Setting up strip " + strip.getName( ) );
-				APA102Control control = Apa102Factory.createControl( strip );
+				APA102Control control = Apa102Factory.createControl( strip, !stripsEnabled );
 				ColorProfile profile = strip.getProfile( );
 				if ( profile != null )
 				{

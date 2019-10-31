@@ -9,7 +9,7 @@ import de.backenddev.led.stripcontrol.javastripbackend.model.LEDStrip;
 
 public class Apa102Factory
 {
-	public static APA102Control createControl(LEDStrip strip ) throws IOException
+	public static APA102Control createControl(LEDStrip strip, boolean dummyImpl ) throws IOException
 	{
 		APA102Control apaStrip = null;
 		ColorProfile profile = strip.getProfile( );
@@ -20,7 +20,9 @@ public class Apa102Factory
 		int speed = strip.getSpeedHz( );
 		try
 		{
-			apaStrip = new APA102Control( numLEDs, brightness, ColorConfig.RGB, misoPin, sclkPin, speed );
+			apaStrip = dummyImpl
+					? new NoOpApa102Control( numLEDs, brightness, ColorConfig.RGB, misoPin, sclkPin, speed )
+					: new APA102Control( numLEDs, brightness, ColorConfig.RGB, misoPin, sclkPin, speed );
 		} catch ( IOException e )
 		{
 			// TODO

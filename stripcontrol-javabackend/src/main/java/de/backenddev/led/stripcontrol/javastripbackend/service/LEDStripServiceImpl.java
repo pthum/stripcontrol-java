@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import de.backenddev.led.apa102.APA102Control;
@@ -18,6 +19,9 @@ public class LEDStripServiceImpl implements LEDStripService
 	@Autowired
 	private LEDStripRepository repo;
 
+	@Value ( "${strips.enabled}" )
+	private boolean stripsEnabled;
+
 	@Override
 	public LEDStrip saveLEDStrip(LEDStrip strip )
 	{
@@ -26,7 +30,7 @@ public class LEDStripServiceImpl implements LEDStripService
 		{
 			try
 			{
-				APA102Control apaStrip = Apa102Factory.createControl( strip );
+				APA102Control apaStrip = Apa102Factory.createControl( strip, !stripsEnabled );
 				if ( apaStrip != null )
 				{
 					if ( strip.isEnabled( ) )
@@ -63,7 +67,7 @@ public class LEDStripServiceImpl implements LEDStripService
 			Optional<LEDStrip> strip = repo.findById( id );
 			if ( strip.isPresent( ) && strip.get( ).isEnabled( ) )
 			{
-				APA102Control apaStrip = Apa102Factory.createControl( strip.get( ) );
+				APA102Control apaStrip = Apa102Factory.createControl( strip.get( ), !stripsEnabled );
 				if ( apaStrip != null )
 				{
 					apaStrip.clearStrip( );
