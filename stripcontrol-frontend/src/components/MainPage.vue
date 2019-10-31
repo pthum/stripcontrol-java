@@ -1,14 +1,16 @@
 <template>
   <div class="hello">
-    <router-link to="/colorprofileservice">ColorProfiles</router-link>
-    <br/>
-    <router-link to="/ledstripservice">LedStrips</router-link>
+    <stripcontrolservice/>
   </div>
 </template>
 
 <script>
+import stripcontrolservice from './StripControlService'
 export default {
-  name: 'MainPage'
+  name: 'MainPage',
+  components: {
+    stripcontrolservice
+  }
 }
 </script>
 

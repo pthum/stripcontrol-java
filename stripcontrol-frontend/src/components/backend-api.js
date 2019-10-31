@@ -29,5 +29,11 @@ export default {
   },
   deleteLedStrip (ledStrip) {
     return AXIOS.delete(`/ledstrip/${ledStrip.id}`)
+  },
+  updateStripProfile (data) {
+    return AXIOS.put(`/ledstrip/${data.stripId}/profile`, data.profile)
+  },
+  deleteStripProfile (stripId) {
+    return AXIOS.delete(`/ledstrip/${stripId}/profile`)
   }
 }

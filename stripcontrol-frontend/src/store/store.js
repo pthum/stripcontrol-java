@@ -40,6 +40,9 @@ const colorProfileStore = {
     selectedProfile: state => state.selectedProfile,
     findColorProfile: (state) => (formName) => {
       return state[formName]
+    },
+    getColorProfileById: (state) => (id) => {
+      return state.backendProfiles.find(profile => profile.id === id)
     }
   }
 }

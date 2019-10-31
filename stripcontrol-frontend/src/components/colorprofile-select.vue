@@ -2,7 +2,7 @@
   <div class="colorProfileService">
     <b-dropdown v-model="selected" class="selectpicker" variant="dark" :text="stringSelected">
       <b-dropdown-item v-if="storedBackendProfiles.length === 0" disabled>No profiles available</b-dropdown-item>
-      <b-dropdown-item v-else v-for="profile in storedBackendProfiles" :key="profile.id" :value="profile" @click="selected = profile">
+      <b-dropdown-item v-else v-for="profile in storedBackendProfiles" :key="profile.id" :value="profile" @click="handleSelection(profile)">
         <div class="foo" :style="{backgroundColor: getHexColor(profile) }">&nbsp;</div><font-awesome-icon icon="sun"></font-awesome-icon>: {{profile.brightness}}
       </b-dropdown-item>
     </b-dropdown>
@@ -16,36 +16,38 @@ import {mapMutations, mapGetters} from 'vuex'
 
 export default {
   name: 'colorprofile-select',
+  props: [ 'selectProfileName', 'selectId', 'preselected' ],
   created () {
+    console.log('creating select' + this.selectId + 'preselect: ' + this.preselected)
+    console.log(this.selected)
+    this.preselectObject()
   },
   data () {
     return {
-      errors: []
+      errors: [],
+      selected: {}
     }
   },
   computed: {
-    selected: {
-      get () {
-        return this.storeSelectedProfile
-      },
-      set (value) {
-        this.updateStoreProfile({type: 'selectedProfile', object: value})
-        this.handleSelect({object: value})
-      }
-    },
-    stringSelected: function () {
-      if (typeof this.selected.id === 'undefined') {
+    stringSelected () {
+      if (typeof this.selected === 'undefined' || typeof this.selected.id === 'undefined') {
         return 'Select profile'
       }
       var brightness = typeof this.selected.brightness !== 'undefined' ? this.selected.brightness : 0
       return colorhelper.rgbToHex2(this.selected) + ', \u2600:' + brightness
     },
     ...mapGetters({
-      storeSelectedProfile: 'selectedProfile',
       storedBackendProfiles: 'backendProfiles'
     })
   },
   methods: {
+    preselectObject () {
+      this.selected = this.storedBackendProfiles.find(profile => profile.id === this.preselected)
+    },
+    handleSelection (profile) {
+      this.selected = profile
+      this.handleSelect({object: this.selected, stripId: this.selectId, type: this.selectProfileName})
+    },
     getHexColor (profile) {
       return colorhelper.rgbToHex2(profile)
     },
@@ -53,8 +55,7 @@ export default {
       EventBus.$emit('CPselect', event)
     },
     ...mapMutations({
-      updateStoreProfile: 'updateColorProfile',
-      updateStoreProfiles: 'updateBackendProfiles'
+      resetStoreProfile: 'resetColorProfile'
     })
   }
 }
