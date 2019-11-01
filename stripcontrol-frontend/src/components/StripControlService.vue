@@ -1,20 +1,29 @@
 <template>
   <div class="stripcontrolService">
     <h1>Strip control</h1>
-    <b-container fluid v-for="strip in storedBackendStrips" :key="strip.id">
-      <b-row >
-        <b-col>{{strip.name}}</b-col>
-        <b-col>
-          <colorprofileselect :selectProfileName="getAndUpdateStoreProfileForStrip(strip)" :selectId="strip.id" :preselected="strip.profileId"/>
-        </b-col>
-        <b-col>
-          <b-button :variant="getVariantEnabled(strip)" @click="toggleEnabled(strip)">
-            <font-awesome-icon v-if="strip.enabled" icon="sun"></font-awesome-icon>
-            <font-awesome-icon v-else icon="lightbulb"></font-awesome-icon>
-          </b-button>
-        </b-col>
-      </b-row>
-    </b-container>
+    <div v-if="storedBackendStrips.length==0">
+      <b-container>
+        <b-row>
+          <b-col>No LED Strips created yet.</b-col>
+        </b-row>
+      </b-container>
+    </div>
+    <div v-else>
+      <b-container fluid v-for="strip in storedBackendStrips" :key="strip.id">
+        <b-row >
+          <b-col>{{strip.name}}</b-col>
+          <b-col>
+            <colorprofileselect :selectProfileName="getAndUpdateStoreProfileForStrip(strip)" :selectId="strip.id" :preselected="strip.profileId"/>
+          </b-col>
+          <b-col>
+            <b-button :variant="getVariantEnabled(strip)" @click="toggleEnabled(strip)">
+              <font-awesome-icon v-if="strip.enabled" icon="sun"></font-awesome-icon>
+              <font-awesome-icon v-else icon="lightbulb"></font-awesome-icon>
+            </b-button>
+          </b-col>
+        </b-row>
+      </b-container>
+  </div>
   </div>
 </template>
 
