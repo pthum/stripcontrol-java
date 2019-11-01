@@ -40,6 +40,7 @@ public class LEDStripServiceImpl implements LEDStripService
 							ColorProfile profile = strip.getProfile( );
 							APA102Helper.setStripColor( apaStrip, profile.getRed( ), profile.getGreen( ),
 									profile.getBlue( ), profile.getBrightness( ) );
+							apaStrip.show( );
 						} else
 						{
 							apaStrip.clearStrip( );
