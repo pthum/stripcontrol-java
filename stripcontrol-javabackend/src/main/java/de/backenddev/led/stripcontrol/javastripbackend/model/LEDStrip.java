@@ -4,6 +4,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * An LED Strip
@@ -16,7 +21,7 @@ public class LEDStrip
 {
 	@Id
 	@GeneratedValue ( strategy = GenerationType.AUTO )
-	private long id;
+	private Long id;
 
 	private String name;
 
@@ -29,6 +34,13 @@ public class LEDStrip
 	private int numLeds;
 
 	private int speedHz;
+
+	private boolean enabled;
+
+	@ManyToOne
+	@JoinColumn ( name = "profile_id" )
+	@JsonIgnore
+	private ColorProfile profile;
 
 	/**
 	 * Default constructor
@@ -60,7 +72,7 @@ public class LEDStrip
 	/**
 	 * @return the id
 	 */
-	public long getId( )
+	public Long getId( )
 	{
 		return id;
 	}
@@ -69,7 +81,7 @@ public class LEDStrip
 	 * @param id
 	 *            the id to set
 	 */
-	public void setId(long id )
+	public void setId(Long id )
 	{
 		this.id = id;
 	}
@@ -174,6 +186,66 @@ public class LEDStrip
 	public void setSpeedHz(int speedHz )
 	{
 		this.speedHz = speedHz;
+	}
+
+	/**
+	 * @return the enabled
+	 */
+	public boolean isEnabled( )
+	{
+		return enabled;
+	}
+
+	/**
+	 * @param enabled
+	 *            the enabled to set
+	 */
+	public void setEnabled(boolean enabled )
+	{
+		this.enabled = enabled;
+	}
+
+	/**
+	 * @return the profile
+	 */
+	@JsonIgnore
+	public ColorProfile getProfile( )
+	{
+		return profile;
+	}
+
+	/**
+	 * @param profile
+	 *            the profile to set
+	 */
+	@JsonIgnore
+	public void setProfile(ColorProfile profile )
+	{
+		this.profile = profile;
+	}
+
+	@JsonProperty
+	public boolean hasProfile( )
+	{
+		return this.profile != null;
+	}
+
+	@JsonIgnore
+	public void setHasProfile(boolean unused )
+	{
+		// empty setter to prevent jackson errors
+	}
+
+	@JsonProperty
+	public Long profileId( )
+	{
+		return this.profile == null ? null : this.profile.getId( );
+	}
+
+	@JsonIgnore
+	public void setProfileId(Long unused )
+	{
+		// empty setter to prevent jackson errors
 	}
 
 	@Override

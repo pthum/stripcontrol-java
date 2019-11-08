@@ -7,12 +7,7 @@
         </b-col>
         <b-col sm="5">
           <b-button-group >
-            <b-dropdown v-model="selected" class="selectpicker" variant="dark" :text="stringSelected">
-              <b-dropdown-item v-if="storedBackendProfiles.length === 0" disabled>No profiles available</b-dropdown-item>
-              <b-dropdown-item v-else v-for="profile in storedBackendProfiles" :key="profile.id" :value="profile" @click="selected = profile">
-                <div class="foo" :style="{backgroundColor: getHexColor(profile) }">&nbsp;</div><font-awesome-icon icon="sun"></font-awesome-icon>: {{profile.brightness}}
-              </b-dropdown-item>
-            </b-dropdown>
+            <colorprofileselect selectProfileName="selectedProfile"/>
             <b-button variant="dark" @click="callGetColorProfiles()"><font-awesome-icon icon="sync" /></b-button>
             <b-button :variant="variantEdit" :disabled="disabledEdit" @click="toggleEdit()"><font-awesome-icon icon="edit"> </font-awesome-icon></b-button>
             <b-button :variant="variantCreate" :disabled="disabledCreate" @click="toggleCreate()"><font-awesome-icon icon="plus-square"> </font-awesome-icon></b-button>
@@ -23,7 +18,7 @@
       </b-row>
       <b-row>
         <b-col>
-        <colorprofileform formProfileName="editableProfile"/>
+          <colorprofileform formProfileName="editableProfile"/>
         </b-col>
       </b-row>
     </b-container>
@@ -33,6 +28,7 @@
 <script>
 import api from './backend-api'
 import colorprofileform from './colorprofile-form'
+import colorprofileselect from './colorprofile-select'
 import EventBus from './eventbus'
 import colorhelper from './colorhelper'
 import {mapMutations, mapGetters} from 'vuex'
@@ -40,7 +36,8 @@ import {mapMutations, mapGetters} from 'vuex'
 export default {
   name: 'colorprofileservice',
   components: {
-    colorprofileform
+    colorprofileform,
+    colorprofileselect
   },
   created () {
     this.callGetColorProfiles()
@@ -57,22 +54,6 @@ export default {
     }
   },
   computed: {
-    selected: {
-      get () {
-        return this.storeSelectedProfile
-      },
-      set (value) {
-        this.updateStoreProfile({type: 'selectedProfile', object: value})
-        this.toggleEdit()
-      }
-    },
-    stringSelected: function () {
-      if (typeof this.selected.id === 'undefined') {
-        return 'Select profile'
-      }
-      var brightness = typeof this.selected.brightness !== 'undefined' ? this.selected.brightness : 0
-      return colorhelper.rgbToHex2(this.selected) + ', \u2600:' + brightness
-    },
     ...mapGetters({
       storeSelectedProfile: 'selectedProfile',
       storedBackendProfiles: 'backendProfiles'
@@ -123,6 +104,10 @@ export default {
       this.toggleCreate()
       this.makeToast(event)
     },
+    handleCPSelect (event) {
+      this.updateStoreProfile({type: 'selectedProfile', object: event.object})
+      this.toggleEdit()
+    },
     /** makes a toast, expects an object with content field and variant field */
     makeToast (toastData) {
       this.$bvToast.toast(toastData.content, {
@@ -141,6 +126,13 @@ export default {
     EventBus.$on('CPupdate', this.handleCPCreate)
     EventBus.$on('CPcreate', this.handleCPCreate)
     EventBus.$on('CPdelete', this.handleCPDelete)
+    EventBus.$on('CPselect', this.handleCPSelect)
+  },
+  beforeDestroy () {
+    EventBus.$off('CPupdate', this.handleCPCreate)
+    EventBus.$off('CPcreate', this.handleCPCreate)
+    EventBus.$off('CPdelete', this.handleCPDelete)
+    EventBus.$off('CPselect', this.handleCPSelect)
   }
 }
 </script>

@@ -19,7 +19,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import de.backenddev.led.stripcontrol.javastripbackend.model.ColorProfile;
 import de.backenddev.led.stripcontrol.javastripbackend.model.LEDStrip;
+import de.backenddev.led.stripcontrol.javastripbackend.service.ColorProfileService;
 import de.backenddev.led.stripcontrol.javastripbackend.service.LEDStripService;
 
 @RestController
@@ -30,6 +32,9 @@ public class LEDStripController
 
 	@Autowired
 	private LEDStripService service;
+
+	@Autowired
+	private ColorProfileService cpService;
 
 	@GetMapping ( "" )
 	public Iterable<LEDStrip> getLEDStrips( )
@@ -68,6 +73,7 @@ public class LEDStripController
 			return ResponseEntity.notFound( ).build( );
 		}
 		ledStrip.setId( strip.get( ).getId( ) );
+		ledStrip.setProfile( strip.get( ).getProfile( ) );
 		service.saveLEDStrip( ledStrip );
 		return ResponseEntity.ok( ).build( );
 	}
@@ -75,12 +81,65 @@ public class LEDStripController
 	@DeleteMapping ( "/{id}" )
 	public ResponseEntity<Object> deleteLEDStrip(@PathVariable Long id )
 	{
-		Optional<LEDStrip> profile = service.getById( id );
-		if ( profile.isPresent( ) == false )
+		Optional<LEDStrip> optStrip = service.getById( id );
+		if ( optStrip.isPresent( ) == false )
 		{
 			return ResponseEntity.notFound( ).build( );
 		}
 		service.removeLEDStrip( id );
+		return ResponseEntity.noContent( ).build( );
+	}
+
+	@GetMapping ( "/{id}/profile" )
+	public ResponseEntity<ColorProfile> getLEDStripProfile(@PathVariable Long id )
+	{
+		final Optional<LEDStrip> strip = service.getById( id );
+		if ( strip.isPresent( ) == false )
+		{
+			return ResponseEntity.notFound( ).build( );
+		}
+		if ( strip.get( ).getProfile( ) == null )
+		{
+			return ResponseEntity.notFound( ).build( );
+		}
+		return ResponseEntity.ok( strip.get( ).getProfile( ) );
+	}
+
+	@PutMapping ( "/{id}/profile" )
+	public ResponseEntity<Object> updateLEDStripProfile(@PathVariable Long id,
+			@Valid @RequestBody ColorProfile colorProfile )
+	{
+		Optional<LEDStrip> strip = service.getById( id );
+		if ( strip.isPresent( ) == false )
+		{
+			return ResponseEntity.notFound( ).build( );
+		}
+		Optional<ColorProfile> dbProfile = cpService.getById( colorProfile.getId( ) );
+		if ( dbProfile.isPresent( ) == false )
+		{
+			return ResponseEntity.notFound( ).build( );
+		}
+		LEDStrip updateStrip = strip.get( );
+		updateStrip.setProfile( dbProfile.get( ) );
+		service.saveLEDStrip( updateStrip );
+		return ResponseEntity.ok( ).build( );
+	}
+
+	@DeleteMapping ( "/{id}/profile" )
+	public ResponseEntity<Object> deleteLEDStripProfile(@PathVariable Long id )
+	{
+		Optional<LEDStrip> optStrip = service.getById( id );
+		if ( optStrip.isPresent( ) == false )
+		{
+			return ResponseEntity.notFound( ).build( );
+		}
+		LEDStrip strip = optStrip.get( );
+		if ( strip.getProfile( ) == null )
+		{
+			return ResponseEntity.notFound( ).build( );
+		}
+		strip.setProfile( null );
+		service.saveLEDStrip( strip );
 		return ResponseEntity.noContent( ).build( );
 	}
 }

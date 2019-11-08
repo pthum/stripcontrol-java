@@ -137,6 +137,11 @@ export default {
     EventBus.$on('LSupdate', this.handleLSCreate)
     EventBus.$on('LScreate', this.handleLSCreate)
     EventBus.$on('LSdelete', this.handleLSDelete)
+  },
+  beforeDestroy () {
+    EventBus.$off('LSupdate', this.handleLSCreate)
+    EventBus.$off('LScreate', this.handleLSCreate)
+    EventBus.$off('LSdelete', this.handleLSDelete)
   }
 }
 </script>
