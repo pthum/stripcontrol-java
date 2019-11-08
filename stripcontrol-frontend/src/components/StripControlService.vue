@@ -42,11 +42,6 @@ export default {
     this.callGetColorProfiles()
     this.callGetLedStrips()
   },
-  data () {
-    return {
-      errors: []
-    }
-  },
   computed: {
     ...mapGetters({
       storedBackendStrips: 'backendStrips'
@@ -57,7 +52,7 @@ export default {
       api.putLedStrip(strip).then(response => {
         strip.enabled = !strip.enabled
       }).catch(error => {
-        this.errors.push(error)
+        this.handleError(error)
       })
     },
     getVariantEnabled (strip) {
@@ -68,7 +63,7 @@ export default {
       api.getLedStrips().then(response => {
         this.updateStoreStrips(response.data)
       }).catch(error => {
-        this.errors.push(error)
+        this.handleError(error)
       })
     },
     /** Fetches profiles when the component is created. */
@@ -76,7 +71,7 @@ export default {
       api.getColorProfiles().then(response => {
         this.updateStoreProfiles(response.data)
       }).catch(error => {
-        this.errors.push(error)
+        this.handleError(error)
       })
     },
     handleCPSelect (event) {
@@ -84,7 +79,20 @@ export default {
       api.updateStripProfile({stripId: event.stripId, profile: event.object}).then(response => {
         this.callGetColorProfiles()
       }).catch(error => {
-        this.errors.push(error)
+        this.handleError(error)
+      })
+    },
+    /** handle error message */
+    handleError (error) {
+      console.log(error)
+      this.makeToast({variant: 'danger', content: error.message})
+    },
+    /** makes a toast, expects an object with content field and variant field */
+    makeToast (toastData) {
+      this.$bvToast.toast(toastData.content, {
+        title: ` ${toastData.variant || 'default'}`,
+        variant: toastData.variant,
+        solid: true
       })
     },
     ...mapMutations({

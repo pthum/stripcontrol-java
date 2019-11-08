@@ -18,8 +18,6 @@ export default {
   name: 'colorprofile-select',
   props: [ 'selectProfileName', 'selectId', 'preselected' ],
   created () {
-    console.log('creating select' + this.selectId + 'preselect: ' + this.preselected)
-    console.log(this.selected)
     this.preselectObject()
   },
   data () {
