@@ -48,6 +48,7 @@ export default {
     })
   },
   methods: {
+    /** enable/disable strip */
     toggleEnabled (strip) {
       api.putLedStrip(strip).then(response => {
         strip.enabled = !strip.enabled
@@ -55,6 +56,7 @@ export default {
         this.handleError(error)
       })
     },
+    /** return the ui variant of a strip */
     getVariantEnabled (strip) {
       return strip.enabled ? 'outline-dark' : 'dark'
     },
@@ -74,6 +76,7 @@ export default {
         this.handleError(error)
       })
     },
+    /** handle selection of a color profile */
     handleCPSelect (event) {
       console.log(event)
       api.updateStripProfile({stripId: event.stripId, profile: event.object}).then(response => {
