@@ -11,10 +11,10 @@ import org.springframework.stereotype.Component;
 
 import de.backenddev.led.apa102.APA102Control;
 import de.backenddev.led.apa102.APA102Helper;
+import de.backenddev.led.stripcontrol.javastripbackend.ledhandling.Apa102Factory;
 import de.backenddev.led.stripcontrol.javastripbackend.model.ColorProfile;
 import de.backenddev.led.stripcontrol.javastripbackend.model.LEDStrip;
 import de.backenddev.led.stripcontrol.javastripbackend.repository.LEDStripRepository;
-import de.backenddev.led.stripcontrol.javastripbackend.service.Apa102Factory;
 
 @Component
 public class ApplicationEventComponent

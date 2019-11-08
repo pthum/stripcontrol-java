@@ -17,7 +17,7 @@ public class ColorProfile
 {
 	@Id
 	@GeneratedValue ( strategy = GenerationType.AUTO )
-	private long id;
+	private Long id;
 
 	@Min ( 0 )
 	@Max ( 255 )
@@ -52,7 +52,7 @@ public class ColorProfile
 	 * @param brightness
 	 *            brightness, between 0 and 100
 	 */
-	public ColorProfile( int red, int green, int blue, int brightness )
+	public ColorProfile( final int red, final int green, final int blue, final int brightness )
 	{
 		super( );
 		this.red = red;
@@ -64,16 +64,16 @@ public class ColorProfile
 	/**
 	 * @return the id
 	 */
-	public long getId( )
+	public Long getId( )
 	{
-		return id;
+		return this.id;
 	}
 
 	/**
 	 * @param id
 	 *            the id to set
 	 */
-	public void setId(long id )
+	public void setId( final Long id )
 	{
 		this.id = id;
 	}
@@ -83,14 +83,14 @@ public class ColorProfile
 	 */
 	public int getRed( )
 	{
-		return red;
+		return this.red;
 	}
 
 	/**
 	 * @param red
 	 *            the red to set
 	 */
-	public void setRed(int red )
+	public void setRed( final int red )
 	{
 		this.red = red;
 	}
@@ -100,14 +100,14 @@ public class ColorProfile
 	 */
 	public int getGreen( )
 	{
-		return green;
+		return this.green;
 	}
 
 	/**
 	 * @param green
 	 *            the green to set
 	 */
-	public void setGreen(int green )
+	public void setGreen( final int green )
 	{
 		this.green = green;
 	}
@@ -117,14 +117,14 @@ public class ColorProfile
 	 */
 	public int getBlue( )
 	{
-		return blue;
+		return this.blue;
 	}
 
 	/**
 	 * @param blue
 	 *            the blue to set
 	 */
-	public void setBlue(int blue )
+	public void setBlue( final int blue )
 	{
 		this.blue = blue;
 	}
@@ -134,14 +134,14 @@ public class ColorProfile
 	 */
 	public int getBrightness( )
 	{
-		return brightness;
+		return this.brightness;
 	}
 
 	/**
 	 * @param brightness
 	 *            the brightness to set
 	 */
-	public void setBrightness(int brightness )
+	public void setBrightness( final int brightness )
 	{
 		this.brightness = brightness;
 	}
@@ -149,8 +149,8 @@ public class ColorProfile
 	@Override
 	public String toString( )
 	{
-		return "ColorProfile [id=" + id + ", red=" + red + ", green=" + green + ", blue=" + blue + ", brightness="
-				+ brightness + "]";
+		return "ColorProfile [id=" + this.id + ", red=" + this.red + ", green=" + this.green + ", blue=" + this.blue
+				+ ", brightness=" + this.brightness + "]";
 	}
 
 	@Override
@@ -158,16 +158,16 @@ public class ColorProfile
 	{
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + blue;
-		result = prime * result + brightness;
-		result = prime * result + green;
-		result = prime * result + (int) ( id ^ ( id >>> 32 ) );
-		result = prime * result + red;
+		result = prime * result + this.blue;
+		result = prime * result + this.brightness;
+		result = prime * result + this.green;
+		result = prime * result + (int) ( this.id ^ ( this.id >>> 32 ) );
+		result = prime * result + this.red;
 		return result;
 	}
 
 	@Override
-	public boolean equals(Object obj )
+	public boolean equals( final Object obj )
 	{
 		if ( this == obj )
 			return true;
@@ -175,16 +175,16 @@ public class ColorProfile
 			return false;
 		if ( getClass( ) != obj.getClass( ) )
 			return false;
-		ColorProfile other = (ColorProfile) obj;
-		if ( blue != other.blue )
+		final ColorProfile other = (ColorProfile) obj;
+		if ( this.blue != other.blue )
 			return false;
-		if ( brightness != other.brightness )
+		if ( this.brightness != other.brightness )
 			return false;
-		if ( green != other.green )
+		if ( this.green != other.green )
 			return false;
-		if ( id != other.id )
+		if ( this.id != other.id )
 			return false;
-		if ( red != other.red )
+		if ( this.red != other.red )
 			return false;
 		return true;
 	}
