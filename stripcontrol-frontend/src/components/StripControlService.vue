@@ -13,7 +13,7 @@
         <b-row >
           <b-col>{{strip.name}}</b-col>
           <b-col>
-            <colorprofileselect :selectProfileName="getAndUpdateStoreProfileForStrip(strip)" :selectId="strip.id" :preselected="strip.profileId"/>
+            <colorprofileselect selectProfileName="selectProfile" :selectId="strip.id" :preselected="strip.profileId"/>
           </b-col>
           <b-col>
             <b-button :variant="getVariantEnabled(strip)" @click="toggleEnabled(strip)">
@@ -49,21 +49,16 @@ export default {
   },
   computed: {
     ...mapGetters({
-      storeSelectedProfile: 'selectedProfile',
-      storedBackendStrips: 'backendStrips',
-      storedBackendProfiles: 'backendProfiles',
-      getColorProfileById: 'getColorProfileById'
+      storedBackendStrips: 'backendStrips'
     })
   },
   methods: {
-    getAndUpdateStoreProfileForStrip (strip) {
-      // var profile = this.getColorProfileById(strip.profileId)
-      // this.updateStoreProfile({type: 'selectProfile', stripId: strip.id, object: profile})
-      return 'selectProfile'
-    },
     toggleEnabled (strip) {
-      strip.enabled = !strip.enabled
-      api.putLedStrip(strip)
+      api.putLedStrip(strip).then(response => {
+        strip.enabled = !strip.enabled
+      }).catch(error => {
+        this.errors.push(error)
+      })
     },
     getVariantEnabled (strip) {
       return strip.enabled ? 'outline-dark' : 'dark'
@@ -95,9 +90,7 @@ export default {
     ...mapMutations({
       updateStoreStrip: 'updateLedStrip',
       updateStoreStrips: 'updateBackendStrips',
-      updateStoreProfiles: 'updateBackendProfiles',
-      updateStoreProfile: 'updateColorProfile',
-      resetStoreStrip: 'resetLedStrip'
+      updateStoreProfiles: 'updateBackendProfiles'
     })
   },
   mounted () {
