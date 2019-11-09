@@ -110,7 +110,7 @@ public class StripRegistry
 
 	private void handleSave( final ProfileEvent event )
 	{
-		if ( event == null || event.getProfileId( ) != null )
+		if ( event == null || event.getProfileId( ) == null )
 		{
 			/* no action if freshly saved profile */
 			return;

@@ -91,7 +91,8 @@ public class Apa102Meta
 	{
 		if ( isEnableStateChange( strip ) || isEnabled( ) )
 		{
-			changeStripState( strip.getProfile( ) ); // FIXME handle change, if disabled
+			/* if new state is disabled set to null to clear */
+			changeStripState( strip.isEnabled( ) ? strip.getProfile( ) : null );
 		}
 		setValues( strip );
 	}
@@ -148,7 +149,7 @@ public class Apa102Meta
 			 * if no profile and this has no color -> no change
 			 * if no profile and this has a color -> change
 			 */
-			return this.hasNoColor( );
+			return this.hasNoColor( ) == false;
 		}
 		return this.r != profile.getRed( ) || this.g != profile.getGreen( ) || this.b != profile.getBlue( );
 	}
@@ -161,7 +162,7 @@ public class Apa102Meta
 			 * if no profile and this has no brightness -> no change
 			 * if no profile and this has a brightness -> change
 			 */
-			return this.hasNoBrightness( );
+			return this.hasNoBrightness( ) == false;
 		}
 		return profile.getBrightness( ) != this.brightness;
 	}

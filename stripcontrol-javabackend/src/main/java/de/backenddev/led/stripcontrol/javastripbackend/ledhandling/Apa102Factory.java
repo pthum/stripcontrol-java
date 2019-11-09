@@ -9,25 +9,26 @@ import de.backenddev.led.stripcontrol.javastripbackend.model.LEDStrip;
 
 public class Apa102Factory
 {
-	public static APA102Control createControl(LEDStrip strip, boolean dummyImpl ) throws IOException
+	public static APA102Control createControl( final LEDStrip strip, final boolean dummyImpl ) throws IOException
 	{
 		APA102Control apaStrip = null;
-		ColorProfile profile = strip.getProfile( );
-		int numLEDs = strip.getNumLeds( );
-		int brightness = profile != null ? profile.getBrightness( ) : 100;
-		int misoPin = strip.getMisoPin( );
-		int sclkPin = strip.getSclkPin( );
-		int speed = strip.getSpeedHz( );
+		final ColorProfile profile = strip.getProfile( );
+		final int numLEDs = strip.getNumLeds( );
+		final int brightness = profile != null ? profile.getBrightness( ) : 100;
+		final int misoPin = strip.getMisoPin( );
+		final int sclkPin = strip.getSclkPin( );
+		final int speed = strip.getSpeedHz( );
 		try
 		{
-			apaStrip = dummyImpl
-					? new NoOpApa102Control( numLEDs, brightness, ColorConfig.RGB, misoPin, sclkPin, speed )
+			apaStrip = dummyImpl ? new NoOpApa102Control( numLEDs )
 					: new APA102Control( numLEDs, brightness, ColorConfig.RGB, misoPin, sclkPin, speed );
-		} catch ( IOException e )
+		}
+		catch ( final IOException e )
 		{
 			// TODO
 			e.printStackTrace( );
-		} catch ( UnsatisfiedLinkError ule )
+		}
+		catch ( final UnsatisfiedLinkError ule )
 		{
 			/*
 			 * occurs, when wiringpi is not available (f.i. on a dev system which is not a

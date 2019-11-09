@@ -7,16 +7,24 @@ import de.backenddev.led.apa102.ColorConfig;
 
 public class NoOpApa102Control extends APA102Control
 {
+	int red = 0;
+	int green = 0;
+	int blue = 0;
+	double brightnessPercent = 0;
 
-	public NoOpApa102Control( int numLed, int globalBrightness, ColorConfig cfg, int mosi, int sclk, int maxSpeedHz )
-			throws IOException
+	public NoOpApa102Control( final int numLed ) throws IOException
 	{
-		super( numLed, cfg, 100, new byte[100], 100, null );
+		super( numLed, ColorConfig.RGB, 100, new byte[100], 100, null );
 	}
 
 	@Override
-	public void setPixel(int ledNum, int red, int green, int blue, double brightnessPercent )
+	public void setPixel( final int ledNum, final int red, final int green, final int blue,
+			final double brightnessPercent )
 	{
+		this.red = red;
+		this.green = green;
+		this.blue = blue;
+		this.brightnessPercent = brightnessPercent;
 	}
 
 	@Override
@@ -27,5 +35,42 @@ public class NoOpApa102Control extends APA102Control
 	@Override
 	public void clearStrip( ) throws IOException
 	{
+		this.red = 0;
+		this.green = 0;
+		this.blue = 0;
+		this.brightnessPercent = 0;
 	}
+
+	/**
+	 * @return the red
+	 */
+	public int getRed( )
+	{
+		return this.red;
+	}
+
+	/**
+	 * @return the green
+	 */
+	public int getGreen( )
+	{
+		return this.green;
+	}
+
+	/**
+	 * @return the blue
+	 */
+	public int getBlue( )
+	{
+		return this.blue;
+	}
+
+	/**
+	 * @return the brightnessPercent
+	 */
+	public double getBrightnessPercent( )
+	{
+		return this.brightnessPercent;
+	}
+
 }
