@@ -122,7 +122,10 @@ public class StripRegistry
 		{
 			try
 			{
-				meta.update( profile );
+				if ( meta.isEnabled( ) )
+				{
+					meta.update( profile );
+				}
 			}
 			catch ( final IOException e )
 			{

@@ -2,6 +2,9 @@ package de.backenddev.led.stripcontrol.javastripbackend.ledhandling;
 
 import java.io.IOException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import de.backenddev.led.apa102.APA102Control;
 import de.backenddev.led.apa102.APA102Helper;
 import de.backenddev.led.stripcontrol.javastripbackend.model.ColorProfile;
@@ -9,6 +12,7 @@ import de.backenddev.led.stripcontrol.javastripbackend.model.LEDStrip;
 
 public class Apa102Meta
 {
+	private static final Logger LOG = LoggerFactory.getLogger( Apa102Meta.class );
 	boolean enabled;
 	int r;
 	int g;
@@ -133,8 +137,10 @@ public class Apa102Meta
 
 	private boolean isStateChange( final LEDStrip strip )
 	{
-		return isEnableStateChange( strip ) || isColorChange( strip.getProfile( ) )
+		final boolean result = isEnableStateChange( strip ) || isColorChange( strip.getProfile( ) )
 				|| isBrightnessChange( strip.getProfile( ) );
+		LOG.debug( "Is state change? " + result + " for " + this.toString( ) + " and strip: " + strip );
+		return result;
 	}
 
 	private boolean isEnableStateChange( final LEDStrip strip )
@@ -181,6 +187,13 @@ public class Apa102Meta
 		this.b = profile != null ? profile.getBlue( ) : 0;
 		this.brightness = profile != null ? profile.getBrightness( ) : 0;
 		this.profileId = profile != null ? profile.getId( ) : null;
+	}
+
+	@Override
+	public String toString( )
+	{
+		return "Apa102Meta [enabled=" + this.enabled + ", r=" + this.r + ", g=" + this.g + ", b=" + this.b
+				+ ", brightness=" + this.brightness + ", profileId=" + this.profileId + "]";
 	}
 
 }
