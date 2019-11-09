@@ -74,7 +74,7 @@ const ledStripStore = {
       name: '',
       description: '',
       misoPin: 0,
-      numLeds: 0,
+      numLeds: 30,
       sclkPin: 0,
       speedHz: 8000000
     },
@@ -93,6 +93,26 @@ const ledStripStore = {
     /** resets the led strip to 0 values, without id, expects an object containing a type field */
     resetLedStrip (state, obj) {
       state[obj.type] = { name: '', description: '', misoPin: 0, numLeds: 30, sclkPin: 0, speedHz: 8000000 }
+    },
+    updateLedStripInBackendList (state, updatedEntry) {
+      if (updatedEntry === 'undefined' || updatedEntry.id === 'undefined') {
+        return
+      }
+      var objIdx = state.backendStrips.findIndex(obj => obj.id === updatedEntry.id)
+      if (objIdx < 0) {
+        state.backendStrips.push(updatedEntry)
+      } else {
+        state.backendStrips[objIdx] = updatedEntry
+      }
+    },
+    removeLedStripInBackendList (state, removedEntry) {
+      if (removedEntry === 'undefined' || removedEntry.id === 'undefined') {
+        return
+      }
+      var objIdx = state.backendStrips.findIndex(obj => obj.id === removedEntry.id)
+      if (objIdx >= 0) {
+        state.backendStrips.splice(objIdx, 1)
+      }
     }
   },
   getters: {

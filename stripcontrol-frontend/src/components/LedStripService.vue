@@ -109,13 +109,13 @@ export default {
     handleLSCreate (event) {
       this.updateStoreStrip({ type: 'selectedStrip', object: event.object })
       this.toggleEdit()
-      this.callGetLedStrips()
+      this.updateLedStripInBackendList(event.object)
       this.makeToast(event)
     },
     /** reset the selected strip, update the led strips, inform user */
     handleLSDelete (event) {
       this.resetStoreStrip({ type: 'selectedStrip' })
-      this.callGetLedStrips()
+      this.removeLedStripInBackendList(event.object)
       this.toggleCreate()
       this.makeToast(event)
     },
@@ -130,7 +130,9 @@ export default {
     ...mapMutations({
       updateStoreStrip: 'updateLedStrip',
       updateStoreStrips: 'updateBackendStrips',
-      resetStoreStrip: 'resetLedStrip'
+      resetStoreStrip: 'resetLedStrip',
+      updateLedStripInBackendList: 'updateLedStripInBackendList',
+      removeLedStripInBackendList: 'removeLedStripInBackendList'
     })
   },
   mounted () {

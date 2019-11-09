@@ -161,11 +161,10 @@ export default {
     /** create an entry */
     createEntry () {
       var obj = { name: this.name, description: this.description, misoPin: this.misoPin, sclkPin: this.sclkPin, numLeds: this.numLeds, speedHz: this.speedHz, id: this.id }
-      console.log('creating entry')
       api.postLedStrip(obj).then(response => {
         var resUrlArray = response.headers.location.split('/')
         var createdId = resUrlArray[resUrlArray.length - 1]
-        obj.id = createdId
+        obj.id = Number(createdId)
         this.handleSuccess({ action: 'LScreate', text: 'Successfully created led strip with id ' + createdId, object: obj })
         this.updateStoreStrip({ ype: this.formStripName, object: obj })
       }).catch(error => {
@@ -189,7 +188,7 @@ export default {
       api.deleteLedStrip(obj).then(response => {
         // reset the current strip, as it was removed
         this.resetStoreStrip({ type: this.formStripName })
-        this.handleSuccess({ action: 'LSdelete', text: 'Deleted led strip "' + obj.name + '"' })
+        this.handleSuccess({ action: 'LSdelete', text: 'Deleted led strip "' + obj.name + '"', object: obj })
       }).catch(error => {
         this.handleError(error)
       })
