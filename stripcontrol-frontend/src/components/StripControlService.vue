@@ -50,8 +50,8 @@ export default {
   methods: {
     /** enable/disable strip */
     toggleEnabled (strip) {
+      strip.enabled = !strip.enabled
       api.putLedStrip(strip).then(response => {
-        strip.enabled = !strip.enabled
       }).catch(error => {
         this.handleError(error)
       })
