@@ -89,16 +89,16 @@ public class Apa102Meta
 
 	public void update( final LEDStrip strip ) throws IOException
 	{
-		if ( isStateChange( strip ) )
+		if ( isEnableStateChange( strip ) || isEnabled( ) )
 		{
-			changeStripState( strip.getProfile( ) );
+			changeStripState( strip.getProfile( ) ); // FIXME handle change, if disabled
 		}
 		setValues( strip );
 	}
 
 	public void update( final ColorProfile profile ) throws IOException
 	{
-		if ( isColorChange( profile ) || isBrightnessChange( profile ) )
+		if ( isEnabled( ) && ( isColorChange( profile ) || isBrightnessChange( profile ) ) )
 		{
 			changeStripState( profile );
 		}
@@ -133,14 +133,6 @@ public class Apa102Meta
 		}
 		APA102Helper.setStripColor( this.control, pr, pg, pb, pbrght );
 		this.control.show( );
-	}
-
-	private boolean isStateChange( final LEDStrip strip )
-	{
-		final boolean result = isEnableStateChange( strip ) || isColorChange( strip.getProfile( ) )
-				|| isBrightnessChange( strip.getProfile( ) );
-		LOG.debug( "Is state change? " + result + " for " + this.toString( ) + " and strip: " + strip );
-		return result;
 	}
 
 	private boolean isEnableStateChange( final LEDStrip strip )
