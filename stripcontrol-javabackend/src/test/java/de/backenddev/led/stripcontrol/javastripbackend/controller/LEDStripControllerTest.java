@@ -24,6 +24,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.backenddev.led.stripcontrol.javastripbackend.model.LEDStrip;
+import de.backenddev.led.stripcontrol.javastripbackend.service.ColorProfileService;
 import de.backenddev.led.stripcontrol.javastripbackend.service.LEDStripService;
 
 @RunWith ( SpringRunner.class )
@@ -37,7 +38,10 @@ public class LEDStripControllerTest
 	@MockBean
 	private LEDStripService service;
 
-	private ObjectMapper mapper = new ObjectMapper( );
+	@MockBean
+	private ColorProfileService cpService;
+
+	private final ObjectMapper mapper = new ObjectMapper( );
 
 	/**
 	 * Test creating an object with valid values
@@ -52,7 +56,7 @@ public class LEDStripControllerTest
 		cp2.setId( 2L );
 		profiles.add( cp1 );
 		profiles.add( cp2 );
-		when( service.getAllLEDStrips( ) ).thenReturn( profiles );
+		when( this.service.getAllLEDStrips( ) ).thenReturn( profiles );
 
 		this.mockMvc.perform( get( CP_PATH ) ).andExpect( status( ).isOk( ) )
 				.andExpect( content( ).json( toJson( profiles ) ) );
@@ -67,7 +71,7 @@ public class LEDStripControllerTest
 		final LEDStrip cp = new LEDStrip( "testStrip", "testdescription", 1, 2, 5, 8000000 );
 		final LEDStrip cpWithId = new LEDStrip( "testStrip", "testdescription", 1, 2, 5, 8000000 );
 		cpWithId.setId( 1L );
-		when( service.saveLEDStrip( cp ) ).thenReturn( cpWithId );
+		when( this.service.saveLEDStrip( cp ) ).thenReturn( cpWithId );
 
 		this.mockMvc.perform( post( CP_PATH ).contentType( MediaType.APPLICATION_JSON ).content( toJson( cp ) ) )
 				.andExpect( status( ).isCreated( ) ).andExpect( redirectedUrlPattern( "http://*" + CP_PATH + "/1" ) );
@@ -81,7 +85,7 @@ public class LEDStripControllerTest
 	@Test
 	public void testGetNotExistingObject( ) throws Exception
 	{
-		when( service.getById( 1 ) ).thenReturn( Optional.empty( ) );
+		when( this.service.getById( 1 ) ).thenReturn( Optional.empty( ) );
 		this.mockMvc.perform( get( CP_PATH + "/1" ) ).andExpect( status( ).isNotFound( ) );
 	}
 
@@ -94,7 +98,7 @@ public class LEDStripControllerTest
 	public void testGetExistingObject( ) throws Exception
 	{
 		final LEDStrip cp = new LEDStrip( "testStrip", "testdescription", 1, 2, 5, 8000000 );
-		when( service.getById( 1 ) ).thenReturn( Optional.of( cp ) );
+		when( this.service.getById( 1 ) ).thenReturn( Optional.of( cp ) );
 		this.mockMvc.perform( get( CP_PATH + "/1" ) ).andExpect( status( ).isOk( ) )
 				.andExpect( content( ).contentType( "application/json;charset=UTF-8" ) )
 				.andExpect( content( ).json( toJson( cp ) ) );
@@ -108,7 +112,7 @@ public class LEDStripControllerTest
 	@Test
 	public void testDeleteNotExistingObject( ) throws Exception
 	{
-		when( service.getById( 1 ) ).thenReturn( Optional.empty( ) );
+		when( this.service.getById( 1 ) ).thenReturn( Optional.empty( ) );
 		this.mockMvc.perform( delete( CP_PATH + "/1" ) ).andExpect( status( ).isNotFound( ) );
 	}
 
@@ -121,11 +125,11 @@ public class LEDStripControllerTest
 	public void testDeleteExistingObject( ) throws Exception
 	{
 		final LEDStrip cp = new LEDStrip( "testStrip", "testdescription", 1, 2, 5, 8000000 );
-		when( service.getById( 1 ) ).thenReturn( Optional.of( cp ) );
+		when( this.service.getById( 1 ) ).thenReturn( Optional.of( cp ) );
 		this.mockMvc.perform( delete( CP_PATH + "/1" ) ).andExpect( status( ).isNoContent( ) );
 	}
 
-	private String toJson(Object object ) throws Exception
+	private String toJson( final Object object ) throws Exception
 	{
 		return this.mapper.writeValueAsString( object );
 	}

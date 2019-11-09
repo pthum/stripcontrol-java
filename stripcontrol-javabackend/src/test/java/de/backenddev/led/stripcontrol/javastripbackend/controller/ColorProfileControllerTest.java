@@ -40,7 +40,7 @@ public class ColorProfileControllerTest
 	@MockBean
 	private ColorProfileService service;
 
-	private ObjectMapper mapper = new ObjectMapper( );
+	private final ObjectMapper mapper = new ObjectMapper( );
 
 	/**
 	 * Test creating an object with valid values
@@ -51,11 +51,11 @@ public class ColorProfileControllerTest
 		final List<ColorProfile> profiles = new ArrayList<>( );
 		final ColorProfile cp1 = new ColorProfile( 255, 255, 255, 100 );
 		final ColorProfile cp2 = new ColorProfile( 255, 255, 255, 100 );
-		cp1.setId( 1 );
-		cp2.setId( 2 );
+		cp1.setId( 1L );
+		cp2.setId( 2L );
 		profiles.add( cp1 );
 		profiles.add( cp2 );
-		when( service.getAllColorProfiles( ) ).thenReturn( profiles );
+		when( this.service.getAllColorProfiles( ) ).thenReturn( profiles );
 
 		this.mockMvc.perform( get( CP_PATH ) ).andExpect( status( ).isOk( ) )
 				.andExpect( content( ).json( toJson( profiles ) ) );
@@ -69,8 +69,8 @@ public class ColorProfileControllerTest
 	{
 		final ColorProfile cp = new ColorProfile( 255, 255, 255, 100 );
 		final ColorProfile cpWithId = new ColorProfile( 255, 255, 255, 100 );
-		cpWithId.setId( 1 );
-		when( service.saveColorProfile( cp ) ).thenReturn( cpWithId );
+		cpWithId.setId( 1L );
+		when( this.service.saveColorProfile( cp ) ).thenReturn( cpWithId );
 
 		this.mockMvc.perform( post( CP_PATH ).contentType( MediaType.APPLICATION_JSON ).content( toJson( cp ) ) )
 				.andExpect( status( ).isCreated( ) ).andExpect( redirectedUrlPattern( "http://*" + CP_PATH + "/1" ) );
@@ -85,8 +85,8 @@ public class ColorProfileControllerTest
 	{
 		final ColorProfile cp = new ColorProfile( 300, 255, 255, 100 );
 		final ColorProfile cpWithId = new ColorProfile( 300, 255, 255, 100 );
-		cpWithId.setId( 1 );
-		when( service.saveColorProfile( cp ) ).thenReturn( cpWithId );
+		cpWithId.setId( 1L );
+		when( this.service.saveColorProfile( cp ) ).thenReturn( cpWithId );
 
 		this.mockMvc.perform( post( CP_PATH ).contentType( MediaType.APPLICATION_JSON ).content( toJson( cp ) ) )
 				.andExpect( status( ).isBadRequest( ) ).andExpect( jsonPath( "$.errors.[0].['field']", is( "red" ) ) );
@@ -100,7 +100,7 @@ public class ColorProfileControllerTest
 	@Test
 	public void testGetNotExistingObject( ) throws Exception
 	{
-		when( service.getById( 1 ) ).thenReturn( Optional.empty( ) );
+		when( this.service.getById( 1 ) ).thenReturn( Optional.empty( ) );
 		this.mockMvc.perform( get( CP_PATH + "/1" ) ).andExpect( status( ).isNotFound( ) );
 	}
 
@@ -113,7 +113,7 @@ public class ColorProfileControllerTest
 	public void testGetExistingObject( ) throws Exception
 	{
 		final ColorProfile cp = new ColorProfile( 255, 255, 255, 100 );
-		when( service.getById( 1 ) ).thenReturn( Optional.of( cp ) );
+		when( this.service.getById( 1 ) ).thenReturn( Optional.of( cp ) );
 		this.mockMvc.perform( get( CP_PATH + "/1" ) ).andExpect( status( ).isOk( ) )
 				.andExpect( content( ).contentType( "application/json;charset=UTF-8" ) )
 				.andExpect( content( ).json( toJson( cp ) ) );
@@ -127,7 +127,7 @@ public class ColorProfileControllerTest
 	@Test
 	public void testDeleteNotExistingObject( ) throws Exception
 	{
-		when( service.getById( 1 ) ).thenReturn( Optional.empty( ) );
+		when( this.service.getById( 1 ) ).thenReturn( Optional.empty( ) );
 		this.mockMvc.perform( delete( CP_PATH + "/1" ) ).andExpect( status( ).isNotFound( ) );
 	}
 
@@ -140,11 +140,11 @@ public class ColorProfileControllerTest
 	public void testDeleteExistingObject( ) throws Exception
 	{
 		final ColorProfile cp = new ColorProfile( 255, 255, 255, 100 );
-		when( service.getById( 1 ) ).thenReturn( Optional.of( cp ) );
+		when( this.service.getById( 1 ) ).thenReturn( Optional.of( cp ) );
 		this.mockMvc.perform( delete( CP_PATH + "/1" ) ).andExpect( status( ).isNoContent( ) );
 	}
 
-	private String toJson(Object object ) throws Exception
+	private String toJson( final Object object ) throws Exception
 	{
 		return this.mapper.writeValueAsString( object );
 	}

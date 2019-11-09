@@ -1,51 +1,50 @@
 package de.backenddev.led.stripcontrol.javastripbackend;
 
-import java.io.IOException;
-import java.util.List;
+import javax.annotation.PreDestroy;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
-import de.backenddev.led.apa102.APA102Control;
-import de.backenddev.led.apa102.APA102Helper;
-import de.backenddev.led.stripcontrol.javastripbackend.model.ColorProfile;
+import de.backenddev.led.stripcontrol.javastripbackend.ledhandling.EventType;
+import de.backenddev.led.stripcontrol.javastripbackend.ledhandling.StripEvent;
+import de.backenddev.led.stripcontrol.javastripbackend.ledhandling.StripRegistry;
 import de.backenddev.led.stripcontrol.javastripbackend.model.LEDStrip;
 import de.backenddev.led.stripcontrol.javastripbackend.repository.LEDStripRepository;
-import de.backenddev.led.stripcontrol.javastripbackend.service.Apa102Factory;
 
 @Component
 public class ApplicationEventComponent
 {
+	private static final Logger LOG = LoggerFactory.getLogger( ApplicationEventComponent.class );
 	@Autowired
 	private LEDStripRepository repo;
 
-	@Value ( "${strips.enabled}" )
-	private boolean stripsEnabled;
+	@Autowired
+	private StripRegistry registry;
 
 	@EventListener ( ApplicationReadyEvent.class )
-	public void doSomethingAfterStartup( )
+	public void initStripsOnStartup( )
 	{
-		List<LEDStrip> enabledStrips = repo.findByEnabled( true );
-		for ( LEDStrip strip : enabledStrips )
+		final Iterable<LEDStrip> allStrips = this.repo.findAll( );
+		/* initialize all strips on startup */
+		for ( final LEDStrip strip : allStrips )
 		{
-			try
-			{
-				System.out.println( "Setting up strip " + strip.getName( ) );
-				APA102Control control = Apa102Factory.createControl( strip, !stripsEnabled );
-				ColorProfile profile = strip.getProfile( );
-				if ( profile != null )
-				{
-					APA102Helper.setStripColor( control, profile.getRed( ), profile.getGreen( ), profile.getBlue( ),
-							profile.getBrightness( ) );
-				}
-			} catch ( IOException e )
-			{
-				// TODO
-				e.printStackTrace( );
-			}
+			LOG.info( "Setting up strip " + strip.getName( ) );
+			this.registry.handleStripEvent( new StripEvent( this, EventType.SAVE, strip, strip.getId( ) ) );
+		}
+	}
+
+	@PreDestroy
+	public void disableStripsOnShutdown( )
+	{
+		final Iterable<LEDStrip> allStrips = this.repo.findAll( );
+		/* shutdown all strips on shutdown */
+		for ( final LEDStrip strip : allStrips )
+		{
+			this.registry.handleStripEvent( new StripEvent( this, EventType.DELETE, null, strip.getId( ) ) );
 		}
 	}
 }
