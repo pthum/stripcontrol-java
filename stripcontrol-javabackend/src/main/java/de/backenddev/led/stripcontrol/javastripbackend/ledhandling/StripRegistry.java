@@ -10,7 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import de.backenddev.led.stripcontrol.javastripbackend.controller.LEDStripController;
 import de.backenddev.led.stripcontrol.javastripbackend.model.ColorProfile;
@@ -23,7 +23,7 @@ import de.backenddev.led.stripcontrol.javastripbackend.model.LEDStrip;
  * @author thum
  *
  */
-@Service
+@Component
 public class StripRegistry
 {
 	private static final Logger LOG = LoggerFactory.getLogger( LEDStripController.class );
