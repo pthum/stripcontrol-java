@@ -1,5 +1,5 @@
 <template>
-  <div class="colorProfileService">
+  <div class="colorProfileSeelect">
     <b-dropdown v-model="selected" class="selectpicker" variant="dark" :text="stringSelected">
       <b-dropdown-item v-if="storedBackendProfiles.length === 0" disabled>No profiles available</b-dropdown-item>
       <b-dropdown-item v-else v-for="profile in storedBackendProfiles" :key="profile.id" :value="profile" @click="handleSelection(profile)">
@@ -22,7 +22,6 @@ export default {
   },
   data () {
     return {
-      errors: [],
       selected: {}
     }
   },

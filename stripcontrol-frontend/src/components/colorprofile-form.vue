@@ -72,7 +72,7 @@ export default {
     },
     /** handles an update of brightness */
     handleBrightness (value) {
-      var obj = { red: this.red, green: this.green, blue: this.blue, brightness: value, id: this.id }
+      var obj = { red: this.red, green: this.green, blue: this.blue, brightness: Number(value), id: this.id }
       this.updateStoreProfile({ type: this.formProfileName, object: obj })
     },
     /** save an entry, will do an update if id is set, create otherwise */
@@ -90,7 +90,7 @@ export default {
       api.postColorProfile(obj).then(response => {
         var resUrlArray = response.headers.location.split('/')
         var createdId = resUrlArray[resUrlArray.length - 1]
-        obj.id = createdId
+        obj.id = Number(createdId)
         this.handleSuccess({ action: 'CPcreate', text: 'Successfully created color profile with id ' + createdId, object: obj })
         this.updateStoreProfile({ type: this.formProfileName, object: obj })
       }).catch(error => {
@@ -114,7 +114,7 @@ export default {
       api.deleteColorProfile(obj).then(response => {
         // reset the current profile, as it was removed
         this.resetStoreProfile({ type: this.formProfileName })
-        this.handleSuccess({ action: 'CPdelete', text: 'Deleted color profile with id ' + obj.id })
+        this.handleSuccess({ action: 'CPdelete', text: 'Deleted color profile with id ' + obj.id, object: obj })
       }).catch(error => {
         this.handleError(error)
       })

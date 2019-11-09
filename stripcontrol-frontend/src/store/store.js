@@ -32,6 +32,26 @@ const colorProfileStore = {
     /** resets the color profile to 0 values, without id, expects an object containing a type field */
     resetColorProfile (state, obj) {
       state[obj.type] = { red: 255, green: 255, blue: 255, brightness: 0 }
+    },
+    updateColorProfileInBackendList (state, updatedEntry) {
+      if (updatedEntry === 'undefined' || updatedEntry.id === 'undefined') {
+        return
+      }
+      var objIdx = state.backendProfiles.findIndex(obj => obj.id === updatedEntry.id)
+      if (objIdx < 0) {
+        state.backendProfiles.push(updatedEntry)
+      } else {
+        state.backendProfiles[objIdx] = updatedEntry
+      }
+    },
+    removeColorProfileInBackendList (state, removedEntry) {
+      if (removedEntry === 'undefined' || removedEntry.id === 'undefined') {
+        return
+      }
+      var objIdx = state.backendProfiles.findIndex(obj => obj.id === removedEntry.id)
+      if (objIdx >= 0) {
+        state.backendProfiles.splice(objIdx, 1)
+      }
     }
   },
   getters: {
@@ -72,7 +92,7 @@ const ledStripStore = {
     },
     /** resets the led strip to 0 values, without id, expects an object containing a type field */
     resetLedStrip (state, obj) {
-      state[obj.type] = { name: '', description: '', misoPin: 0, numLeds: 0, sclkPin: 0, speedHz: 8000000 }
+      state[obj.type] = { name: '', description: '', misoPin: 0, numLeds: 30, sclkPin: 0, speedHz: 8000000 }
     }
   },
   getters: {

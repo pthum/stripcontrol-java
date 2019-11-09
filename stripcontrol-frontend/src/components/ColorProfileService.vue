@@ -7,7 +7,7 @@
         </b-col>
         <b-col sm="5">
           <b-button-group >
-            <colorprofileselect selectProfileName="selectedProfile"/>
+            <colorprofileselect selectProfileName="selectedProfile" :preselected="storeSelectedProfile.id"/>
             <b-button variant="dark" @click="callGetColorProfiles()"><font-awesome-icon icon="sync" /></b-button>
             <b-button :variant="variantEdit" :disabled="disabledEdit" @click="toggleEdit()"><font-awesome-icon icon="edit"> </font-awesome-icon></b-button>
             <b-button :variant="variantCreate" :disabled="disabledCreate" @click="toggleCreate()"><font-awesome-icon icon="plus-square"> </font-awesome-icon></b-button>
@@ -92,15 +92,17 @@ export default {
     },
     /** set the created object as selected profile, update the colorprofiles, inform user  */
     handleCPCreate (event) {
+      console.log(event)
       this.updateStoreProfile({ type: 'selectedProfile', object: event.object })
+      this.updateColorProfileInBackendList(event.object)
       this.toggleEdit()
-      this.callGetColorProfiles()
       this.makeToast(event)
     },
     /** reset the selected profile, update the colorprofiles, inform user */
     handleCPDelete (event) {
+      console.log(event)
       this.resetStoreProfile({ type: 'selectedProfile' })
-      this.callGetColorProfiles()
+      this.removeColorProfileInBackendList(event.object)
       this.toggleCreate()
       this.makeToast(event)
     },
@@ -119,7 +121,9 @@ export default {
     ...mapMutations({
       updateStoreProfile: 'updateColorProfile',
       updateStoreProfiles: 'updateBackendProfiles',
-      resetStoreProfile: 'resetColorProfile'
+      resetStoreProfile: 'resetColorProfile',
+      updateColorProfileInBackendList: 'updateColorProfileInBackendList',
+      removeColorProfileInBackendList: 'removeColorProfileInBackendList'
     })
   },
   mounted () {
