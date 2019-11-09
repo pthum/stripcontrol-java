@@ -35,7 +35,7 @@
 import api from './backend-api'
 import ledstripform from './ledstrip-form'
 import EventBus from './eventbus'
-import {mapMutations, mapGetters} from 'vuex'
+import { mapMutations, mapGetters } from 'vuex'
 
 export default {
   name: 'ledstripservice',
@@ -62,7 +62,7 @@ export default {
         return this.storeSelectedStrip
       },
       set (value) {
-        this.updateStoreStrip({type: 'selectedStrip', object: value})
+        this.updateStoreStrip({ type: 'selectedStrip', object: value })
         this.toggleEdit()
       }
     },
@@ -91,7 +91,7 @@ export default {
     },
     /** sets the current set strip as strip to edit */
     toggleEdit () {
-      this.updateStoreStrip({type: 'editableStrip', object: this.storeSelectedStrip})
+      this.updateStoreStrip({ type: 'editableStrip', object: this.storeSelectedStrip })
       this.variantEdit = 'outline-dark'
       this.disabledEdit = true
       this.variantCreate = 'dark'
@@ -99,7 +99,7 @@ export default {
     },
     /** resets the strip to edit to initial values */
     toggleCreate () {
-      this.resetStoreStrip({type: 'editableStrip'})
+      this.resetStoreStrip({ type: 'editableStrip' })
       this.variantEdit = 'dark'
       this.disabledEdit = false
       this.variantCreate = 'outline-dark'
@@ -107,14 +107,14 @@ export default {
     },
     /** set the created object as selected strip, update the led strips, inform user  */
     handleLSCreate (event) {
-      this.updateStoreStrip({type: 'selectedStrip', object: event.object})
+      this.updateStoreStrip({ type: 'selectedStrip', object: event.object })
       this.toggleEdit()
       this.callGetLedStrips()
       this.makeToast(event)
     },
     /** reset the selected strip, update the led strips, inform user */
     handleLSDelete (event) {
-      this.resetStoreStrip({type: 'selectedStrip'})
+      this.resetStoreStrip({ type: 'selectedStrip' })
       this.callGetLedStrips()
       this.toggleCreate()
       this.makeToast(event)

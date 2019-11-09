@@ -67,7 +67,7 @@
 <script>
 import api from './backend-api'
 import EventBus from './eventbus'
-import {mapMutations, mapGetters} from 'vuex'
+import { mapMutations, mapGetters } from 'vuex'
 
 export default {
   name: 'strip-form',
@@ -166,8 +166,8 @@ export default {
         var resUrlArray = response.headers.location.split('/')
         var createdId = resUrlArray[resUrlArray.length - 1]
         obj.id = createdId
-        this.handleSuccess({action: 'LScreate', text: 'Successfully created led strip with id ' + createdId, object: obj})
-        this.updateStoreStrip({type: this.formStripName, object: obj})
+        this.handleSuccess({ action: 'LScreate', text: 'Successfully created led strip with id ' + createdId, object: obj })
+        this.updateStoreStrip({ ype: this.formStripName, object: obj })
       }).catch(error => {
         this.handleError(error)
       })
@@ -177,7 +177,7 @@ export default {
       var obj = { name: this.name, description: this.description, misoPin: this.misoPin, sclkPin: this.sclkPin, numLeds: this.numLeds, speedHz: this.speedHz, id: this.id }
       console.log('updating entry "' + obj.name + '"' + obj.id)
       api.putLedStrip(obj).then(response => {
-        this.handleSuccess({action: 'LSupdate', text: 'Successfully updated led strip "' + obj.name + '"', object: obj})
+        this.handleSuccess({ action: 'LSupdate', text: 'Successfully updated led strip "' + obj.name + '"', object: obj })
       }).catch(error => {
         this.handleError(error)
       })
@@ -188,20 +188,20 @@ export default {
       console.log('deleting entry ' + obj.id)
       api.deleteLedStrip(obj).then(response => {
         // reset the current strip, as it was removed
-        this.resetStoreStrip({type: this.formStripName})
-        this.handleSuccess({action: 'LSdelete', text: 'Deleted led strip "' + obj.name + '"'})
+        this.resetStoreStrip({ type: this.formStripName })
+        this.handleSuccess({ action: 'LSdelete', text: 'Deleted led strip "' + obj.name + '"' })
       }).catch(error => {
         this.handleError(error)
       })
     },
     /** handle success message, expects object with text field and optionally an object field */
     handleSuccess (event) {
-      EventBus.$emit(event.action, {variant: 'success', content: event.text, object: event.object})
+      EventBus.$emit(event.action, { variant: 'success', content: event.text, object: event.object })
     },
     /** handle error message */
     handleError (error) {
       console.log(error)
-      this.makeToast({variant: 'danger', content: error.message})
+      this.makeToast({ variant: 'danger', content: error.message })
     },
     /** makes a toast, expects an object with content field and variant field */
     makeToast (toastData) {

@@ -12,8 +12,8 @@ const routes = [
     name: 'MainPage',
     component: MainPage
   },
-    { path: '/colorprofileservice', component: ColorProfileService },
-    { path: '/ledstripservice', component: LedStripService }
+  { path: '/colorprofileservice', component: ColorProfileService },
+  { path: '/ledstripservice', component: LedStripService }
 ]
 
 const router = new VueRouter({

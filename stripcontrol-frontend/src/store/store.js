@@ -31,7 +31,7 @@ const colorProfileStore = {
     },
     /** resets the color profile to 0 values, without id, expects an object containing a type field */
     resetColorProfile (state, obj) {
-      state[obj.type] = {red: 255, green: 255, blue: 255, brightness: 0}
+      state[obj.type] = { red: 255, green: 255, blue: 255, brightness: 0 }
     }
   },
   getters: {

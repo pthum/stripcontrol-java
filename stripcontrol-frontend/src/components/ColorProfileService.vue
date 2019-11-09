@@ -31,7 +31,7 @@ import colorprofileform from './colorprofile-form'
 import colorprofileselect from './colorprofile-select'
 import EventBus from './eventbus'
 import colorhelper from './colorhelper'
-import {mapMutations, mapGetters} from 'vuex'
+import { mapMutations, mapGetters } from 'vuex'
 
 export default {
   name: 'colorprofileservice',
@@ -76,7 +76,7 @@ export default {
     },
     /** sets the current set profile as profile to edit */
     toggleEdit () {
-      this.updateStoreProfile({type: 'editableProfile', object: this.storeSelectedProfile})
+      this.updateStoreProfile({ type: 'editableProfile', object: this.storeSelectedProfile })
       this.variantEdit = 'outline-dark'
       this.disabledEdit = true
       this.variantCreate = 'dark'
@@ -84,7 +84,7 @@ export default {
     },
     /** resets the profile to edit to initial values */
     toggleCreate () {
-      this.resetStoreProfile({type: 'editableProfile'})
+      this.resetStoreProfile({ type: 'editableProfile' })
       this.variantEdit = 'dark'
       this.disabledEdit = false
       this.variantCreate = 'outline-dark'
@@ -92,20 +92,20 @@ export default {
     },
     /** set the created object as selected profile, update the colorprofiles, inform user  */
     handleCPCreate (event) {
-      this.updateStoreProfile({type: 'selectedProfile', object: event.object})
+      this.updateStoreProfile({ type: 'selectedProfile', object: event.object })
       this.toggleEdit()
       this.callGetColorProfiles()
       this.makeToast(event)
     },
     /** reset the selected profile, update the colorprofiles, inform user */
     handleCPDelete (event) {
-      this.resetStoreProfile({type: 'selectedProfile'})
+      this.resetStoreProfile({ type: 'selectedProfile' })
       this.callGetColorProfiles()
       this.toggleCreate()
       this.makeToast(event)
     },
     handleCPSelect (event) {
-      this.updateStoreProfile({type: 'selectedProfile', object: event.object})
+      this.updateStoreProfile({ type: 'selectedProfile', object: event.object })
       this.toggleEdit()
     },
     /** makes a toast, expects an object with content field and variant field */

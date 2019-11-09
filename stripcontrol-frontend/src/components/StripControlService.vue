@@ -31,7 +31,7 @@
 import api from './backend-api'
 import colorprofileselect from './colorprofile-select'
 import EventBus from './eventbus'
-import {mapMutations, mapGetters} from 'vuex'
+import { mapMutations, mapGetters } from 'vuex'
 
 export default {
   name: 'stripcontrolservice',
@@ -79,7 +79,7 @@ export default {
     /** handle selection of a color profile */
     handleCPSelect (event) {
       console.log(event)
-      api.updateStripProfile({stripId: event.stripId, profile: event.object}).then(response => {
+      api.updateStripProfile({ stripId: event.stripId, profile: event.object }).then(response => {
         this.callGetColorProfiles()
       }).catch(error => {
         this.handleError(error)
@@ -88,7 +88,7 @@ export default {
     /** handle error message */
     handleError (error) {
       console.log(error)
-      this.makeToast({variant: 'danger', content: error.message})
+      this.makeToast({ variant: 'danger', content: error.message })
     },
     /** makes a toast, expects an object with content field and variant field */
     makeToast (toastData) {

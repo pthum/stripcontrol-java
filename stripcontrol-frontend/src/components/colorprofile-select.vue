@@ -12,7 +12,7 @@
 <script>
 import colorhelper from './colorhelper'
 import EventBus from './eventbus'
-import {mapMutations, mapGetters} from 'vuex'
+import { mapMutations, mapGetters } from 'vuex'
 
 export default {
   name: 'colorprofile-select',
@@ -44,7 +44,7 @@ export default {
     },
     handleSelection (profile) {
       this.selected = profile
-      this.handleSelect({object: this.selected, stripId: this.selectId, type: this.selectProfileName})
+      this.handleSelect({ object: this.selected, stripId: this.selectId, type: this.selectProfileName })
     },
     getHexColor (profile) {
       return colorhelper.rgbToHex2(profile)
