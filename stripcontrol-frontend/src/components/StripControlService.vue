@@ -31,6 +31,7 @@
 import api from './backend-api'
 import colorprofileselect from './colorprofile-select'
 import EventBus from './eventbus'
+import { Ui, EventType } from './constant-contig'
 import { mapMutations, mapGetters } from 'vuex'
 
 export default {
@@ -58,7 +59,7 @@ export default {
     },
     /** return the ui variant of a strip */
     getVariantEnabled (strip) {
-      return strip.enabled ? 'outline-dark' : 'dark'
+      return strip.enabled ? Ui.VRNT_ENABLED : Ui.VRNT_DISABLED
     },
     /** Fetches strips when the component is created. */
     callGetLedStrips () {
@@ -78,7 +79,6 @@ export default {
     },
     /** handle selection of a color profile */
     handleCPSelect (event) {
-      console.log(event)
       api.updateStripProfile({ stripId: event.stripId, profile: event.object }).then(response => {
         this.callGetColorProfiles()
       }).catch(error => {
@@ -87,7 +87,6 @@ export default {
     },
     /** handle error message */
     handleError (error) {
-      console.log(error)
       this.makeToast({ variant: 'danger', content: error.message })
     },
     /** makes a toast, expects an object with content field and variant field */
@@ -105,10 +104,10 @@ export default {
     })
   },
   mounted () {
-    EventBus.$on('CPselect', this.handleCPSelect)
+    EventBus.$on(EventType.CP_SELECT, this.handleCPSelect)
   },
   beforeDestroy () {
-    EventBus.$off('CPselect', this.handleCPSelect)
+    EventBus.$off(EventType.CP_SELECT, this.handleCPSelect)
   }
 }
 </script>
@@ -128,12 +127,5 @@ margin: 0 10px;
 }
 a {
 color: #42b983;
-}
-.foo {
-  float: left;
-  width: 20px;
-  height: 20px;
-  margin: 5px;
-  border: 1px solid rgba(0, 0, 0, .2);
 }
 </style>

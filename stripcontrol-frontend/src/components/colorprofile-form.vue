@@ -35,6 +35,7 @@
 import api from './backend-api'
 import colorhelper from './colorhelper'
 import EventBus from './eventbus'
+import { EventType } from './constant-contig'
 import { mapMutations, mapGetters } from 'vuex'
 
 export default {
@@ -86,12 +87,11 @@ export default {
     /** create an entry */
     createEntry () {
       var obj = { red: this.red, green: this.green, blue: this.blue, brightness: this.brightness, id: this.id }
-      console.log('creating entry')
       api.postColorProfile(obj).then(response => {
         var resUrlArray = response.headers.location.split('/')
         var createdId = resUrlArray[resUrlArray.length - 1]
         obj.id = Number(createdId)
-        this.handleSuccess({ action: 'CPcreate', text: 'Successfully created color profile with id ' + createdId, object: obj })
+        this.handleSuccess({ action: EventType.CP_CREATE, text: 'Successfully created color profile with id ' + createdId, object: obj })
         this.updateStoreProfile({ type: this.formProfileName, object: obj })
       }).catch(error => {
         this.handleError(error)
@@ -100,9 +100,8 @@ export default {
     /** update an entry */
     updateEntry () {
       var obj = { red: this.red, green: this.green, blue: this.blue, brightness: this.brightness, id: this.id }
-      console.log('updating entry ' + obj.id)
       api.putColorProfile(obj).then(response => {
-        this.handleSuccess({ action: 'CPupdate', text: 'Successfully updated color profile with id ' + obj.id, object: obj })
+        this.handleSuccess({ action: EventType.CP_UPDATE, text: 'Successfully updated color profile with id ' + obj.id, object: obj })
       }).catch(error => {
         this.handleError(error)
       })
@@ -110,11 +109,10 @@ export default {
     /** delete an entry */
     deleteEntry () {
       var obj = { id: this.id }
-      console.log('deleting entry ' + obj.id)
       api.deleteColorProfile(obj).then(response => {
         // reset the current profile, as it was removed
         this.resetStoreProfile({ type: this.formProfileName })
-        this.handleSuccess({ action: 'CPdelete', text: 'Deleted color profile with id ' + obj.id, object: obj })
+        this.handleSuccess({ action: EventType.CP_DELETE, text: 'Deleted color profile with id ' + obj.id, object: obj })
       }).catch(error => {
         this.handleError(error)
       })
@@ -125,7 +123,6 @@ export default {
     },
     /** handle error message */
     handleError (error) {
-      console.log(error)
       this.makeToast({ variant: 'danger', content: error.message })
     },
     /** makes a toast, expects an object with content field and variant field */

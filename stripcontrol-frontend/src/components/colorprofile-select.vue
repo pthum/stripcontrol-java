@@ -1,5 +1,5 @@
 <template>
-  <div class="colorProfileSeelect">
+  <div class="colorProfileSelect">
     <b-dropdown v-model="selected" class="selectpicker" variant="dark" :text="stringSelected">
       <b-dropdown-item v-if="storedBackendProfiles.length === 0" disabled>No profiles available</b-dropdown-item>
       <b-dropdown-item v-else v-for="profile in storedBackendProfiles" :key="profile.id" :value="profile" @click="handleSelection(profile)">
@@ -12,20 +12,24 @@
 <script>
 import colorhelper from './colorhelper'
 import EventBus from './eventbus'
-import { mapMutations, mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
+import { EventType } from './constant-contig'
 
 export default {
   name: 'colorprofile-select',
   props: [ 'selectProfileName', 'selectId', 'preselected' ],
   created () {
-    this.preselectObject()
+    this.id = this.preselected
   },
   data () {
     return {
-      selected: {}
+      id: -1
     }
   },
   computed: {
+    selected () {
+      return this.storedBackendProfiles.find(profile => profile.id === this.id)
+    },
     stringSelected () {
       if (typeof this.selected === 'undefined' || typeof this.selected.id === 'undefined') {
         return 'Select profile'
@@ -38,22 +42,24 @@ export default {
     })
   },
   methods: {
-    preselectObject () {
-      this.selected = this.storedBackendProfiles.find(profile => profile.id === this.preselected)
-    },
     handleSelection (profile) {
-      this.selected = profile
-      this.handleSelect({ object: this.selected, stripId: this.selectId, type: this.selectProfileName })
+      this.id = profile.id
+      EventBus.$emit(EventType.CP_SELECT, { object: profile, stripId: this.selectId, type: this.selectProfileName })
     },
     getHexColor (profile) {
       return colorhelper.rgbToHex2(profile)
     },
-    handleSelect (event) {
-      EventBus.$emit('CPselect', event)
-    },
-    ...mapMutations({
-      resetStoreProfile: 'resetColorProfile'
-    })
+    handleCPCreate (event) {
+      if (event !== 'undefined' && event.object !== 'undefined' && event.object.id !== 'undefined') {
+        this.id = event.object.id
+      }
+    }
+  },
+  mounted () {
+    EventBus.$on(EventType.CP_CREATE, this.handleCPCreate)
+  },
+  beforeDestroy () {
+    EventBus.$off(EventType.CP_CREATE, this.handleCPCreate)
   }
 }
 </script>

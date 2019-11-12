@@ -6,7 +6,7 @@
         <b-col sm="3">
         </b-col>
         <b-col sm="5">
-          <b-button-group >
+          <b-button-group>
             <colorprofileselect selectProfileName="selectedProfile" :preselected="storeSelectedProfile.id"/>
             <b-button variant="dark" @click="callGetColorProfiles()"><font-awesome-icon icon="sync" /></b-button>
             <b-button :variant="variantEdit" :disabled="disabledEdit" @click="toggleEdit()"><font-awesome-icon icon="edit"> </font-awesome-icon></b-button>
@@ -31,6 +31,7 @@ import colorprofileform from './colorprofile-form'
 import colorprofileselect from './colorprofile-select'
 import EventBus from './eventbus'
 import colorhelper from './colorhelper'
+import { Ui, EventType } from './constant-contig'
 import { mapMutations, mapGetters } from 'vuex'
 
 export default {
@@ -47,16 +48,15 @@ export default {
   data () {
     return {
       errors: [],
-      variantEdit: 'dark',
-      variantCreate: 'dark',
+      variantEdit: Ui.VRNT_DISABLED,
+      variantCreate: Ui.VRNT_DISABLED,
       disabledEdit: false,
       disabledCreate: false
     }
   },
   computed: {
     ...mapGetters({
-      storeSelectedProfile: 'selectedProfile',
-      storedBackendProfiles: 'backendProfiles'
+      storeSelectedProfile: 'selectedProfile'
     })
   },
   methods: {
@@ -77,22 +77,21 @@ export default {
     /** sets the current set profile as profile to edit */
     toggleEdit () {
       this.updateStoreProfile({ type: 'editableProfile', object: this.storeSelectedProfile })
-      this.variantEdit = 'outline-dark'
+      this.variantEdit = Ui.VRNT_ENABLED
       this.disabledEdit = true
-      this.variantCreate = 'dark'
+      this.variantCreate = Ui.VRNT_DISABLED
       this.disabledCreate = false
     },
     /** resets the profile to edit to initial values */
     toggleCreate () {
       this.resetStoreProfile({ type: 'editableProfile' })
-      this.variantEdit = 'dark'
+      this.variantEdit = Ui.VRNT_DISABLED
       this.disabledEdit = false
-      this.variantCreate = 'outline-dark'
+      this.variantCreate = Ui.VRNT_ENABLED
       this.disabledCreate = true
     },
     /** set the created object as selected profile, update the colorprofiles, inform user  */
     handleCPCreate (event) {
-      console.log(event)
       this.updateStoreProfile({ type: 'selectedProfile', object: event.object })
       this.updateColorProfileInBackendList(event.object)
       this.toggleEdit()
@@ -100,7 +99,6 @@ export default {
     },
     /** reset the selected profile, update the colorprofiles, inform user */
     handleCPDelete (event) {
-      console.log(event)
       this.resetStoreProfile({ type: 'selectedProfile' })
       this.removeColorProfileInBackendList(event.object)
       this.toggleCreate()
@@ -127,16 +125,16 @@ export default {
     })
   },
   mounted () {
-    EventBus.$on('CPupdate', this.handleCPCreate)
-    EventBus.$on('CPcreate', this.handleCPCreate)
-    EventBus.$on('CPdelete', this.handleCPDelete)
-    EventBus.$on('CPselect', this.handleCPSelect)
+    EventBus.$on(EventType.CP_CREATE, this.handleCPCreate)
+    EventBus.$on(EventType.CP_UPDATE, this.handleCPCreate)
+    EventBus.$on(EventType.CP_DELETE, this.handleCPDelete)
+    EventBus.$on(EventType.CP_SELECT, this.handleCPSelect)
   },
   beforeDestroy () {
-    EventBus.$off('CPupdate', this.handleCPCreate)
-    EventBus.$off('CPcreate', this.handleCPCreate)
-    EventBus.$off('CPdelete', this.handleCPDelete)
-    EventBus.$off('CPselect', this.handleCPSelect)
+    EventBus.$off(EventType.CP_CREATE, this.handleCPCreate)
+    EventBus.$off(EventType.CP_UPDATE, this.handleCPCreate)
+    EventBus.$off(EventType.CP_DELETE, this.handleCPDelete)
+    EventBus.$off(EventType.CP_SELECT, this.handleCPSelect)
   }
 }
 </script>
@@ -156,12 +154,5 @@ margin: 0 10px;
 }
 a {
 color: #42b983;
-}
-.foo {
-  float: left;
-  width: 20px;
-  height: 20px;
-  margin: 5px;
-  border: 1px solid rgba(0, 0, 0, .2);
 }
 </style>

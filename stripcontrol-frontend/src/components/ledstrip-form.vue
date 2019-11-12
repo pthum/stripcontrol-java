@@ -67,6 +67,7 @@
 <script>
 import api from './backend-api'
 import EventBus from './eventbus'
+import { EventType } from './constant-contig'
 import { mapMutations, mapGetters } from 'vuex'
 
 export default {
@@ -165,7 +166,7 @@ export default {
         var resUrlArray = response.headers.location.split('/')
         var createdId = resUrlArray[resUrlArray.length - 1]
         obj.id = Number(createdId)
-        this.handleSuccess({ action: 'LScreate', text: 'Successfully created led strip with id ' + createdId, object: obj })
+        this.handleSuccess({ action: EventType.LS_CREATE, text: 'Successfully created led strip with id ' + createdId, object: obj })
         this.updateStoreStrip({ ype: this.formStripName, object: obj })
       }).catch(error => {
         this.handleError(error)
@@ -174,9 +175,8 @@ export default {
     /** update an entry */
     updateEntry () {
       var obj = { name: this.name, description: this.description, misoPin: this.misoPin, sclkPin: this.sclkPin, numLeds: this.numLeds, speedHz: this.speedHz, id: this.id }
-      console.log('updating entry "' + obj.name + '"' + obj.id)
       api.putLedStrip(obj).then(response => {
-        this.handleSuccess({ action: 'LSupdate', text: 'Successfully updated led strip "' + obj.name + '"', object: obj })
+        this.handleSuccess({ action: EventType.LS_UPDATE, text: 'Successfully updated led strip "' + obj.name + '"', object: obj })
       }).catch(error => {
         this.handleError(error)
       })
@@ -184,11 +184,10 @@ export default {
     /** delete an entry */
     deleteEntry () {
       var obj = { id: this.id, name: this.name }
-      console.log('deleting entry ' + obj.id)
       api.deleteLedStrip(obj).then(response => {
         // reset the current strip, as it was removed
         this.resetStoreStrip({ type: this.formStripName })
-        this.handleSuccess({ action: 'LSdelete', text: 'Deleted led strip "' + obj.name + '"', object: obj })
+        this.handleSuccess({ action: EventType.LS_DELETE, text: 'Deleted led strip "' + obj.name + '"', object: obj })
       }).catch(error => {
         this.handleError(error)
       })
@@ -199,7 +198,6 @@ export default {
     },
     /** handle error message */
     handleError (error) {
-      console.log(error)
       this.makeToast({ variant: 'danger', content: error.message })
     },
     /** makes a toast, expects an object with content field and variant field */
