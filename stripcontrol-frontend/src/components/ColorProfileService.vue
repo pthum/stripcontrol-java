@@ -8,7 +8,7 @@
         <b-col sm="5">
           <b-button-group>
             <colorprofileselect selectProfileName="selectedProfile" :preselected="storeSelectedProfile.id"/>
-            <b-button variant="dark" @click="callGetColorProfiles()"><font-awesome-icon icon="sync" /></b-button>
+            <b-button variant="dark" @click="callGetColorProfiles(this)"><font-awesome-icon icon="sync" /></b-button>
             <b-button :variant="variantEdit" :disabled="disabledEdit" @click="toggleEdit()"><font-awesome-icon icon="edit"> </font-awesome-icon></b-button>
             <b-button :variant="variantCreate" :disabled="disabledCreate" @click="toggleCreate()"><font-awesome-icon icon="plus-square"> </font-awesome-icon></b-button>
           </b-button-group>
@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import api from './backend-api'
+import ApiManager from './api-manager'
 import colorprofileform from './colorprofile-form'
 import colorprofileselect from './colorprofile-select'
 import EventBus from './eventbus'
@@ -63,16 +63,8 @@ export default {
     getHexColor (profile) {
       return colorhelper.rgbToHex2(profile)
     },
-    /** Fetches profiles when the component is created. */
     callGetColorProfiles () {
-      api.getColorProfiles().then(response => {
-        this.updateStoreProfiles(response.data)
-        if (response.data.length === 0) {
-          this.disabledEdit = true
-        }
-      }).catch(error => {
-        this.errors.push(error)
-      })
+      ApiManager.callGetColorProfiles(this)
     },
     /** sets the current set profile as profile to edit */
     toggleEdit () {
@@ -108,6 +100,11 @@ export default {
       this.updateStoreProfile({ type: 'selectedProfile', object: event.object })
       this.toggleEdit()
     },
+    handleCPGetAll (event) {
+      if (event.object.length === 0) {
+        this.disabledEdit = true
+      }
+    },
     /** makes a toast, expects an object with content field and variant field */
     makeToast (toastData) {
       this.$bvToast.toast(toastData.content, {
@@ -129,12 +126,14 @@ export default {
     EventBus.$on(EventType.CP_UPDATE, this.handleCPCreate)
     EventBus.$on(EventType.CP_DELETE, this.handleCPDelete)
     EventBus.$on(EventType.CP_SELECT, this.handleCPSelect)
+    EventBus.$on(EventType.CP_GETALL, this.handleCPGetAll)
   },
   beforeDestroy () {
     EventBus.$off(EventType.CP_CREATE, this.handleCPCreate)
     EventBus.$off(EventType.CP_UPDATE, this.handleCPCreate)
     EventBus.$off(EventType.CP_DELETE, this.handleCPDelete)
     EventBus.$off(EventType.CP_SELECT, this.handleCPSelect)
+    EventBus.$on(EventType.CP_GETALL, this.handleCPGetAll)
   }
 }
 </script>

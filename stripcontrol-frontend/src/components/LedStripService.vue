@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import api from './backend-api'
+import ApiManager from './api-manager'
 import ledstripform from './ledstrip-form'
 import ledstripselect from './ledstrip-select'
 import EventBus from './eventbus'
@@ -70,14 +70,7 @@ export default {
   methods: {
     /** Fetches strips when the component is created. */
     callGetLedStrips () {
-      api.getLedStrips().then(response => {
-        this.updateStoreStrips(response.data)
-        if (response.data.length === 0) {
-          this.disabledEdit = true
-        }
-      }).catch(error => {
-        this.errors.push(error)
-      })
+      ApiManager.callGetLedStrips(this)
     },
     toggle (isCreate) {
 
@@ -116,6 +109,11 @@ export default {
       this.updateStoreStrip({ type: 'selectedStrip', object: event.object })
       this.toggleEdit()
     },
+    handleLSGetAll (event) {
+      if (event.object.length === 0) {
+        this.disabledEdit = true
+      }
+    },
     /** makes a toast, expects an object with content field and variant field */
     makeToast (toastData) {
       this.$bvToast.toast(toastData.content, {
@@ -137,12 +135,14 @@ export default {
     EventBus.$on(EventType.LS_UPDATE, this.handleLSCreate)
     EventBus.$on(EventType.LS_DELETE, this.handleLSDelete)
     EventBus.$on(EventType.LS_SELECT, this.handleLSSelect)
+    EventBus.$on(EventType.LS_GETALL, this.handleLSGetAll)
   },
   beforeDestroy () {
     EventBus.$off(EventType.LS_CREATE, this.handleLSCreate)
     EventBus.$off(EventType.LS_UPDATE, this.handleLSCreate)
     EventBus.$off(EventType.LS_DELETE, this.handleLSDelete)
-    EventBus.$on(EventType.LS_SELECT, this.handleLSSelect)
+    EventBus.$off(EventType.LS_SELECT, this.handleLSSelect)
+    EventBus.$off(EventType.LS_GETALL, this.handleLSGetAll)
   }
 }
 </script>

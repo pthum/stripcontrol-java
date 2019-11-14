@@ -32,10 +32,8 @@
 </template>
 
 <script>
-import api from './backend-api'
 import colorhelper from './colorhelper'
-import EventBus from './eventbus'
-import { EventType } from './constant-contig'
+import ApiManager from './api-manager'
 import { mapMutations, mapGetters } from 'vuex'
 
 export default {
@@ -87,51 +85,17 @@ export default {
     /** create an entry */
     createEntry () {
       var obj = { red: this.red, green: this.green, blue: this.blue, brightness: this.brightness, id: this.id }
-      api.postColorProfile(obj).then(response => {
-        var resUrlArray = response.headers.location.split('/')
-        var createdId = resUrlArray[resUrlArray.length - 1]
-        obj.id = Number(createdId)
-        this.handleSuccess({ action: EventType.CP_CREATE, text: 'Successfully created color profile with id ' + createdId, object: obj })
-        this.updateStoreProfile({ type: this.formProfileName, object: obj })
-      }).catch(error => {
-        this.handleError(error)
-      })
+      ApiManager.createColorProfile(this, obj)
     },
     /** update an entry */
     updateEntry () {
       var obj = { red: this.red, green: this.green, blue: this.blue, brightness: this.brightness, id: this.id }
-      api.putColorProfile(obj).then(response => {
-        this.handleSuccess({ action: EventType.CP_UPDATE, text: 'Successfully updated color profile with id ' + obj.id, object: obj })
-      }).catch(error => {
-        this.handleError(error)
-      })
+      ApiManager.updateColorProfile(this, obj)
     },
     /** delete an entry */
     deleteEntry () {
       var obj = { id: this.id }
-      api.deleteColorProfile(obj).then(response => {
-        // reset the current profile, as it was removed
-        this.resetStoreProfile({ type: this.formProfileName })
-        this.handleSuccess({ action: EventType.CP_DELETE, text: 'Deleted color profile with id ' + obj.id, object: obj })
-      }).catch(error => {
-        this.handleError(error)
-      })
-    },
-    /** handle success message, expects object with text field and optionally an object field */
-    handleSuccess (event) {
-      EventBus.$emit(event.action, { variant: 'success', content: event.text, object: event.object })
-    },
-    /** handle error message */
-    handleError (error) {
-      this.makeToast({ variant: 'danger', content: error.message })
-    },
-    /** makes a toast, expects an object with content field and variant field */
-    makeToast (toastData) {
-      this.$bvToast.toast(toastData.content, {
-        title: ` ${toastData.variant || 'default'}`,
-        variant: toastData.variant,
-        solid: true
-      })
+      ApiManager.deleteColorProfile(this, obj)
     },
     ...mapMutations({
       updateStoreProfile: 'updateColorProfile',

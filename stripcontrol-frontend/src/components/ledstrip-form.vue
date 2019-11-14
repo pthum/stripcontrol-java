@@ -65,9 +65,7 @@
 </template>
 
 <script>
-import api from './backend-api'
-import EventBus from './eventbus'
-import { EventType } from './constant-contig'
+import ApiManager from './api-manager'
 import { mapMutations, mapGetters } from 'vuex'
 
 export default {
@@ -162,51 +160,17 @@ export default {
     /** create an entry */
     createEntry () {
       var obj = { name: this.name, description: this.description, misoPin: this.misoPin, sclkPin: this.sclkPin, numLeds: this.numLeds, speedHz: this.speedHz, id: this.id }
-      api.postLedStrip(obj).then(response => {
-        var resUrlArray = response.headers.location.split('/')
-        var createdId = resUrlArray[resUrlArray.length - 1]
-        obj.id = Number(createdId)
-        this.handleSuccess({ action: EventType.LS_CREATE, text: 'Successfully created led strip with id ' + createdId, object: obj })
-        this.updateStoreStrip({ ype: this.formStripName, object: obj })
-      }).catch(error => {
-        this.handleError(error)
-      })
+      ApiManager.createLedStrip(this, obj)
     },
     /** update an entry */
     updateEntry () {
       var obj = { name: this.name, description: this.description, misoPin: this.misoPin, sclkPin: this.sclkPin, numLeds: this.numLeds, speedHz: this.speedHz, id: this.id }
-      api.putLedStrip(obj).then(response => {
-        this.handleSuccess({ action: EventType.LS_UPDATE, text: 'Successfully updated led strip "' + obj.name + '"', object: obj })
-      }).catch(error => {
-        this.handleError(error)
-      })
+      ApiManager.updateLedStrip(this, obj)
     },
     /** delete an entry */
     deleteEntry () {
       var obj = { id: this.id, name: this.name }
-      api.deleteLedStrip(obj).then(response => {
-        // reset the current strip, as it was removed
-        this.resetStoreStrip({ type: this.formStripName })
-        this.handleSuccess({ action: EventType.LS_DELETE, text: 'Deleted led strip "' + obj.name + '"', object: obj })
-      }).catch(error => {
-        this.handleError(error)
-      })
-    },
-    /** handle success message, expects object with text field and optionally an object field */
-    handleSuccess (event) {
-      EventBus.$emit(event.action, { variant: 'success', content: event.text, object: event.object })
-    },
-    /** handle error message */
-    handleError (error) {
-      this.makeToast({ variant: 'danger', content: error.message })
-    },
-    /** makes a toast, expects an object with content field and variant field */
-    makeToast (toastData) {
-      this.$bvToast.toast(toastData.content, {
-        title: ` ${toastData.variant || 'default'}`,
-        variant: toastData.variant,
-        solid: true
-      })
+      ApiManager.deleteLedStrip(this, obj)
     },
     ...mapMutations({
       updateStoreStrip: 'updateLedStrip',

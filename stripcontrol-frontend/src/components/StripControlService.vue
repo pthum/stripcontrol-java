@@ -30,6 +30,7 @@
 <script>
 import api from './backend-api'
 import colorprofileselect from './colorprofile-select'
+import ApiManager from './api-manager'
 import EventBus from './eventbus'
 import { Ui, EventType } from './constant-contig'
 import { mapMutations, mapGetters } from 'vuex'
@@ -40,8 +41,8 @@ export default {
     colorprofileselect
   },
   created () {
-    this.callGetColorProfiles()
-    this.callGetLedStrips()
+    ApiManager.callGetColorProfiles(this)
+    ApiManager.callGetLedStrips(this)
   },
   computed: {
     ...mapGetters({
@@ -52,35 +53,16 @@ export default {
     /** enable/disable strip */
     toggleEnabled (strip) {
       strip.enabled = !strip.enabled
-      api.putLedStrip(strip).then(response => {
-      }).catch(error => {
-        this.handleError(error)
-      })
+      ApiManager.updateLedStrip(strip)
     },
     /** return the ui variant of a strip */
     getVariantEnabled (strip) {
       return strip.enabled ? Ui.VRNT_ENABLED : Ui.VRNT_DISABLED
     },
-    /** Fetches strips when the component is created. */
-    callGetLedStrips () {
-      api.getLedStrips().then(response => {
-        this.updateStoreStrips(response.data)
-      }).catch(error => {
-        this.handleError(error)
-      })
-    },
-    /** Fetches profiles when the component is created. */
-    callGetColorProfiles () {
-      api.getColorProfiles().then(response => {
-        this.updateStoreProfiles(response.data)
-      }).catch(error => {
-        this.handleError(error)
-      })
-    },
     /** handle selection of a color profile */
     handleCPSelect (event) {
       api.updateStripProfile({ stripId: event.stripId, profile: event.object }).then(response => {
-        this.callGetColorProfiles()
+        ApiManager.callGetColorProfiles(this)
       }).catch(error => {
         this.handleError(error)
       })
@@ -98,9 +80,7 @@ export default {
       })
     },
     ...mapMutations({
-      updateStoreStrip: 'updateLedStrip',
-      updateStoreStrips: 'updateBackendStrips',
-      updateStoreProfiles: 'updateBackendProfiles'
+      updateStoreStrip: 'updateLedStrip'
     })
   },
   mounted () {

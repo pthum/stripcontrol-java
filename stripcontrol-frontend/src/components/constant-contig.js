@@ -7,8 +7,10 @@ export const EventType = Object.freeze({
   LS_UPDATE: 'LSUpdate',
   LS_DELETE: 'LSDelete',
   LS_SELECT: 'LSSelect',
+  LS_GETALL: 'LSGetAll',
   CP_CREATE: 'CPCreate',
   CP_UPDATE: 'CPUpdate',
   CP_DELETE: 'CPDelete',
-  CP_SELECT: 'CPSelect'
+  CP_SELECT: 'CPSelect',
+  CP_GETALL: 'CPGetAll'
 })
