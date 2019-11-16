@@ -39,6 +39,13 @@ export default {
       this.handleError(vm, error)
     })
   },
+  updateStripProfile (vm, obj) {
+    api.updateStripProfile(obj).then(response => {
+      store.commit('updateLedStripForProfile', obj)
+    }).catch(error => {
+      this.handleError(vm, error)
+    })
+  },
   /** Fetches profiles when the component is created. */
   callGetColorProfiles (vm) {
     api.getColorProfiles().then(response => {

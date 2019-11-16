@@ -28,7 +28,6 @@
 </template>
 
 <script>
-import api from './backend-api'
 import colorprofileselect from './colorprofile-select'
 import ApiManager from './api-manager'
 import EventBus from './eventbus'
@@ -61,15 +60,7 @@ export default {
     },
     /** handle selection of a color profile */
     handleCPSelect (event) {
-      api.updateStripProfile({ stripId: event.stripId, profile: event.object }).then(response => {
-        ApiManager.callGetColorProfiles(this)
-      }).catch(error => {
-        this.handleError(error)
-      })
-    },
-    /** handle error message */
-    handleError (error) {
-      EventBus.makeToast(this, { variant: 'danger', content: error.message })
+      ApiManager.updateStripProfile(this, { stripId: event.stripId, profile: event.object })
     },
     ...mapMutations({
       updateStoreStrip: 'updateLedStrip'
