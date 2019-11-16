@@ -80,15 +80,7 @@ export default {
   },
   /** handle error message */
   handleError (vm, error) {
-    this.makeToast(vm, { variant: 'danger', content: error.message })
+    EventBus.makeToast(vm, { variant: 'danger', content: error.message })
     throw error
-  },
-  /** makes a toast, expects an object with content field and variant field */
-  makeToast (vm, toastData) {
-    vm.$bvToast.toast(toastData.content, {
-      title: ` ${toastData.variant || 'default'}`,
-      variant: toastData.variant,
-      solid: true
-    })
   }
 }

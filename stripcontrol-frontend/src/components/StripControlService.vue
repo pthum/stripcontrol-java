@@ -57,7 +57,7 @@ export default {
     },
     /** return the ui variant of a strip */
     getVariantEnabled (strip) {
-      return strip.enabled ? Ui.VRNT_ENABLED : Ui.VRNT_DISABLED
+      return Ui.getVariant(strip.enabled)
     },
     /** handle selection of a color profile */
     handleCPSelect (event) {
@@ -69,15 +69,7 @@ export default {
     },
     /** handle error message */
     handleError (error) {
-      this.makeToast({ variant: 'danger', content: error.message })
-    },
-    /** makes a toast, expects an object with content field and variant field */
-    makeToast (toastData) {
-      this.$bvToast.toast(toastData.content, {
-        title: ` ${toastData.variant || 'default'}`,
-        variant: toastData.variant,
-        solid: true
-      })
+      EventBus.makeToast(this, { variant: 'danger', content: error.message })
     },
     ...mapMutations({
       updateStoreStrip: 'updateLedStrip'

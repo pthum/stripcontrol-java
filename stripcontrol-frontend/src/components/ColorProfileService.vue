@@ -9,8 +9,8 @@
           <b-button-group>
             <colorprofileselect selectProfileName="selectedProfile" :preselected="storeSelectedProfile.id"/>
             <b-button variant="dark" @click="callGetColorProfiles(this)"><font-awesome-icon icon="sync" /></b-button>
-            <b-button :variant="variantEdit" :disabled="disabledEdit" @click="toggleEdit()"><font-awesome-icon icon="edit"> </font-awesome-icon></b-button>
-            <b-button :variant="variantCreate" :disabled="disabledCreate" @click="toggleCreate()"><font-awesome-icon icon="plus-square"> </font-awesome-icon></b-button>
+            <b-button :variant="variantEdit" :disabled="disabledEdit" @click="toggle(false)"><font-awesome-icon icon="edit"> </font-awesome-icon></b-button>
+            <b-button :variant="variantCreate" :disabled="disabledCreate" @click="toggle(true)"><font-awesome-icon icon="plus-square"> </font-awesome-icon></b-button>
           </b-button-group>
         </b-col>
         <b-col>
@@ -42,7 +42,7 @@ export default {
   },
   created () {
     this.callGetColorProfiles()
-    this.toggleCreate()
+    this.toggle(true)
     this.disabledEdit = true
   },
   data () {
@@ -63,73 +63,65 @@ export default {
       return colorhelper.rgbToHex2(profile)
     },
     callGetColorProfiles () {
-      ApiManager.callGetColorProfiles(this)
+      ApiManager.callGetColorProfiles()
     },
-    /** sets the current set profile as profile to edit */
-    toggleEdit () {
-      this.updateStoreProfile({ type: 'editableProfile', object: this.storeSelectedProfile })
-      this.variantEdit = Ui.VRNT_ENABLED
-      this.disabledEdit = true
-      this.variantCreate = Ui.VRNT_DISABLED
-      this.disabledCreate = false
+    toggle (isCreate) {
+      if (isCreate) {
+        this.resetStoreProfile({ type: 'editableProfile' })
+      } else {
+        this.updateStoreProfile({ type: 'editableProfile', object: this.storeSelectedProfile })
+      }
+      this.toggleCreateElements(isCreate)
+      this.toggleEditElements(!isCreate)
     },
-    /** resets the profile to edit to initial values */
-    toggleCreate () {
-      this.resetStoreProfile({ type: 'editableProfile' })
-      this.variantEdit = Ui.getVariant(false)
-      this.disabledEdit = false
-      this.variantCreate = Ui.getVariant(true)
-      this.disabledCreate = true
+    toggleCreateElements (isEnabled) {
+      this.variantCreate = Ui.getVariant(isEnabled)
+      this.disabledCreate = isEnabled
     },
-    /** set the created object as selected profile, update the colorprofiles, inform user  */
-    handleCPCreate (event) {
+    toggleEditElements (isEnabled) {
+      this.variantEdit = Ui.getVariant(isEnabled)
+      this.disabledEdit = isEnabled
+    },
+    /** set the saved object as selected profile, update the colorprofiles, inform user  */
+    handleCPSave (event) {
       this.updateStoreProfile({ type: 'selectedProfile', object: event.object })
       this.updateColorProfileInBackendList(event.object)
-      this.toggleEdit()
-      this.makeToast(event)
+      this.toggle(false)
+      EventBus.makeToast(this, event)
     },
     /** reset the selected profile, update the colorprofiles, inform user */
     handleCPDelete (event) {
       this.resetStoreProfile({ type: 'selectedProfile' })
       this.removeColorProfileInBackendList(event.object)
-      this.toggleCreate()
-      this.makeToast(event)
+      this.toggle(true)
+      EventBus.makeToast(this, event)
     },
     handleCPSelect (event) {
       this.updateStoreProfile({ type: 'selectedProfile', object: event.object })
-      this.toggleEdit()
+      this.toggle(false)
     },
     handleCPGetAll (event) {
       if (event.object.length === 0) {
         this.disabledEdit = true
       }
     },
-    /** makes a toast, expects an object with content field and variant field */
-    makeToast (toastData) {
-      this.$bvToast.toast(toastData.content, {
-        title: `${toastData.variant || 'default'}`,
-        variant: toastData.variant,
-        solid: true
-      })
-    },
     ...mapMutations({
       updateStoreProfile: 'updateColorProfile',
-      updateStoreProfiles: 'updateBackendProfiles',
       resetStoreProfile: 'resetColorProfile',
       updateColorProfileInBackendList: 'updateColorProfileInBackendList',
       removeColorProfileInBackendList: 'removeColorProfileInBackendList'
     })
   },
   mounted () {
-    EventBus.$on(EventType.CP_CREATE, this.handleCPCreate)
-    EventBus.$on(EventType.CP_UPDATE, this.handleCPCreate)
+    EventBus.$on(EventType.CP_CREATE, this.handleCPSave)
+    EventBus.$on(EventType.CP_UPDATE, this.handleCPSave)
     EventBus.$on(EventType.CP_DELETE, this.handleCPDelete)
     EventBus.$on(EventType.CP_SELECT, this.handleCPSelect)
     EventBus.$on(EventType.CP_GETALL, this.handleCPGetAll)
   },
   beforeDestroy () {
-    EventBus.$off(EventType.CP_CREATE, this.handleCPCreate)
-    EventBus.$off(EventType.CP_UPDATE, this.handleCPCreate)
+    EventBus.$off(EventType.CP_CREATE, this.handleCPSave)
+    EventBus.$off(EventType.CP_UPDATE, this.handleCPSave)
     EventBus.$off(EventType.CP_DELETE, this.handleCPDelete)
     EventBus.$off(EventType.CP_SELECT, this.handleCPSelect)
     EventBus.$on(EventType.CP_GETALL, this.handleCPGetAll)
