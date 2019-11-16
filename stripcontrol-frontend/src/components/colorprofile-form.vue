@@ -76,21 +76,12 @@ export default {
     },
     /** save an entry, will do an update if id is set, create otherwise */
     saveEntry () {
+      var obj = { red: this.red, green: this.green, blue: this.blue, brightness: this.brightness, id: this.id }
       if (typeof this.id !== 'undefined') {
-        this.updateEntry()
+        ApiManager.updateColorProfile(this, obj)
       } else {
-        this.createEntry()
+        ApiManager.createColorProfile(this, obj)
       }
-    },
-    /** create an entry */
-    createEntry () {
-      var obj = { red: this.red, green: this.green, blue: this.blue, brightness: this.brightness, id: this.id }
-      ApiManager.createColorProfile(this, obj)
-    },
-    /** update an entry */
-    updateEntry () {
-      var obj = { red: this.red, green: this.green, blue: this.blue, brightness: this.brightness, id: this.id }
-      ApiManager.updateColorProfile(this, obj)
     },
     /** delete an entry */
     deleteEntry () {

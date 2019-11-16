@@ -151,21 +151,12 @@ export default {
   methods: {
     /** save an entry, will do an update if id is set, create otherwise */
     saveEntry () {
+      var obj = { name: this.name, description: this.description, misoPin: this.misoPin, sclkPin: this.sclkPin, numLeds: this.numLeds, speedHz: this.speedHz, id: this.id }
       if (typeof this.id !== 'undefined') {
-        this.updateEntry()
+        ApiManager.updateLedStrip(this, obj)
       } else {
-        this.createEntry()
+        ApiManager.createLedStrip(this, obj)
       }
-    },
-    /** create an entry */
-    createEntry () {
-      var obj = { name: this.name, description: this.description, misoPin: this.misoPin, sclkPin: this.sclkPin, numLeds: this.numLeds, speedHz: this.speedHz, id: this.id }
-      ApiManager.createLedStrip(this, obj)
-    },
-    /** update an entry */
-    updateEntry () {
-      var obj = { name: this.name, description: this.description, misoPin: this.misoPin, sclkPin: this.sclkPin, numLeds: this.numLeds, speedHz: this.speedHz, id: this.id }
-      ApiManager.updateLedStrip(this, obj)
     },
     /** delete an entry */
     deleteEntry () {

@@ -47,7 +47,6 @@ export default {
   },
   data () {
     return {
-      errors: [],
       variantEdit: Ui.VRNT_DISABLED,
       variantCreate: Ui.VRNT_DISABLED,
       disabledEdit: false,
@@ -77,9 +76,9 @@ export default {
     /** resets the profile to edit to initial values */
     toggleCreate () {
       this.resetStoreProfile({ type: 'editableProfile' })
-      this.variantEdit = Ui.VRNT_DISABLED
+      this.variantEdit = Ui.getVariant(false)
       this.disabledEdit = false
-      this.variantCreate = Ui.VRNT_ENABLED
+      this.variantCreate = Ui.getVariant(true)
       this.disabledCreate = true
     },
     /** set the created object as selected profile, update the colorprofiles, inform user  */

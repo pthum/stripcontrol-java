@@ -53,7 +53,7 @@ export default {
     /** enable/disable strip */
     toggleEnabled (strip) {
       strip.enabled = !strip.enabled
-      ApiManager.updateLedStrip(strip)
+      ApiManager.updateLedStrip(this, strip)
     },
     /** return the ui variant of a strip */
     getVariantEnabled (strip) {

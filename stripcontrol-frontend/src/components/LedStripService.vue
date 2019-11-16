@@ -46,7 +46,6 @@ export default {
   },
   data () {
     return {
-      errors: [],
       variantEdit: Ui.VRNT_DISABLED,
       variantCreate: Ui.VRNT_DISABLED,
       disabledEdit: false,
