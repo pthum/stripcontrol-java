@@ -66,7 +66,7 @@
 
 <script>
 import ApiManager from './api-manager'
-import { mapMutations, mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'strip-form',
@@ -162,11 +162,7 @@ export default {
     deleteEntry () {
       var obj = { id: this.id, name: this.name }
       ApiManager.deleteLedStrip(this, obj)
-    },
-    ...mapMutations({
-      updateStoreStrip: 'updateLedStrip',
-      resetStoreStrip: 'resetLedStrip'
-    })
+    }
   }
 }
 </script>

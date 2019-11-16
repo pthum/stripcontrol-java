@@ -56,7 +56,7 @@ export default {
       return this.findColorProfile(this.formProfileName).id
     },
     hexVal () {
-      return colorhelper.rgbToHex2(this.findColorProfile(this.formProfileName))
+      return colorhelper.rgbToHex(this.findColorProfile(this.formProfileName))
     },
     ...mapGetters([
       'findColorProfile'
@@ -89,8 +89,7 @@ export default {
       ApiManager.deleteColorProfile(this, obj)
     },
     ...mapMutations({
-      updateStoreProfile: 'updateColorProfile',
-      resetStoreProfile: 'resetColorProfile'
+      updateStoreProfile: 'updateColorProfile'
     })
   }
 }

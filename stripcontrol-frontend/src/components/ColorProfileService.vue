@@ -30,7 +30,6 @@ import ApiManager from './api-manager'
 import colorprofileform from './colorprofile-form'
 import colorprofileselect from './colorprofile-select'
 import EventBus from './eventbus'
-import colorhelper from './colorhelper'
 import { Ui, EventType } from './constant-contig'
 import { mapMutations, mapGetters } from 'vuex'
 
@@ -47,8 +46,8 @@ export default {
   },
   data () {
     return {
-      variantEdit: Ui.VRNT_DISABLED,
-      variantCreate: Ui.VRNT_DISABLED,
+      variantEdit: Ui.getVariant(false),
+      variantCreate: Ui.getVariant(false),
       disabledEdit: false,
       disabledCreate: false
     }
@@ -59,9 +58,6 @@ export default {
     })
   },
   methods: {
-    getHexColor (profile) {
-      return colorhelper.rgbToHex2(profile)
-    },
     callGetColorProfiles () {
       ApiManager.callGetColorProfiles()
     },

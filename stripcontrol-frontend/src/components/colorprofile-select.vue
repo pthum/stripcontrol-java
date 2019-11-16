@@ -35,7 +35,7 @@ export default {
         return 'Select profile'
       }
       var brightness = typeof this.selected.brightness !== 'undefined' ? this.selected.brightness : 0
-      return colorhelper.rgbToHex2(this.selected) + ', \u2600:' + brightness
+      return this.getHexColor(this.selected) + ', \u2600:' + brightness
     },
     ...mapGetters({
       storedBackendProfiles: 'backendProfiles'
@@ -47,7 +47,7 @@ export default {
       EventBus.$emit(EventType.CP_SELECT, { object: profile, stripId: this.selectId, type: this.selectProfileName })
     },
     getHexColor (profile) {
-      return colorhelper.rgbToHex2(profile)
+      return colorhelper.rgbToHex(profile)
     },
     handleCPCreate (event) {
       if (event !== 'undefined' && event.object !== 'undefined' && event.object.id !== 'undefined') {
