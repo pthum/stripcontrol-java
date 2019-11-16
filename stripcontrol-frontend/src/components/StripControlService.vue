@@ -1,6 +1,7 @@
 <template>
   <div class="stripcontrolService">
-    <h1>Strip control</h1>
+    <h1>Strip control
+            <b-button variant="dark" @click="refresh()"><font-awesome-icon icon="sync" /></b-button></h1>
     <div v-if="storedBackendStrips.length==0">
       <b-container>
         <b-row>
@@ -40,8 +41,7 @@ export default {
     colorprofileselect
   },
   created () {
-    ApiManager.callGetColorProfiles(this)
-    ApiManager.callGetLedStrips(this)
+    this.refresh()
   },
   computed: {
     ...mapGetters({
@@ -49,6 +49,10 @@ export default {
     })
   },
   methods: {
+    refresh () {
+      ApiManager.callGetColorProfiles(this)
+      ApiManager.callGetLedStrips(this)
+    },
     /** enable/disable strip */
     toggleEnabled (strip) {
       strip.enabled = !strip.enabled

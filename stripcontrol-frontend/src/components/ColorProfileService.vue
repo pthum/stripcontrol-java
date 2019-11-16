@@ -8,7 +8,7 @@
         <b-col sm="5">
           <b-button-group>
             <colorprofileselect selectProfileName="selectedProfile" :preselected="storeSelectedProfile.id"/>
-            <b-button variant="dark" @click="callGetColorProfiles(this)"><font-awesome-icon icon="sync" /></b-button>
+            <b-button variant="dark" @click="callGetColorProfiles()"><font-awesome-icon icon="sync" /></b-button>
             <b-button :variant="variantEdit" :disabled="disabledEdit" @click="toggle(false)"><font-awesome-icon icon="edit"> </font-awesome-icon></b-button>
             <b-button :variant="variantCreate" :disabled="disabledCreate" @click="toggle(true)"><font-awesome-icon icon="plus-square"> </font-awesome-icon></b-button>
           </b-button-group>
@@ -59,7 +59,7 @@ export default {
   },
   methods: {
     callGetColorProfiles () {
-      ApiManager.callGetColorProfiles()
+      ApiManager.callGetColorProfiles(this)
     },
     toggle (isCreate) {
       if (isCreate) {
