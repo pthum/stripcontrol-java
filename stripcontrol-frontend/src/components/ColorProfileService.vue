@@ -6,11 +6,11 @@
         <b-col sm="3">
         </b-col>
         <b-col sm="5">
-          <b-button-group >
-            <colorprofileselect selectProfileName="selectedProfile"/>
+          <b-button-group>
+            <colorprofileselect selectProfileName="selectedProfile" :preselected="storeSelectedProfile.id"/>
             <b-button variant="dark" @click="callGetColorProfiles()"><font-awesome-icon icon="sync" /></b-button>
-            <b-button :variant="variantEdit" :disabled="disabledEdit" @click="toggleEdit()"><font-awesome-icon icon="edit"> </font-awesome-icon></b-button>
-            <b-button :variant="variantCreate" :disabled="disabledCreate" @click="toggleCreate()"><font-awesome-icon icon="plus-square"> </font-awesome-icon></b-button>
+            <b-button :variant="variantEdit" :disabled="disabledEdit" @click="toggle(false)"><font-awesome-icon icon="edit"> </font-awesome-icon></b-button>
+            <b-button :variant="variantCreate" :disabled="disabledCreate" @click="toggle(true)"><font-awesome-icon icon="plus-square"> </font-awesome-icon></b-button>
           </b-button-group>
         </b-col>
         <b-col>
@@ -26,12 +26,12 @@
 </template>
 
 <script>
-import api from './backend-api'
+import ApiManager from './api-manager'
 import colorprofileform from './colorprofile-form'
 import colorprofileselect from './colorprofile-select'
 import EventBus from './eventbus'
-import colorhelper from './colorhelper'
-import {mapMutations, mapGetters} from 'vuex'
+import { Ui, EventType } from './constant-contig'
+import { mapMutations, mapGetters } from 'vuex'
 
 export default {
   name: 'colorprofileservice',
@@ -41,98 +41,86 @@ export default {
   },
   created () {
     this.callGetColorProfiles()
-    this.toggleCreate()
+    this.toggle(true)
     this.disabledEdit = true
   },
   data () {
     return {
-      errors: [],
-      variantEdit: 'dark',
-      variantCreate: 'dark',
+      variantEdit: Ui.getVariant(false),
+      variantCreate: Ui.getVariant(false),
       disabledEdit: false,
       disabledCreate: false
     }
   },
   computed: {
     ...mapGetters({
-      storeSelectedProfile: 'selectedProfile',
-      storedBackendProfiles: 'backendProfiles'
+      storeSelectedProfile: 'selectedProfile'
     })
   },
   methods: {
-    getHexColor (profile) {
-      return colorhelper.rgbToHex2(profile)
-    },
-    /** Fetches profiles when the component is created. */
     callGetColorProfiles () {
-      api.getColorProfiles().then(response => {
-        this.updateStoreProfiles(response.data)
-        if (response.data.length === 0) {
-          this.disabledEdit = true
-        }
-      }).catch(error => {
-        this.errors.push(error)
-      })
+      ApiManager.callGetColorProfiles(this)
     },
-    /** sets the current set profile as profile to edit */
-    toggleEdit () {
-      this.updateStoreProfile({type: 'editableProfile', object: this.storeSelectedProfile})
-      this.variantEdit = 'outline-dark'
-      this.disabledEdit = true
-      this.variantCreate = 'dark'
-      this.disabledCreate = false
+    toggle (isCreate) {
+      if (isCreate) {
+        this.resetStoreProfile({ type: 'editableProfile' })
+      } else {
+        this.updateStoreProfile({ type: 'editableProfile', object: this.storeSelectedProfile })
+      }
+      this.toggleCreateElements(isCreate)
+      this.toggleEditElements(!isCreate)
     },
-    /** resets the profile to edit to initial values */
-    toggleCreate () {
-      this.resetStoreProfile({type: 'editableProfile'})
-      this.variantEdit = 'dark'
-      this.disabledEdit = false
-      this.variantCreate = 'outline-dark'
-      this.disabledCreate = true
+    toggleCreateElements (isEnabled) {
+      this.variantCreate = Ui.getVariant(isEnabled)
+      this.disabledCreate = isEnabled
     },
-    /** set the created object as selected profile, update the colorprofiles, inform user  */
-    handleCPCreate (event) {
-      this.updateStoreProfile({type: 'selectedProfile', object: event.object})
-      this.toggleEdit()
-      this.callGetColorProfiles()
-      this.makeToast(event)
+    toggleEditElements (isEnabled) {
+      this.variantEdit = Ui.getVariant(isEnabled)
+      this.disabledEdit = isEnabled
+    },
+    /** set the saved object as selected profile, update the colorprofiles, inform user  */
+    handleCPSave (event) {
+      this.updateStoreProfile({ type: 'selectedProfile', object: event.object })
+      this.updateColorProfileInBackendList(event.object)
+      this.toggle(false)
+      EventBus.makeToast(this, event)
     },
     /** reset the selected profile, update the colorprofiles, inform user */
     handleCPDelete (event) {
-      this.resetStoreProfile({type: 'selectedProfile'})
-      this.callGetColorProfiles()
-      this.toggleCreate()
-      this.makeToast(event)
+      this.resetStoreProfile({ type: 'selectedProfile' })
+      this.removeColorProfileInBackendList(event.object)
+      this.toggle(true)
+      EventBus.makeToast(this, event)
     },
     handleCPSelect (event) {
-      this.updateStoreProfile({type: 'selectedProfile', object: event.object})
-      this.toggleEdit()
+      this.updateStoreProfile({ type: 'selectedProfile', object: event.object })
+      this.toggle(false)
     },
-    /** makes a toast, expects an object with content field and variant field */
-    makeToast (toastData) {
-      this.$bvToast.toast(toastData.content, {
-        title: `${toastData.variant || 'default'}`,
-        variant: toastData.variant,
-        solid: true
-      })
+    handleCPGetAll (event) {
+      if (event.object.length === 0) {
+        this.disabledEdit = true
+      }
     },
     ...mapMutations({
       updateStoreProfile: 'updateColorProfile',
-      updateStoreProfiles: 'updateBackendProfiles',
-      resetStoreProfile: 'resetColorProfile'
+      resetStoreProfile: 'resetColorProfile',
+      updateColorProfileInBackendList: 'updateColorProfileInBackendList',
+      removeColorProfileInBackendList: 'removeColorProfileInBackendList'
     })
   },
   mounted () {
-    EventBus.$on('CPupdate', this.handleCPCreate)
-    EventBus.$on('CPcreate', this.handleCPCreate)
-    EventBus.$on('CPdelete', this.handleCPDelete)
-    EventBus.$on('CPselect', this.handleCPSelect)
+    EventBus.$on(EventType.CP_CREATE, this.handleCPSave)
+    EventBus.$on(EventType.CP_UPDATE, this.handleCPSave)
+    EventBus.$on(EventType.CP_DELETE, this.handleCPDelete)
+    EventBus.$on(EventType.CP_SELECT, this.handleCPSelect)
+    EventBus.$on(EventType.CP_GETALL, this.handleCPGetAll)
   },
   beforeDestroy () {
-    EventBus.$off('CPupdate', this.handleCPCreate)
-    EventBus.$off('CPcreate', this.handleCPCreate)
-    EventBus.$off('CPdelete', this.handleCPDelete)
-    EventBus.$off('CPselect', this.handleCPSelect)
+    EventBus.$off(EventType.CP_CREATE, this.handleCPSave)
+    EventBus.$off(EventType.CP_UPDATE, this.handleCPSave)
+    EventBus.$off(EventType.CP_DELETE, this.handleCPDelete)
+    EventBus.$off(EventType.CP_SELECT, this.handleCPSelect)
+    EventBus.$on(EventType.CP_GETALL, this.handleCPGetAll)
   }
 }
 </script>
@@ -152,12 +140,5 @@ margin: 0 10px;
 }
 a {
 color: #42b983;
-}
-.foo {
-  float: left;
-  width: 20px;
-  height: 20px;
-  margin: 5px;
-  border: 1px solid rgba(0, 0, 0, .2);
 }
 </style>

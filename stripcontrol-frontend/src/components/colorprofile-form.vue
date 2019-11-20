@@ -32,10 +32,9 @@
 </template>
 
 <script>
-import api from './backend-api'
 import colorhelper from './colorhelper'
-import EventBus from './eventbus'
-import {mapMutations, mapGetters} from 'vuex'
+import ApiManager from './api-manager'
+import { mapMutations, mapGetters } from 'vuex'
 
 export default {
   name: 'color-form',
@@ -57,7 +56,7 @@ export default {
       return this.findColorProfile(this.formProfileName).id
     },
     hexVal () {
-      return colorhelper.rgbToHex2(this.findColorProfile(this.formProfileName))
+      return colorhelper.rgbToHex(this.findColorProfile(this.formProfileName))
     },
     ...mapGetters([
       'findColorProfile'
@@ -68,77 +67,29 @@ export default {
     handleColorHex (hexValue) {
       var result = colorhelper.hexToRgb(hexValue)
       var obj = { red: result.r, green: result.g, blue: result.b, brightness: this.brightness, id: this.id }
-      this.updateStoreProfile({type: this.formProfileName, object: obj})
+      this.updateStoreProfile({ type: this.formProfileName, object: obj })
     },
     /** handles an update of brightness */
     handleBrightness (value) {
-      var obj = { red: this.red, green: this.green, blue: this.blue, brightness: value, id: this.id }
-      this.updateStoreProfile({type: this.formProfileName, object: obj})
+      var obj = { red: this.red, green: this.green, blue: this.blue, brightness: Number(value), id: this.id }
+      this.updateStoreProfile({ type: this.formProfileName, object: obj })
     },
     /** save an entry, will do an update if id is set, create otherwise */
     saveEntry () {
+      var obj = { red: this.red, green: this.green, blue: this.blue, brightness: this.brightness, id: this.id }
       if (typeof this.id !== 'undefined') {
-        this.updateEntry()
+        ApiManager.updateColorProfile(this, obj)
       } else {
-        this.createEntry()
+        ApiManager.createColorProfile(this, obj)
       }
-    },
-    /** create an entry */
-    createEntry () {
-      var obj = { red: this.red, green: this.green, blue: this.blue, brightness: this.brightness, id: this.id }
-      console.log('creating entry')
-      api.postColorProfile(obj).then(response => {
-        var resUrlArray = response.headers.location.split('/')
-        var createdId = resUrlArray[resUrlArray.length - 1]
-        obj.id = createdId
-        this.handleSuccess({action: 'CPcreate', text: 'Successfully created color profile with id ' + createdId, object: obj})
-        this.updateStoreProfile({type: this.formProfileName, object: obj})
-      }).catch(error => {
-        this.handleError(error)
-      })
-    },
-    /** update an entry */
-    updateEntry () {
-      var obj = { red: this.red, green: this.green, blue: this.blue, brightness: this.brightness, id: this.id }
-      console.log('updating entry ' + obj.id)
-      api.putColorProfile(obj).then(response => {
-        this.handleSuccess({action: 'CPupdate', text: 'Successfully updated color profile with id ' + obj.id, object: obj})
-      }).catch(error => {
-        this.handleError(error)
-      })
     },
     /** delete an entry */
     deleteEntry () {
       var obj = { id: this.id }
-      console.log('deleting entry ' + obj.id)
-      api.deleteColorProfile(obj).then(response => {
-        // reset the current profile, as it was removed
-        this.resetStoreProfile({type: this.formProfileName})
-        this.handleSuccess({action: 'CPdelete', text: 'Deleted color profile with id ' + obj.id})
-      }).catch(error => {
-        this.handleError(error)
-      })
-    },
-    /** handle success message, expects object with text field and optionally an object field */
-    handleSuccess (event) {
-      EventBus.$emit(event.action, {variant: 'success', content: event.text, object: event.object})
-    },
-    /** handle error message */
-    handleError (error) {
-      console.log(error)
-      this.makeToast({variant: 'danger', content: error.message})
-    },
-    /** makes a toast, expects an object with content field and variant field */
-    makeToast (toastData) {
-      this.$bvToast.toast(toastData.content, {
-        title: ` ${toastData.variant || 'default'}`,
-        variant: toastData.variant,
-        solid: true
-      })
+      ApiManager.deleteColorProfile(this, obj)
     },
     ...mapMutations({
-      updateStoreProfile: 'updateColorProfile',
-      resetStoreProfile: 'resetColorProfile'
+      updateStoreProfile: 'updateColorProfile'
     })
   }
 }

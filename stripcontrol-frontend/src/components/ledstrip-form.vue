@@ -65,9 +65,8 @@
 </template>
 
 <script>
-import api from './backend-api'
-import EventBus from './eventbus'
-import {mapMutations, mapGetters} from 'vuex'
+import ApiManager from './api-manager'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'strip-form',
@@ -152,69 +151,18 @@ export default {
   methods: {
     /** save an entry, will do an update if id is set, create otherwise */
     saveEntry () {
+      var obj = { name: this.name, description: this.description, misoPin: this.misoPin, sclkPin: this.sclkPin, numLeds: this.numLeds, speedHz: this.speedHz, id: this.id }
       if (typeof this.id !== 'undefined') {
-        this.updateEntry()
+        ApiManager.updateLedStrip(this, obj)
       } else {
-        this.createEntry()
+        ApiManager.createLedStrip(this, obj)
       }
-    },
-    /** create an entry */
-    createEntry () {
-      var obj = { name: this.name, description: this.description, misoPin: this.misoPin, sclkPin: this.sclkPin, numLeds: this.numLeds, speedHz: this.speedHz, id: this.id }
-      console.log('creating entry')
-      api.postLedStrip(obj).then(response => {
-        var resUrlArray = response.headers.location.split('/')
-        var createdId = resUrlArray[resUrlArray.length - 1]
-        obj.id = createdId
-        this.handleSuccess({action: 'LScreate', text: 'Successfully created led strip with id ' + createdId, object: obj})
-        this.updateStoreStrip({type: this.formStripName, object: obj})
-      }).catch(error => {
-        this.handleError(error)
-      })
-    },
-    /** update an entry */
-    updateEntry () {
-      var obj = { name: this.name, description: this.description, misoPin: this.misoPin, sclkPin: this.sclkPin, numLeds: this.numLeds, speedHz: this.speedHz, id: this.id }
-      console.log('updating entry "' + obj.name + '"' + obj.id)
-      api.putLedStrip(obj).then(response => {
-        this.handleSuccess({action: 'LSupdate', text: 'Successfully updated led strip "' + obj.name + '"', object: obj})
-      }).catch(error => {
-        this.handleError(error)
-      })
     },
     /** delete an entry */
     deleteEntry () {
       var obj = { id: this.id, name: this.name }
-      console.log('deleting entry ' + obj.id)
-      api.deleteLedStrip(obj).then(response => {
-        // reset the current strip, as it was removed
-        this.resetStoreStrip({type: this.formStripName})
-        this.handleSuccess({action: 'LSdelete', text: 'Deleted led strip "' + obj.name + '"'})
-      }).catch(error => {
-        this.handleError(error)
-      })
-    },
-    /** handle success message, expects object with text field and optionally an object field */
-    handleSuccess (event) {
-      EventBus.$emit(event.action, {variant: 'success', content: event.text, object: event.object})
-    },
-    /** handle error message */
-    handleError (error) {
-      console.log(error)
-      this.makeToast({variant: 'danger', content: error.message})
-    },
-    /** makes a toast, expects an object with content field and variant field */
-    makeToast (toastData) {
-      this.$bvToast.toast(toastData.content, {
-        title: ` ${toastData.variant || 'default'}`,
-        variant: toastData.variant,
-        solid: true
-      })
-    },
-    ...mapMutations({
-      updateStoreStrip: 'updateLedStrip',
-      resetStoreStrip: 'resetLedStrip'
-    })
+      ApiManager.deleteLedStrip(this, obj)
+    }
   }
 }
 </script>

@@ -7,16 +7,10 @@
         </b-col>
         <b-col sm="5">
           <b-button-group >
-            <b-dropdown v-model="selected" class="selectpicker" variant="dark" :text="stringSelected">
-              <b-dropdown-item v-if="storedBackendStrips.length === 0" disabled>No strips available</b-dropdown-item>
-              <b-dropdown-item v-else v-for="strip in storedBackendStrips" :key="strip.id" :value="strip" @click="selected = strip">
-                 {{strip.name}}
-              </b-dropdown-item>
-            </b-dropdown>
-
+            <ledstripselect/>
             <b-button variant="dark" @click="callGetLedStrips()"><font-awesome-icon icon="sync" /></b-button>
-            <b-button :variant="variantEdit" :disabled="disabledEdit" @click="toggleEdit()"><font-awesome-icon icon="edit"> </font-awesome-icon></b-button>
-            <b-button :variant="variantCreate" :disabled="disabledCreate" @click="toggleCreate()"><font-awesome-icon icon="plus-square"> </font-awesome-icon></b-button>
+            <b-button :variant="variantEdit" :disabled="disabledEdit" @click="toggle(false)"><font-awesome-icon icon="edit"> </font-awesome-icon></b-button>
+            <b-button :variant="variantCreate" :disabled="disabledCreate" @click="toggle(true)"><font-awesome-icon icon="plus-square"> </font-awesome-icon></b-button>
           </b-button-group>
         </b-col>
         <b-col>
@@ -32,26 +26,28 @@
 </template>
 
 <script>
-import api from './backend-api'
+import ApiManager from './api-manager'
 import ledstripform from './ledstrip-form'
+import ledstripselect from './ledstrip-select'
 import EventBus from './eventbus'
-import {mapMutations, mapGetters} from 'vuex'
+import { Ui, EventType } from './constant-contig'
+import { mapMutations, mapGetters } from 'vuex'
 
 export default {
   name: 'ledstripservice',
   components: {
-    ledstripform
+    ledstripform,
+    ledstripselect
   },
   created () {
     this.callGetLedStrips()
-    this.toggleCreate()
+    this.toggle(true)
     this.disabledEdit = true
   },
   data () {
     return {
-      errors: [],
-      variantEdit: 'dark',
-      variantCreate: 'dark',
+      variantEdit: Ui.getVariant(false),
+      variantCreate: Ui.getVariant(false),
       disabledEdit: false,
       disabledCreate: false
     }
@@ -62,86 +58,79 @@ export default {
         return this.storeSelectedStrip
       },
       set (value) {
-        this.updateStoreStrip({type: 'selectedStrip', object: value})
-        this.toggleEdit()
+        this.updateStoreStrip({ type: 'selectedStrip', object: value })
+        this.toggle(false)
       }
-    },
-    stringSelected: function () {
-      if (typeof this.selected.id === 'undefined') {
-        return 'Select strip'
-      }
-      return this.selected.name
     },
     ...mapGetters({
-      storeSelectedStrip: 'selectedStrip',
-      storedBackendStrips: 'backendStrips'
+      storeSelectedStrip: 'selectedStrip'
     })
   },
   methods: {
     /** Fetches strips when the component is created. */
     callGetLedStrips () {
-      api.getLedStrips().then(response => {
-        this.updateStoreStrips(response.data)
-        if (response.data.length === 0) {
-          this.disabledEdit = true
-        }
-      }).catch(error => {
-        this.errors.push(error)
-      })
+      ApiManager.callGetLedStrips(this)
     },
-    /** sets the current set strip as strip to edit */
-    toggleEdit () {
-      this.updateStoreStrip({type: 'editableStrip', object: this.storeSelectedStrip})
-      this.variantEdit = 'outline-dark'
-      this.disabledEdit = true
-      this.variantCreate = 'dark'
-      this.disabledCreate = false
+    toggle (isCreate) {
+      if (isCreate) {
+        this.resetStoreStrip({ type: 'editableStrip' })
+      } else {
+        this.updateStoreStrip({ type: 'editableStrip', object: this.storeSelectedStrip })
+      }
+      this.toggleCreateElements(isCreate)
+      this.toggleEditElements(!isCreate)
     },
-    /** resets the strip to edit to initial values */
-    toggleCreate () {
-      this.resetStoreStrip({type: 'editableStrip'})
-      this.variantEdit = 'dark'
-      this.disabledEdit = false
-      this.variantCreate = 'outline-dark'
-      this.disabledCreate = true
+    toggleCreateElements (isEnabled) {
+      this.variantCreate = Ui.getVariant(isEnabled)
+      this.disabledCreate = isEnabled
+    },
+    toggleEditElements (isEnabled) {
+      this.variantEdit = Ui.getVariant(isEnabled)
+      this.disabledEdit = isEnabled
     },
     /** set the created object as selected strip, update the led strips, inform user  */
-    handleLSCreate (event) {
-      this.updateStoreStrip({type: 'selectedStrip', object: event.object})
-      this.toggleEdit()
-      this.callGetLedStrips()
-      this.makeToast(event)
+    handleLSSave (event) {
+      this.updateStoreStrip({ type: 'selectedStrip', object: event.object })
+      this.toggle(false)
+      this.updateLedStripInBackendList(event.object)
+      EventBus.makeToast(this, event)
     },
     /** reset the selected strip, update the led strips, inform user */
     handleLSDelete (event) {
-      this.resetStoreStrip({type: 'selectedStrip'})
-      this.callGetLedStrips()
-      this.toggleCreate()
-      this.makeToast(event)
+      this.resetStoreStrip({ type: 'selectedStrip' })
+      this.removeLedStripInBackendList(event.object)
+      this.toggle(true)
+      EventBus.makeToast(this, event)
     },
-    /** makes a toast, expects an object with content field and variant field */
-    makeToast (toastData) {
-      this.$bvToast.toast(toastData.content, {
-        title: `${toastData.variant || 'default'}`,
-        variant: toastData.variant,
-        solid: true
-      })
+    handleLSSelect (event) {
+      this.updateStoreStrip({ type: 'selectedStrip', object: event.object })
+      this.toggle(false)
+    },
+    handleLSGetAll (event) {
+      if (event.object.length === 0) {
+        this.disabledEdit = true
+      }
     },
     ...mapMutations({
       updateStoreStrip: 'updateLedStrip',
-      updateStoreStrips: 'updateBackendStrips',
-      resetStoreStrip: 'resetLedStrip'
+      resetStoreStrip: 'resetLedStrip',
+      updateLedStripInBackendList: 'updateLedStripInBackendList',
+      removeLedStripInBackendList: 'removeLedStripInBackendList'
     })
   },
   mounted () {
-    EventBus.$on('LSupdate', this.handleLSCreate)
-    EventBus.$on('LScreate', this.handleLSCreate)
-    EventBus.$on('LSdelete', this.handleLSDelete)
+    EventBus.$on(EventType.LS_CREATE, this.handleLSSave)
+    EventBus.$on(EventType.LS_UPDATE, this.handleLSSave)
+    EventBus.$on(EventType.LS_DELETE, this.handleLSDelete)
+    EventBus.$on(EventType.LS_SELECT, this.handleLSSelect)
+    EventBus.$on(EventType.LS_GETALL, this.handleLSGetAll)
   },
   beforeDestroy () {
-    EventBus.$off('LSupdate', this.handleLSCreate)
-    EventBus.$off('LScreate', this.handleLSCreate)
-    EventBus.$off('LSdelete', this.handleLSDelete)
+    EventBus.$off(EventType.LS_CREATE, this.handleLSSave)
+    EventBus.$off(EventType.LS_UPDATE, this.handleLSSave)
+    EventBus.$off(EventType.LS_DELETE, this.handleLSDelete)
+    EventBus.$off(EventType.LS_SELECT, this.handleLSSelect)
+    EventBus.$off(EventType.LS_GETALL, this.handleLSGetAll)
   }
 }
 </script>
@@ -161,12 +150,5 @@ margin: 0 10px;
 }
 a {
 color: #42b983;
-}
-.foo {
-  float: left;
-  width: 20px;
-  height: 20px;
-  margin: 5px;
-  border: 1px solid rgba(0, 0, 0, .2);
 }
 </style>

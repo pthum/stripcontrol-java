@@ -13,21 +13,7 @@ export default {
       b: parseInt(result[3], 16)
     } : null
   },
-  rgbToHex (r, g, b) {
-    if (typeof r === 'undefined') {
-      r = 0
-    }
-    if (typeof g === 'undefined') {
-      g = 0
-    }
-    if (typeof b === 'undefined') {
-      b = 0
-    }
-    console.log('rgb2Hex: r:' + r + ' g:' + g + ' b:' + b)
-    var rgb = b | (g << 8) | (r << 16)
-    return '#' + (0x1000000 + rgb).toString(16).slice(1)
-  },
-  rgbToHex2 (colorProfile) {
+  rgbToHex (colorProfile) {
     if (typeof colorProfile.red === 'undefined') {
       colorProfile.red = 0
     }

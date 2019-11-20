@@ -9,6 +9,7 @@
         <b-navbar-nav>
           <b-nav-item :to="{path: '/colorprofileservice'}">Color Profiles</b-nav-item>
           <b-nav-item :to="{path: '/ledstripservice'}">LED strips</b-nav-item>
+          <b-nav-item href="swagger-ui.html" target="_blank">Swagger</b-nav-item>
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>

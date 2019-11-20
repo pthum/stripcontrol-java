@@ -1,6 +1,7 @@
 <template>
   <div class="stripcontrolService">
-    <h1>Strip control</h1>
+    <h1>Strip control
+            <b-button variant="dark" @click="refresh()"><font-awesome-icon icon="sync" /></b-button></h1>
     <div v-if="storedBackendStrips.length==0">
       <b-container>
         <b-row>
@@ -28,10 +29,11 @@
 </template>
 
 <script>
-import api from './backend-api'
 import colorprofileselect from './colorprofile-select'
+import ApiManager from './api-manager'
 import EventBus from './eventbus'
-import {mapMutations, mapGetters} from 'vuex'
+import { Ui, EventType } from './constant-contig'
+import { mapMutations, mapGetters } from 'vuex'
 
 export default {
   name: 'stripcontrolservice',
@@ -39,8 +41,7 @@ export default {
     colorprofileselect
   },
   created () {
-    this.callGetColorProfiles()
-    this.callGetLedStrips()
+    this.refresh()
   },
   computed: {
     ...mapGetters({
@@ -48,67 +49,32 @@ export default {
     })
   },
   methods: {
+    refresh () {
+      ApiManager.callGetColorProfiles(this)
+      ApiManager.callGetLedStrips(this)
+    },
     /** enable/disable strip */
     toggleEnabled (strip) {
-      api.putLedStrip(strip).then(response => {
-        strip.enabled = !strip.enabled
-      }).catch(error => {
-        this.handleError(error)
-      })
+      strip.enabled = !strip.enabled
+      ApiManager.updateLedStrip(this, strip)
     },
     /** return the ui variant of a strip */
     getVariantEnabled (strip) {
-      return strip.enabled ? 'outline-dark' : 'dark'
-    },
-    /** Fetches strips when the component is created. */
-    callGetLedStrips () {
-      api.getLedStrips().then(response => {
-        this.updateStoreStrips(response.data)
-      }).catch(error => {
-        this.handleError(error)
-      })
-    },
-    /** Fetches profiles when the component is created. */
-    callGetColorProfiles () {
-      api.getColorProfiles().then(response => {
-        this.updateStoreProfiles(response.data)
-      }).catch(error => {
-        this.handleError(error)
-      })
+      return Ui.getVariant(strip.enabled)
     },
     /** handle selection of a color profile */
     handleCPSelect (event) {
-      console.log(event)
-      api.updateStripProfile({stripId: event.stripId, profile: event.object}).then(response => {
-        this.callGetColorProfiles()
-      }).catch(error => {
-        this.handleError(error)
-      })
-    },
-    /** handle error message */
-    handleError (error) {
-      console.log(error)
-      this.makeToast({variant: 'danger', content: error.message})
-    },
-    /** makes a toast, expects an object with content field and variant field */
-    makeToast (toastData) {
-      this.$bvToast.toast(toastData.content, {
-        title: ` ${toastData.variant || 'default'}`,
-        variant: toastData.variant,
-        solid: true
-      })
+      ApiManager.updateStripProfile(this, { stripId: event.stripId, profile: event.object })
     },
     ...mapMutations({
-      updateStoreStrip: 'updateLedStrip',
-      updateStoreStrips: 'updateBackendStrips',
-      updateStoreProfiles: 'updateBackendProfiles'
+      updateStoreStrip: 'updateLedStrip'
     })
   },
   mounted () {
-    EventBus.$on('CPselect', this.handleCPSelect)
+    EventBus.$on(EventType.CP_SELECT, this.handleCPSelect)
   },
   beforeDestroy () {
-    EventBus.$off('CPselect', this.handleCPSelect)
+    EventBus.$off(EventType.CP_SELECT, this.handleCPSelect)
   }
 }
 </script>
@@ -128,12 +94,5 @@ margin: 0 10px;
 }
 a {
 color: #42b983;
-}
-.foo {
-  float: left;
-  width: 20px;
-  height: 20px;
-  margin: 5px;
-  border: 1px solid rgba(0, 0, 0, .2);
 }
 </style>
