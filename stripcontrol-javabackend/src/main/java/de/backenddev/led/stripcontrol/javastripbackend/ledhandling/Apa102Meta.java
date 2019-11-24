@@ -6,7 +6,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.backenddev.led.apa102.APA102Control;
-import de.backenddev.led.apa102.APA102Helper;
+import de.backenddev.led.apa102.APA102Strip;
+import de.backenddev.led.apa102.LEDStripHelper;
 import de.backenddev.led.stripcontrol.javastripbackend.model.ColorProfile;
 import de.backenddev.led.stripcontrol.javastripbackend.model.LEDStrip;
 
@@ -20,10 +21,12 @@ public class Apa102Meta
 	int brightness;
 	Long profileId;
 	APA102Control control;
+	APA102Strip strip;
 
 	public Apa102Meta( final LEDStrip strip, final boolean useNoOp ) throws IOException
 	{
 		this.control = Apa102Factory.createControl( strip, useNoOp );
+		this.strip = Apa102Factory.createStrip( strip );
 		update( strip );
 	}
 
@@ -110,7 +113,7 @@ public class Apa102Meta
 	{
 		if ( isInClearedState( ) == false )
 		{
-			this.control.clearStrip( );
+			this.control.clearStrip( this.strip );
 		}
 		this.r = 0;
 		this.g = 0;
@@ -132,8 +135,8 @@ public class Apa102Meta
 			pb = profile.getBlue( );
 			pbrght = profile.getBrightness( );
 		}
-		APA102Helper.setStripColor( this.control, pr, pg, pb, pbrght );
-		this.control.show( );
+		LEDStripHelper.setStripColor( this.strip, pr, pg, pb, pbrght );
+		this.control.show(this.strip );
 	}
 
 	private boolean isEnableStateChange( final LEDStrip strip )
