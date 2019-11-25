@@ -30,10 +30,7 @@ public class EffectConfigurationController
 	private static final Logger LOG = LoggerFactory.getLogger( EffectConfigurationController.class );
 
 	@Autowired
-	// @Qualifier ( "effectConfigurationService" )
 	private ModelService<EffectConfiguration> service;
-	// @Autowired
-	// private EffectConfigurationService service;
 
 	@GetMapping ( "" )
 	public Iterable<EffectConfiguration> getEffectConfigurations( )

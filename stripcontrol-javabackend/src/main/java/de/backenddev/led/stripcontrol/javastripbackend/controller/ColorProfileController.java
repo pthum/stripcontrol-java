@@ -34,7 +34,6 @@ public class ColorProfileController
 	private ModelService<ColorProfile> service;
 
 	@Autowired
-	// @Qualifier ( "effectConfigurationService" )
 	private ModelService<EffectConfiguration> effectService;
 
 	@GetMapping ( "" )
