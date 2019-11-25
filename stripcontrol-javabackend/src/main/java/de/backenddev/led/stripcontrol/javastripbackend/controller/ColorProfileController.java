@@ -19,11 +19,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import de.backenddev.led.stripcontrol.javastripbackend.JavastripBackendApplication;
 import de.backenddev.led.stripcontrol.javastripbackend.model.ColorProfile;
+import de.backenddev.led.stripcontrol.javastripbackend.model.EffectConfiguration;
 import de.backenddev.led.stripcontrol.javastripbackend.service.ColorProfileService;
+import de.backenddev.led.stripcontrol.javastripbackend.service.EffectConfigurationService;
 
 @RestController
-@RequestMapping ( BackendController.API_BASE + "/colorprofile" )
+@RequestMapping ( JavastripBackendApplication.API_BASE + "/colorprofile" )
 public class ColorProfileController
 {
 	private static final Logger LOG = LoggerFactory.getLogger( ColorProfileController.class );
@@ -31,27 +34,30 @@ public class ColorProfileController
 	@Autowired
 	private ColorProfileService service;
 
+	@Autowired
+	private EffectConfigurationService effService;
+
 	@GetMapping ( "" )
 	public Iterable<ColorProfile> getColorProfiles( )
 	{
-		return service.getAllColorProfiles( );
+		return this.service.getAllColorProfiles( );
 	}
 
 	@PostMapping ( "" )
-	public ResponseEntity<Object> createColorProfile(@Valid @RequestBody ColorProfile colorProfile )
+	public ResponseEntity<Object> createColorProfile( @Valid @RequestBody final ColorProfile colorProfile )
 	{
-		final ColorProfile createdProfile = service.saveColorProfile( colorProfile );
+		final ColorProfile createdProfile = this.service.saveColorProfile( colorProfile );
 		LOG.info( "ReturnObj: " + createdProfile );
-		URI location = ServletUriComponentsBuilder.fromCurrentRequest( ).path( "/{id}" )
+		final URI location = ServletUriComponentsBuilder.fromCurrentRequest( ).path( "/{id}" )
 				.buildAndExpand( createdProfile.getId( ) ).toUri( );
 		return ResponseEntity.created( location ).build( );
 
 	}
 
 	@GetMapping ( "/{id}" )
-	public ResponseEntity<ColorProfile> getColorProfile(@PathVariable Long id )
+	public ResponseEntity<ColorProfile> getColorProfile( @PathVariable final Long id )
 	{
-		final Optional<ColorProfile> profile = service.getById( id );
+		final Optional<ColorProfile> profile = this.service.getById( id );
 		if ( profile.isPresent( ) == false )
 		{
 			return ResponseEntity.notFound( ).build( );
@@ -60,28 +66,134 @@ public class ColorProfileController
 	}
 
 	@PutMapping ( "/{id}" )
-	public ResponseEntity<Object> updateColorProfile(@PathVariable Long id,
-			@Valid @RequestBody ColorProfile colorProfile )
+	public ResponseEntity<Object> updateColorProfile( @PathVariable final Long id,
+			@Valid @RequestBody final ColorProfile colorProfile )
 	{
-		Optional<ColorProfile> profile = service.getById( id );
+		final Optional<ColorProfile> profile = this.service.getById( id );
 		if ( profile.isPresent( ) == false )
 		{
 			return ResponseEntity.notFound( ).build( );
 		}
 		colorProfile.setId( profile.get( ).getId( ) );
-		service.saveColorProfile( colorProfile );
+		this.service.saveColorProfile( colorProfile );
 		return ResponseEntity.ok( ).build( );
 	}
 
 	@DeleteMapping ( "/{id}" )
-	public ResponseEntity<Object> deleteColorProfile(@PathVariable Long id )
+	public ResponseEntity<Object> deleteColorProfile( @PathVariable final Long id )
 	{
-		Optional<ColorProfile> profile = service.getById( id );
+		final Optional<ColorProfile> profile = this.service.getById( id );
 		if ( profile.isPresent( ) == false )
 		{
 			return ResponseEntity.notFound( ).build( );
 		}
-		service.removeColorProfile( id );
+		this.service.removeColorProfile( id );
 		return ResponseEntity.noContent( ).build( );
 	}
+
+	@GetMapping ( "/{id}/onEffect" )
+	public ResponseEntity<EffectConfiguration> getOnEffect( @PathVariable final Long id )
+	{
+		final Optional<ColorProfile> strip = this.service.getById( id );
+		if ( strip.isPresent( ) == false )
+		{
+			return ResponseEntity.notFound( ).build( );
+		}
+		if ( strip.get( ).hasOnEffect( ) )
+		{
+			return ResponseEntity.notFound( ).build( );
+		}
+		return ResponseEntity.ok( strip.get( ).getOnEffect( ) );
+	}
+
+	@PutMapping ( "/{id}/onEffect" )
+	public ResponseEntity<Object> updateOnEffect( @PathVariable final Long id,
+			@Valid @RequestBody final EffectConfiguration onEffect )
+	{
+		final Optional<ColorProfile> strip = this.service.getById( id );
+		if ( strip.isPresent( ) == false )
+		{
+			return ResponseEntity.notFound( ).build( );
+		}
+		final Optional<EffectConfiguration> dbEffect = this.effService.getById( onEffect.getId( ) );
+		if ( dbEffect.isPresent( ) == false )
+		{
+			return ResponseEntity.notFound( ).build( );
+		}
+		final ColorProfile updateStrip = strip.get( );
+		updateStrip.setOnEffect( dbEffect.get( ) );
+		this.service.saveColorProfile( updateStrip );
+		return ResponseEntity.ok( ).build( );
+	}
+
+	@DeleteMapping ( "/{id}/onEffect" )
+	public ResponseEntity<Object> deleteOnEffect( @PathVariable final Long id )
+	{
+		final Optional<ColorProfile> optStrip = this.service.getById( id );
+		if ( optStrip.isPresent( ) == false )
+		{
+			return ResponseEntity.notFound( ).build( );
+		}
+		final ColorProfile strip = optStrip.get( );
+		if ( strip.hasOnEffect( ) )
+		{
+			return ResponseEntity.notFound( ).build( );
+		}
+		strip.setOnEffect( null );
+		this.service.saveColorProfile( strip );
+		return ResponseEntity.noContent( ).build( );
+	}
+	@GetMapping ( "/{id}/offEffect" )
+	public ResponseEntity<EffectConfiguration> getOffEffect( @PathVariable final Long id )
+	{
+		final Optional<ColorProfile> strip = this.service.getById( id );
+		if ( strip.isPresent( ) == false )
+		{
+			return ResponseEntity.notFound( ).build( );
+		}
+		if ( strip.get( ).hasOffEffect( ) )
+		{
+			return ResponseEntity.notFound( ).build( );
+		}
+		return ResponseEntity.ok( strip.get( ).getOffEffect( ) );
+	}
+
+	@PutMapping ( "/{id}/offEffect" )
+	public ResponseEntity<Object> updateOffEffect( @PathVariable final Long id,
+			@Valid @RequestBody final EffectConfiguration offEffect )
+	{
+		final Optional<ColorProfile> strip = this.service.getById( id );
+		if ( strip.isPresent( ) == false )
+		{
+			return ResponseEntity.notFound( ).build( );
+		}
+		final Optional<EffectConfiguration> dbEffect = this.effService.getById( offEffect.getId( ) );
+		if ( dbEffect.isPresent( ) == false )
+		{
+			return ResponseEntity.notFound( ).build( );
+		}
+		final ColorProfile updateStrip = strip.get( );
+		updateStrip.setOffEffect( dbEffect.get( ) );
+		this.service.saveColorProfile( updateStrip );
+		return ResponseEntity.ok( ).build( );
+	}
+
+	@DeleteMapping ( "/{id}/offEffect" )
+	public ResponseEntity<Object> deleteOffEffect( @PathVariable final Long id )
+	{
+		final Optional<ColorProfile> optStrip = this.service.getById( id );
+		if ( optStrip.isPresent( ) == false )
+		{
+			return ResponseEntity.notFound( ).build( );
+		}
+		final ColorProfile strip = optStrip.get( );
+		if ( strip.hasOffEffect( ) )
+		{
+			return ResponseEntity.notFound( ).build( );
+		}
+		strip.setOffEffect( null );
+		this.service.saveColorProfile( strip );
+		return ResponseEntity.noContent( ).build( );
+	}
+
 }

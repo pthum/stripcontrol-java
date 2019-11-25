@@ -4,8 +4,13 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * The color profile
@@ -31,6 +36,16 @@ public class ColorProfile
 	@Min ( 0 )
 	@Max ( 100 )
 	private int brightness;
+
+	@ManyToOne
+	@JoinColumn ( name = "effect_id" )
+	@JsonIgnore
+	private EffectConfiguration onEffect;
+
+	@ManyToOne
+	@JoinColumn ( name = "effect_id" )
+	@JsonIgnore
+	private EffectConfiguration offEffect;
 
 	/**
 	 * Default constructor
@@ -144,6 +159,76 @@ public class ColorProfile
 	public void setBrightness( final int brightness )
 	{
 		this.brightness = brightness;
+	}
+
+	/**
+	 * @return the onEffect
+	 */
+	public EffectConfiguration getOnEffect( )
+	{
+		return this.onEffect;
+	}
+
+	/**
+	 * @param onEffect
+	 *            the onEffect to set
+	 */
+	public void setOnEffect( final EffectConfiguration onEffect )
+	{
+		this.onEffect = onEffect;
+	}
+
+	@JsonProperty
+	public boolean hasOnEffect( )
+	{
+		return this.onEffect != null;
+	}
+
+	@JsonIgnore
+	public void setHasOnEffect( final boolean unused )
+	{
+		// empty setter to prevent jackson errors
+	}
+
+	@JsonProperty
+	public Long onEffectId( )
+	{
+		return this.onEffect == null ? null : this.onEffect.getId( );
+	}
+
+	/**
+	 * @return the offEffect
+	 */
+	public EffectConfiguration getOffEffect( )
+	{
+		return this.offEffect;
+	}
+
+	/**
+	 * @param onEffect
+	 *            the offEffect to set
+	 */
+	public void setOffEffect( final EffectConfiguration offEffect )
+	{
+		this.offEffect = offEffect;
+	}
+
+	@JsonProperty
+	public boolean hasOffEffect( )
+	{
+		return this.offEffect != null;
+	}
+
+	@JsonIgnore
+	public void setHasOffEffect( final boolean unused )
+	{
+		// empty setter to prevent jackson errors
+	}
+
+	@JsonProperty
+	public Long offEffectId( )
+	{
+		return this.offEffect == null ? null : this.offEffect.getId( );
 	}
 
 	@Override

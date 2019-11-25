@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import de.backenddev.led.apa102.APA102Control;
 import de.backenddev.led.apa102.APA102Strip;
+import de.backenddev.led.apa102.LEDEffects;
 import de.backenddev.led.apa102.LEDStripHelper;
 import de.backenddev.led.stripcontrol.javastripbackend.model.ColorProfile;
 import de.backenddev.led.stripcontrol.javastripbackend.model.LEDStrip;
@@ -136,7 +137,31 @@ public class Apa102Meta
 			pbrght = profile.getBrightness( );
 		}
 		LEDStripHelper.setStripColor( this.strip, pr, pg, pb, pbrght );
-		this.control.show(this.strip );
+		this.control.show( this.strip );
+	}
+
+	private void doEffect( final int r, final int g, final int b, final int brightness, final EffectType effect )
+			throws Exception
+	{
+		final APA102Strip newStrip = new APA102Strip( this.strip.getNumLed( ), this.strip.getGlobalBrightness( ),
+				this.strip.getColorConfig( ) );
+		LEDStripHelper.setStripColor( newStrip, r, g, b, brightness );
+		switch ( effect )
+		{
+			case CHASE:
+				LEDEffects.chaselight( this.control, this.strip, newStrip, 20 );
+				break;
+
+			case FADE:
+				LEDEffects.fadeBrightness( this.control, newStrip, 10, 0.0d, 100.0d, 2.0d );
+				break;
+			case LIGHT_UP:
+				LEDEffects.lightUp( control, newStrip, 10 );
+				break;
+			default:
+				break;
+		}
+
 	}
 
 	private boolean isEnableStateChange( final LEDStrip strip )
