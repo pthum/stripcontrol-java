@@ -1,15 +1,10 @@
 package de.backenddev.led.stripcontrol.javastripbackend.ledhandling;
 
-import org.springframework.context.ApplicationEvent;
-
 import de.backenddev.led.stripcontrol.javastripbackend.model.ColorProfile;
 
-public class ProfileEvent extends ApplicationEvent
+public class ProfileEvent extends Event<ColorProfile>
 {
 	private static final long serialVersionUID = -6436182964039671435L;
-	private final EventType type;
-	private final ColorProfile profile;
-	private final Long profileId;
 
 	/**
 	 * 
@@ -24,42 +19,8 @@ public class ProfileEvent extends ApplicationEvent
 	 *            may be <code>null</code> for a {@link EventType#SAVE} with a new
 	 *            object, otherwise contain the id
 	 */
-	public ProfileEvent( Object source, EventType type, ColorProfile strip, Long stripId )
+	public ProfileEvent( final Object source, final EventType type, final ColorProfile profile, final Long profileId )
 	{
-		super( source );
-		this.type = type;
-		this.profile = strip;
-		this.profileId = stripId;
+		super( source, type, profile, profileId );
 	}
-
-	/**
-	 * @return the type
-	 */
-	public EventType getType( )
-	{
-		return type;
-	}
-
-	/**
-	 * @return the profile
-	 */
-	public ColorProfile getProfile( )
-	{
-		return profile;
-	}
-
-	/**
-	 * @return the profileId
-	 */
-	public Long getProfileId( )
-	{
-		return profileId;
-	}
-
-	@Override
-	public String toString( )
-	{
-		return "ProfileEvent [type=" + type + ", profile=" + profile + ", profileId=" + profileId + "]";
-	}
-
 }
