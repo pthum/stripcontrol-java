@@ -10,6 +10,7 @@ import de.backenddev.led.apa102.APA102Strip;
 import de.backenddev.led.apa102.LEDEffects;
 import de.backenddev.led.apa102.LEDStripHelper;
 import de.backenddev.led.stripcontrol.javastripbackend.model.ColorProfile;
+import de.backenddev.led.stripcontrol.javastripbackend.model.EffectConfiguration;
 import de.backenddev.led.stripcontrol.javastripbackend.model.LEDStrip;
 
 public class Apa102Meta
@@ -23,6 +24,8 @@ public class Apa102Meta
 	Long profileId;
 	APA102Control control;
 	APA102Strip strip;
+	EffectConfiguration onEffect;
+	EffectConfiguration offEffect;
 
 	public Apa102Meta( final LEDStrip strip, final boolean useNoOp ) throws IOException
 	{
@@ -129,37 +132,53 @@ public class Apa102Meta
 		int pg = 0;
 		int pb = 0;
 		int pbrght = 0;
+		EffectType type = null;
 		if ( profile != null )
 		{
 			pr = profile.getRed( );
 			pg = profile.getGreen( );
 			pb = profile.getBlue( );
 			pbrght = profile.getBrightness( );
+			type = EffectType.CHASE;
+
+		} else
+		{
+			type = EffectType.LIGHT_UP;
 		}
-		LEDStripHelper.setStripColor( this.strip, pr, pg, pb, pbrght );
-		this.control.show( this.strip );
+		doEffect( pr, pg, pb, pbrght, type, 20 );
+		// LEDStripHelper.setStripColor( this.strip, pr, pg, pb, pbrght );
+		// this.control.show( this.strip );
 	}
 
-	private void doEffect( final int r, final int g, final int b, final int brightness, final EffectType effect )
-			throws Exception
+	private void doEffect( final int r, final int g, final int b, final int brightness, final EffectType effect,
+			final int stepPauseMs ) throws IOException
 	{
 		final APA102Strip newStrip = new APA102Strip( this.strip.getNumLed( ), this.strip.getGlobalBrightness( ),
 				this.strip.getColorConfig( ) );
 		LEDStripHelper.setStripColor( newStrip, r, g, b, brightness );
-		switch ( effect )
+		try
 		{
-			case CHASE:
-				LEDEffects.chaselight( this.control, this.strip, newStrip, 20 );
-				break;
+			switch ( effect )
+			{
+				case CHASE:
+					LEDEffects.chaselight( this.control, this.strip, newStrip, stepPauseMs );
+					break;
 
-			case FADE:
-				LEDEffects.fadeBrightness( this.control, newStrip, 10, 0.0d, 100.0d, 2.0d );
-				break;
-			case LIGHT_UP:
-				LEDEffects.lightUp( control, newStrip, 10 );
-				break;
-			default:
-				break;
+				case FADE:
+					LEDEffects.fadeBrightness( this.control, newStrip, stepPauseMs, this.brightness, brightness, 2.0d );
+					break;
+				case LIGHT_UP:
+					LEDEffects.lightUp( this.control, newStrip, stepPauseMs );
+					break;
+				default:
+					LEDStripHelper.setStripColor( this.strip, r, g, b, brightness );
+					this.control.show( this.strip );
+					break;
+			}
+		}
+		catch ( final InterruptedException e )
+		{
+			LOG.error( "Interrupted effect", e );
 		}
 
 	}
