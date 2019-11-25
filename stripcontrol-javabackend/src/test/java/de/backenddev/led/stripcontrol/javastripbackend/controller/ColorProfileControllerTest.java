@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrlPattern;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -27,7 +28,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.backenddev.led.stripcontrol.javastripbackend.model.ColorProfile;
-import de.backenddev.led.stripcontrol.javastripbackend.service.ColorProfileService;
+import de.backenddev.led.stripcontrol.javastripbackend.service.ModelService;
 
 @RunWith ( SpringRunner.class )
 @WebMvcTest ( ColorProfileController.class )
@@ -38,7 +39,7 @@ public class ColorProfileControllerTest
 	private MockMvc mockMvc;
 
 	@MockBean
-	private ColorProfileService service;
+	private ModelService<ColorProfile> service;
 
 	private final ObjectMapper mapper = new ObjectMapper( );
 
@@ -55,7 +56,7 @@ public class ColorProfileControllerTest
 		cp2.setId( 2L );
 		profiles.add( cp1 );
 		profiles.add( cp2 );
-		when( this.service.getAllColorProfiles( ) ).thenReturn( profiles );
+		when( this.service.getAll( ) ).thenReturn( profiles );
 
 		this.mockMvc.perform( get( CP_PATH ) ).andExpect( status( ).isOk( ) )
 				.andExpect( content( ).json( toJson( profiles ) ) );
@@ -70,7 +71,7 @@ public class ColorProfileControllerTest
 		final ColorProfile cp = new ColorProfile( 255, 255, 255, 100 );
 		final ColorProfile cpWithId = new ColorProfile( 255, 255, 255, 100 );
 		cpWithId.setId( 1L );
-		when( this.service.saveColorProfile( cp ) ).thenReturn( cpWithId );
+		when( this.service.save( cp ) ).thenReturn( cpWithId );
 
 		this.mockMvc.perform( post( CP_PATH ).contentType( MediaType.APPLICATION_JSON ).content( toJson( cp ) ) )
 				.andExpect( status( ).isCreated( ) ).andExpect( redirectedUrlPattern( "http://*" + CP_PATH + "/1" ) );
@@ -86,7 +87,7 @@ public class ColorProfileControllerTest
 		final ColorProfile cp = new ColorProfile( 300, 255, 255, 100 );
 		final ColorProfile cpWithId = new ColorProfile( 300, 255, 255, 100 );
 		cpWithId.setId( 1L );
-		when( this.service.saveColorProfile( cp ) ).thenReturn( cpWithId );
+		when( this.service.save( cp ) ).thenReturn( cpWithId );
 
 		this.mockMvc.perform( post( CP_PATH ).contentType( MediaType.APPLICATION_JSON ).content( toJson( cp ) ) )
 				.andExpect( status( ).isBadRequest( ) ).andExpect( jsonPath( "$.errors.[0].['field']", is( "red" ) ) );

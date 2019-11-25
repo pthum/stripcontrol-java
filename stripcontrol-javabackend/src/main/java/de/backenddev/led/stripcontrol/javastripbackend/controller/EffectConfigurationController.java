@@ -21,7 +21,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import de.backenddev.led.stripcontrol.javastripbackend.JavastripBackendApplication;
 import de.backenddev.led.stripcontrol.javastripbackend.model.EffectConfiguration;
-import de.backenddev.led.stripcontrol.javastripbackend.service.EffectConfigurationService;
+import de.backenddev.led.stripcontrol.javastripbackend.service.ModelService;
 
 @RestController
 @RequestMapping ( JavastripBackendApplication.API_BASE + "/EffectConfiguration" )
@@ -30,19 +30,22 @@ public class EffectConfigurationController
 	private static final Logger LOG = LoggerFactory.getLogger( EffectConfigurationController.class );
 
 	@Autowired
-	private EffectConfigurationService service;
+	// @Qualifier ( "effectConfigurationService" )
+	private ModelService<EffectConfiguration> service;
+	// @Autowired
+	// private EffectConfigurationService service;
 
 	@GetMapping ( "" )
 	public Iterable<EffectConfiguration> getEffectConfigurations( )
 	{
-		return this.service.getAllEffectConfigurations( );
+		return this.service.getAll( );
 	}
 
 	@PostMapping ( "" )
 	public ResponseEntity<Object> createEffectConfiguration(
 			@Valid @RequestBody final EffectConfiguration EffectConfiguration )
 	{
-		final EffectConfiguration createdProfile = this.service.saveEffectConfiguration( EffectConfiguration );
+		final EffectConfiguration createdProfile = this.service.save( EffectConfiguration );
 		LOG.info( "ReturnObj: " + createdProfile );
 		final URI location = ServletUriComponentsBuilder.fromCurrentRequest( ).path( "/{id}" )
 				.buildAndExpand( createdProfile.getId( ) ).toUri( );
@@ -71,7 +74,7 @@ public class EffectConfigurationController
 			return ResponseEntity.notFound( ).build( );
 		}
 		EffectConfiguration.setId( profile.get( ).getId( ) );
-		this.service.saveEffectConfiguration( EffectConfiguration );
+		this.service.save( EffectConfiguration );
 		return ResponseEntity.ok( ).build( );
 	}
 
@@ -83,7 +86,7 @@ public class EffectConfigurationController
 		{
 			return ResponseEntity.notFound( ).build( );
 		}
-		this.service.removeEffectConfiguration( id );
+		this.service.remove( id );
 		return ResponseEntity.noContent( ).build( );
 	}
 }

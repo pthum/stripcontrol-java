@@ -22,8 +22,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import de.backenddev.led.stripcontrol.javastripbackend.JavastripBackendApplication;
 import de.backenddev.led.stripcontrol.javastripbackend.model.ColorProfile;
 import de.backenddev.led.stripcontrol.javastripbackend.model.LEDStrip;
-import de.backenddev.led.stripcontrol.javastripbackend.service.ColorProfileService;
-import de.backenddev.led.stripcontrol.javastripbackend.service.LEDStripService;
+import de.backenddev.led.stripcontrol.javastripbackend.service.ModelService;
 
 @RestController
 @RequestMapping ( JavastripBackendApplication.API_BASE + "/ledstrip" )
@@ -32,21 +31,21 @@ public class LEDStripController
 	private static final Logger LOG = LoggerFactory.getLogger( LEDStripController.class );
 
 	@Autowired
-	private LEDStripService service;
+	private ModelService<LEDStrip> service;
 
 	@Autowired
-	private ColorProfileService cpService;
+	private ModelService<ColorProfile> cpService;
 
 	@GetMapping ( "" )
 	public Iterable<LEDStrip> getLEDStrips( )
 	{
-		return this.service.getAllLEDStrips( );
+		return this.service.getAll( );
 	}
 
 	@PostMapping ( "" )
 	public ResponseEntity<Object> createLEDStrip( @Valid @RequestBody final LEDStrip ledStrip )
 	{
-		final LEDStrip createdStrip = this.service.saveLEDStrip( ledStrip );
+		final LEDStrip createdStrip = this.service.save( ledStrip );
 		LOG.info( "ReturnObj: " + createdStrip );
 		final URI location = ServletUriComponentsBuilder.fromCurrentRequest( ).path( "/{id}" )
 				.buildAndExpand( createdStrip.getId( ) ).toUri( );
@@ -76,7 +75,7 @@ public class LEDStripController
 		}
 		ledStrip.setId( strip.get( ).getId( ) );
 		ledStrip.setProfile( strip.get( ).getProfile( ) );
-		this.service.saveLEDStrip( ledStrip );
+		this.service.save( ledStrip );
 		return ResponseEntity.ok( ).build( );
 	}
 
@@ -88,7 +87,7 @@ public class LEDStripController
 		{
 			return ResponseEntity.notFound( ).build( );
 		}
-		this.service.removeLEDStrip( id );
+		this.service.remove( id );
 		return ResponseEntity.noContent( ).build( );
 	}
 
@@ -123,7 +122,7 @@ public class LEDStripController
 		}
 		final LEDStrip updateStrip = strip.get( );
 		updateStrip.setProfile( dbProfile.get( ) );
-		this.service.saveLEDStrip( updateStrip );
+		this.service.save( updateStrip );
 		return ResponseEntity.ok( ).build( );
 	}
 
@@ -141,10 +140,8 @@ public class LEDStripController
 			return ResponseEntity.notFound( ).build( );
 		}
 		strip.setProfile( null );
-		this.service.saveLEDStrip( strip );
+		this.service.save( strip );
 		return ResponseEntity.noContent( ).build( );
 	}
-	
-	
-	
+
 }

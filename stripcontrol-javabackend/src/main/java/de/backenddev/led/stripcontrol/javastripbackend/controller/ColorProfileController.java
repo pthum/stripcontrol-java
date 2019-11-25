@@ -22,8 +22,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import de.backenddev.led.stripcontrol.javastripbackend.JavastripBackendApplication;
 import de.backenddev.led.stripcontrol.javastripbackend.model.ColorProfile;
 import de.backenddev.led.stripcontrol.javastripbackend.model.EffectConfiguration;
-import de.backenddev.led.stripcontrol.javastripbackend.service.ColorProfileService;
-import de.backenddev.led.stripcontrol.javastripbackend.service.EffectConfigurationService;
+import de.backenddev.led.stripcontrol.javastripbackend.service.ModelService;
 
 @RestController
 @RequestMapping ( JavastripBackendApplication.API_BASE + "/colorprofile" )
@@ -32,21 +31,22 @@ public class ColorProfileController
 	private static final Logger LOG = LoggerFactory.getLogger( ColorProfileController.class );
 
 	@Autowired
-	private ColorProfileService service;
+	private ModelService<ColorProfile> service;
 
 	@Autowired
-	private EffectConfigurationService effService;
+	// @Qualifier ( "effectConfigurationService" )
+	private ModelService<EffectConfiguration> effectService;
 
 	@GetMapping ( "" )
 	public Iterable<ColorProfile> getColorProfiles( )
 	{
-		return this.service.getAllColorProfiles( );
+		return this.service.getAll( );
 	}
 
 	@PostMapping ( "" )
 	public ResponseEntity<Object> createColorProfile( @Valid @RequestBody final ColorProfile colorProfile )
 	{
-		final ColorProfile createdProfile = this.service.saveColorProfile( colorProfile );
+		final ColorProfile createdProfile = this.service.save( colorProfile );
 		LOG.info( "ReturnObj: " + createdProfile );
 		final URI location = ServletUriComponentsBuilder.fromCurrentRequest( ).path( "/{id}" )
 				.buildAndExpand( createdProfile.getId( ) ).toUri( );
@@ -75,7 +75,7 @@ public class ColorProfileController
 			return ResponseEntity.notFound( ).build( );
 		}
 		colorProfile.setId( profile.get( ).getId( ) );
-		this.service.saveColorProfile( colorProfile );
+		this.service.save( colorProfile );
 		return ResponseEntity.ok( ).build( );
 	}
 
@@ -87,7 +87,7 @@ public class ColorProfileController
 		{
 			return ResponseEntity.notFound( ).build( );
 		}
-		this.service.removeColorProfile( id );
+		this.service.remove( id );
 		return ResponseEntity.noContent( ).build( );
 	}
 
@@ -115,14 +115,14 @@ public class ColorProfileController
 		{
 			return ResponseEntity.notFound( ).build( );
 		}
-		final Optional<EffectConfiguration> dbEffect = this.effService.getById( onEffect.getId( ) );
+		final Optional<EffectConfiguration> dbEffect = this.effectService.getById( onEffect.getId( ) );
 		if ( dbEffect.isPresent( ) == false )
 		{
 			return ResponseEntity.notFound( ).build( );
 		}
 		final ColorProfile updateStrip = strip.get( );
 		updateStrip.setOnEffect( dbEffect.get( ) );
-		this.service.saveColorProfile( updateStrip );
+		this.service.save( updateStrip );
 		return ResponseEntity.ok( ).build( );
 	}
 
@@ -140,9 +140,10 @@ public class ColorProfileController
 			return ResponseEntity.notFound( ).build( );
 		}
 		strip.setOnEffect( null );
-		this.service.saveColorProfile( strip );
+		this.service.save( strip );
 		return ResponseEntity.noContent( ).build( );
 	}
+
 	@GetMapping ( "/{id}/offEffect" )
 	public ResponseEntity<EffectConfiguration> getOffEffect( @PathVariable final Long id )
 	{
@@ -167,14 +168,14 @@ public class ColorProfileController
 		{
 			return ResponseEntity.notFound( ).build( );
 		}
-		final Optional<EffectConfiguration> dbEffect = this.effService.getById( offEffect.getId( ) );
+		final Optional<EffectConfiguration> dbEffect = this.effectService.getById( offEffect.getId( ) );
 		if ( dbEffect.isPresent( ) == false )
 		{
 			return ResponseEntity.notFound( ).build( );
 		}
 		final ColorProfile updateStrip = strip.get( );
 		updateStrip.setOffEffect( dbEffect.get( ) );
-		this.service.saveColorProfile( updateStrip );
+		this.service.save( updateStrip );
 		return ResponseEntity.ok( ).build( );
 	}
 
@@ -192,7 +193,7 @@ public class ColorProfileController
 			return ResponseEntity.notFound( ).build( );
 		}
 		strip.setOffEffect( null );
-		this.service.saveColorProfile( strip );
+		this.service.save( strip );
 		return ResponseEntity.noContent( ).build( );
 	}
 

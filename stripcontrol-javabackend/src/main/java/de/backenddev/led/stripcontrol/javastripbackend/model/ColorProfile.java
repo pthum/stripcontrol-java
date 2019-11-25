@@ -38,12 +38,12 @@ public class ColorProfile
 	private int brightness;
 
 	@ManyToOne
-	@JoinColumn ( name = "effect_id" )
+	@JoinColumn ( name = "oneffect_id" )
 	@JsonIgnore
 	private EffectConfiguration onEffect;
 
 	@ManyToOne
-	@JoinColumn ( name = "effect_id" )
+	@JoinColumn ( name = "offeffect_id" )
 	@JsonIgnore
 	private EffectConfiguration offEffect;
 

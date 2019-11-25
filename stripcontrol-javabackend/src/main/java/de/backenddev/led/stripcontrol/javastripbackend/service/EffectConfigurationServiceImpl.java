@@ -12,7 +12,7 @@ import de.backenddev.led.stripcontrol.javastripbackend.model.EffectConfiguration
 import de.backenddev.led.stripcontrol.javastripbackend.repository.EffectConfigurationRepository;
 
 @Service
-public class EffectConfigurationServiceImpl implements EffectConfigurationService
+public class EffectConfigurationServiceImpl implements ModelService<EffectConfiguration>
 {
 	@Autowired
 	private EffectConfigurationRepository repo;
@@ -21,14 +21,14 @@ public class EffectConfigurationServiceImpl implements EffectConfigurationServic
 	private ApplicationEventPublisher applicationEventPublisher;
 
 	@Override
-	public EffectConfiguration saveEffectConfiguration( final EffectConfiguration effectConfiguration )
+	public EffectConfiguration save( final EffectConfiguration effectConfiguration )
 	{
 		final EffectConfiguration result = this.repo.save( effectConfiguration );
 		return result;
 	}
 
 	@Override
-	public void removeEffectConfiguration( final long id )
+	public void remove( final long id )
 	{
 		this.repo.deleteById( id );
 		this.applicationEventPublisher.publishEvent( new StripEvent( this, EventType.DELETE, null, id ) );
@@ -41,7 +41,7 @@ public class EffectConfigurationServiceImpl implements EffectConfigurationServic
 	}
 
 	@Override
-	public Iterable<EffectConfiguration> getAllEffectConfigurations( )
+	public Iterable<EffectConfiguration> getAll( )
 	{
 		return this.repo.findAll( );
 	}

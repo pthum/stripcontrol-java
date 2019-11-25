@@ -12,7 +12,7 @@ import de.backenddev.led.stripcontrol.javastripbackend.model.LEDStrip;
 import de.backenddev.led.stripcontrol.javastripbackend.repository.LEDStripRepository;
 
 @Service
-public class LEDStripServiceImpl implements LEDStripService
+public class LEDStripServiceImpl implements ModelService<LEDStrip>
 {
 	@Autowired
 	private LEDStripRepository repo;
@@ -21,31 +21,31 @@ public class LEDStripServiceImpl implements LEDStripService
 	private ApplicationEventPublisher applicationEventPublisher;
 
 	@Override
-	public LEDStrip saveLEDStrip(LEDStrip strip )
+	public LEDStrip save( final LEDStrip strip )
 	{
-		Long idBeforeSave = strip != null ? strip.getId( ) : null;
-		LEDStrip result = repo.save( strip );
-		applicationEventPublisher.publishEvent( new StripEvent( this, EventType.SAVE, result, idBeforeSave ) );
+		final Long idBeforeSave = strip != null ? strip.getId( ) : null;
+		final LEDStrip result = this.repo.save( strip );
+		this.applicationEventPublisher.publishEvent( new StripEvent( this, EventType.SAVE, result, idBeforeSave ) );
 		return result;
 	}
 
 	@Override
-	public void removeLEDStrip(long id )
+	public void remove( final long id )
 	{
-		repo.deleteById( id );
-		applicationEventPublisher.publishEvent( new StripEvent( this, EventType.DELETE, null, id ) );
+		this.repo.deleteById( id );
+		this.applicationEventPublisher.publishEvent( new StripEvent( this, EventType.DELETE, null, id ) );
 	}
 
 	@Override
-	public Iterable<LEDStrip> getAllLEDStrips( )
+	public Iterable<LEDStrip> getAll( )
 	{
-		return repo.findAll( );
+		return this.repo.findAll( );
 	}
 
 	@Override
-	public Optional<LEDStrip> getById(long id )
+	public Optional<LEDStrip> getById( final long id )
 	{
-		return repo.findById( id );
+		return this.repo.findById( id );
 	}
 
 }
