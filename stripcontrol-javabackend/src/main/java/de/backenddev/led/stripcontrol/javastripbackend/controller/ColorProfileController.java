@@ -95,11 +95,7 @@ public class ColorProfileController
 	public ResponseEntity<EffectConfiguration> getOnEffect( @PathVariable final Long id )
 	{
 		final Optional<ColorProfile> strip = this.service.getById( id );
-		if ( strip.isPresent( ) == false )
-		{
-			return ResponseEntity.notFound( ).build( );
-		}
-		if ( strip.get( ).hasOnEffect( ) )
+		if ( strip.isPresent( ) == false || strip.get( ).hasOnEffect( ) == false )
 		{
 			return ResponseEntity.notFound( ).build( );
 		}
@@ -130,15 +126,11 @@ public class ColorProfileController
 	public ResponseEntity<Object> deleteOnEffect( @PathVariable final Long id )
 	{
 		final Optional<ColorProfile> optStrip = this.service.getById( id );
-		if ( optStrip.isPresent( ) == false )
+		if ( optStrip.isPresent( ) == false || optStrip.get( ).hasOnEffect( ) == false )
 		{
 			return ResponseEntity.notFound( ).build( );
 		}
 		final ColorProfile strip = optStrip.get( );
-		if ( strip.hasOnEffect( ) )
-		{
-			return ResponseEntity.notFound( ).build( );
-		}
 		strip.setOnEffect( null );
 		this.service.save( strip );
 		return ResponseEntity.noContent( ).build( );
@@ -148,11 +140,7 @@ public class ColorProfileController
 	public ResponseEntity<EffectConfiguration> getOffEffect( @PathVariable final Long id )
 	{
 		final Optional<ColorProfile> strip = this.service.getById( id );
-		if ( strip.isPresent( ) == false )
-		{
-			return ResponseEntity.notFound( ).build( );
-		}
-		if ( strip.get( ).hasOffEffect( ) )
+		if ( strip.isPresent( ) == false || strip.get( ).hasOffEffect( ) == false )
 		{
 			return ResponseEntity.notFound( ).build( );
 		}
@@ -183,15 +171,11 @@ public class ColorProfileController
 	public ResponseEntity<Object> deleteOffEffect( @PathVariable final Long id )
 	{
 		final Optional<ColorProfile> optStrip = this.service.getById( id );
-		if ( optStrip.isPresent( ) == false )
+		if ( optStrip.isPresent( ) == false || optStrip.get( ).hasOffEffect( ) == false )
 		{
 			return ResponseEntity.notFound( ).build( );
 		}
 		final ColorProfile strip = optStrip.get( );
-		if ( strip.hasOffEffect( ) )
-		{
-			return ResponseEntity.notFound( ).build( );
-		}
 		strip.setOffEffect( null );
 		this.service.save( strip );
 		return ResponseEntity.noContent( ).build( );

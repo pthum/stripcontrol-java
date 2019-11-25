@@ -95,11 +95,7 @@ public class LEDStripController
 	public ResponseEntity<ColorProfile> getLEDStripProfile( @PathVariable final Long id )
 	{
 		final Optional<LEDStrip> strip = this.service.getById( id );
-		if ( strip.isPresent( ) == false )
-		{
-			return ResponseEntity.notFound( ).build( );
-		}
-		if ( strip.get( ).getProfile( ) == null )
+		if ( strip.isPresent( ) == false || strip.get( ).hasProfile( ) == false )
 		{
 			return ResponseEntity.notFound( ).build( );
 		}
@@ -130,15 +126,11 @@ public class LEDStripController
 	public ResponseEntity<Object> deleteLEDStripProfile( @PathVariable final Long id )
 	{
 		final Optional<LEDStrip> optStrip = this.service.getById( id );
-		if ( optStrip.isPresent( ) == false )
+		if ( optStrip.isPresent( ) == false || optStrip.get( ).hasProfile( ) == false )
 		{
 			return ResponseEntity.notFound( ).build( );
 		}
 		final LEDStrip strip = optStrip.get( );
-		if ( strip.getProfile( ) == null )
-		{
-			return ResponseEntity.notFound( ).build( );
-		}
 		strip.setProfile( null );
 		this.service.save( strip );
 		return ResponseEntity.noContent( ).build( );
