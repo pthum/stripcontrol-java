@@ -135,4 +135,11 @@ public class ColorProfileController extends AbstractModelController<ColorProfile
 		return LOG;
 	}
 
+	@Override
+	void prepareUpdateObjectBeforeSave( final ColorProfile updateObject, final ColorProfile dbObject )
+	{
+		updateObject.setOffEffect( dbObject.getOffEffect( ) );
+		updateObject.setOnEffect( dbObject.getOnEffect( ) );
+	}
+
 }

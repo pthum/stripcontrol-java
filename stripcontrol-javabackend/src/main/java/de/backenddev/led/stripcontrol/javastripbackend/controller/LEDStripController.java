@@ -90,4 +90,10 @@ public class LEDStripController extends AbstractModelController<LEDStrip>
 		return LOG;
 	}
 
+	@Override
+	void prepareUpdateObjectBeforeSave( final LEDStrip updateObject, final LEDStrip dbObject )
+	{
+		updateObject.setProfile( dbObject.getProfile( ) );
+	}
+
 }

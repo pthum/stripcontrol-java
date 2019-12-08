@@ -49,15 +49,17 @@ public abstract class AbstractModelController<T extends AbstractModel>
 	}
 
 	@PutMapping ( "/{id}" )
-	public ResponseEntity<Object> update( @PathVariable final Long id, @Valid @RequestBody final T EffectConfiguration )
+	public ResponseEntity<Object> update( @PathVariable final Long id, @Valid @RequestBody final T updateObject )
 	{
-		final Optional<T> profile = getModelService( ).getById( id );
-		if ( profile.isPresent( ) == false )
+		final Optional<T> optDbObject = getModelService( ).getById( id );
+		if ( optDbObject.isPresent( ) == false )
 		{
 			return ResponseEntity.notFound( ).build( );
 		}
-		EffectConfiguration.setId( profile.get( ).getId( ) );
-		getModelService( ).save( EffectConfiguration );
+		final T dbObject = optDbObject.get( );
+		updateObject.setId( dbObject.getId( ) );
+		prepareUpdateObjectBeforeSave( updateObject, dbObject );
+		getModelService( ).save( updateObject );
 		return ResponseEntity.ok( ).build( );
 	}
 
@@ -76,5 +78,7 @@ public abstract class AbstractModelController<T extends AbstractModel>
 	abstract ModelService<T> getModelService( );
 
 	abstract Logger getLogger( );
+
+	abstract void prepareUpdateObjectBeforeSave( final T updateObject, final T dbObject );
 
 }

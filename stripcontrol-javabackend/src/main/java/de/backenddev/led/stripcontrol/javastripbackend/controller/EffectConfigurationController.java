@@ -30,4 +30,9 @@ public class EffectConfigurationController extends AbstractModelController<Effec
 	{
 		return LOG;
 	}
+
+	@Override
+	void prepareUpdateObjectBeforeSave( final EffectConfiguration updateObject, final EffectConfiguration dbObject )
+	{
+	}
 }
