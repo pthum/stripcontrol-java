@@ -148,6 +148,7 @@ public class Apa102Meta
 	private void doEffect( final int r, final int g, final int b, final int brightness, final EffectType effect,
 			final int stepPauseMs ) throws IOException
 	{
+		LOG.trace( "Doing effect " + effect + " with steps of " + stepPauseMs + " ms" );
 		final APA102Strip newStrip = new APA102Strip( this.strip.getNumLed( ), this.strip.getGlobalBrightness( ),
 				this.strip.getColorConfig( ) );
 		LEDStripHelper.setStripColor( newStrip, r, g, b, brightness );
