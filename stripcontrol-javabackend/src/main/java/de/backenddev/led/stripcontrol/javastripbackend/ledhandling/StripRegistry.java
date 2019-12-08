@@ -34,6 +34,9 @@ public class StripRegistry
 	@Value ( "${strips.enabled}" )
 	private boolean stripsEnabled;
 
+	@Value ( "${strips.effecttime:20}" )
+	private int effectTime;
+
 	public StripRegistry( )
 	{
 		this.map = new HashMap<>( );
@@ -172,7 +175,7 @@ public class StripRegistry
 		{
 			try
 			{
-				control = new Apa102Meta( strip, !this.stripsEnabled );
+				control = new Apa102Meta( strip, !this.stripsEnabled, this.effectTime );
 				this.map.put( strip.getId( ), control );
 			}
 			catch ( final IOException e )

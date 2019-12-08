@@ -21,7 +21,7 @@ public class Apa102MetaTest extends AbstractLedHandlingTest
 		/* create a strip */
 		final LEDStrip strip = getStrip( false );
 		/* event would create meta */
-		final Apa102Meta testMeta = new Apa102Meta( strip, true );
+		final Apa102Meta testMeta = new Apa102Meta( strip, true, 0 );
 		checkMeta( testMeta, 0, 0, 0, 0, null, false );
 		checkControl( testMeta, 0, 0, 0, 0.0d );
 
@@ -61,7 +61,7 @@ public class Apa102MetaTest extends AbstractLedHandlingTest
 		/* create a strip */
 		final LEDStrip strip = getStrip( false );
 		/* event would create meta */
-		final Apa102Meta testMeta = new Apa102Meta( strip, true );
+		final Apa102Meta testMeta = new Apa102Meta( strip, true, 0 );
 		checkMeta( testMeta, 0, 0, 0, 0, null, false );
 		checkControl( testMeta, 0, 0, 0, 0.0d );
 
@@ -94,7 +94,7 @@ public class Apa102MetaTest extends AbstractLedHandlingTest
 		/* create a strip */
 		final LEDStrip strip = getStrip( false );
 		/* event would create meta */
-		final Apa102Meta testMeta = new Apa102Meta( strip, true );
+		final Apa102Meta testMeta = new Apa102Meta( strip, true, 0 );
 		checkMeta( testMeta, 0, 0, 0, 0, null, false );
 		checkControl( testMeta, 0, 0, 0, 0.0d );
 
@@ -124,7 +124,7 @@ public class Apa102MetaTest extends AbstractLedHandlingTest
 		/* create a strip */
 		final LEDStrip strip = getStrip( false );
 		/* event would create meta */
-		final Apa102Meta testMeta = new Apa102Meta( strip, true );
+		final Apa102Meta testMeta = new Apa102Meta( strip, true, 0 );
 		checkMeta( testMeta, 0, 0, 0, 0, null, false );
 		checkControl( testMeta, 0, 0, 0, 0.0d );
 
@@ -166,7 +166,7 @@ public class Apa102MetaTest extends AbstractLedHandlingTest
 		final LEDStrip strip = getStrip( false );
 		strip.setId( stripId );
 		/* event would create meta */
-		final Apa102Meta testMeta = new Apa102Meta( strip, true );
+		final Apa102Meta testMeta = new Apa102Meta( strip, true, 0 );
 		checkMeta( testMeta, 0, 0, 0, 0, null, false );
 		checkControl( testMeta, 0, 0, 0, 0.0d );
 
@@ -196,7 +196,7 @@ public class Apa102MetaTest extends AbstractLedHandlingTest
 		final LEDStrip strip = getStrip( false );
 		strip.setId( stripId );
 		/* event would create meta */
-		final Apa102Meta testMeta = new Apa102Meta( strip, true );
+		final Apa102Meta testMeta = new Apa102Meta( strip, true, 0 );
 		checkMeta( testMeta, 0, 0, 0, 0, null, false );
 		checkControl( testMeta, 0, 0, 0, 0.0d );
 
@@ -227,7 +227,7 @@ public class Apa102MetaTest extends AbstractLedHandlingTest
 		final LEDStrip strip = getStrip( false );
 		strip.setId( stripId );
 		/* event would create meta */
-		final Apa102Meta testMeta = new Apa102Meta( strip, true );
+		final Apa102Meta testMeta = new Apa102Meta( strip, true, 0 );
 		checkMeta( testMeta, 0, 0, 0, 0, null, false );
 		checkControl( testMeta, 0, 0, 0, 0.0d );
 
@@ -258,7 +258,7 @@ public class Apa102MetaTest extends AbstractLedHandlingTest
 		final LEDStrip strip = getStrip( false );
 		strip.setId( stripId );
 		/* event would create meta */
-		final Apa102Meta testMeta = new Apa102Meta( strip, true );
+		final Apa102Meta testMeta = new Apa102Meta( strip, true, 0 );
 		checkMeta( testMeta, 0, 0, 0, 0, null, false );
 		checkControl( testMeta, 0, 0, 0, 0.0d );
 

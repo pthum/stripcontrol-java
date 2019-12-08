@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 
 import de.backenddev.led.apa102.APA102Control;
 import de.backenddev.led.apa102.APA102Strip;
@@ -25,14 +24,14 @@ public class Apa102Meta
 	Long profileId;
 	APA102Control control;
 	APA102Strip strip;
-	@Value ( "${strips.effecttime:20}" )
-	private int effectTime;
+	private final int effectTime;
 
-	public Apa102Meta( final LEDStrip strip, final boolean useNoOp ) throws IOException
+	public Apa102Meta( final LEDStrip strip, final boolean useNoOp, final int effectTime ) throws IOException
 	{
 		this.control = Apa102Factory.createControl( strip, useNoOp );
 		this.strip = Apa102Factory.createStrip( strip );
 		update( strip );
+		this.effectTime = effectTime;
 	}
 
 	public boolean isEnabled( )
