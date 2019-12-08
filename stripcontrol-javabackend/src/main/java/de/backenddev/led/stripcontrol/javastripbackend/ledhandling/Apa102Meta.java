@@ -132,18 +132,14 @@ public class Apa102Meta
 		int pg = 0;
 		int pb = 0;
 		int pbrght = 0;
-		EffectType type = null;
+		final EffectType type = EffectType.CHASE;
 		if ( profile != null )
 		{
 			pr = profile.getRed( );
 			pg = profile.getGreen( );
 			pb = profile.getBlue( );
 			pbrght = profile.getBrightness( );
-			type = EffectType.CHASE;
 
-		} else
-		{
-			type = EffectType.LIGHT_UP;
 		}
 		doEffect( pr, pg, pb, pbrght, type, 20 );
 		// LEDStripHelper.setStripColor( this.strip, pr, pg, pb, pbrght );
