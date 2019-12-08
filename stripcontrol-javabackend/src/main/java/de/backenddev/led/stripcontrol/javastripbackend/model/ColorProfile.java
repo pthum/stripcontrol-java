@@ -3,13 +3,8 @@ package de.backenddev.led.stripcontrol.javastripbackend.model;
 import java.util.Objects;
 
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * The color profile
@@ -31,16 +26,6 @@ public class ColorProfile extends AbstractModel
 	@Min ( 0 )
 	@Max ( 100 )
 	private int brightness;
-
-	@ManyToOne
-	@JoinColumn ( name = "oneffect_id" )
-	@JsonIgnore
-	private EffectConfiguration onEffect;
-
-	@ManyToOne
-	@JoinColumn ( name = "offeffect_id" )
-	@JsonIgnore
-	private EffectConfiguration offEffect;
 
 	/**
 	 * Default constructor
@@ -139,76 +124,6 @@ public class ColorProfile extends AbstractModel
 		this.brightness = brightness;
 	}
 
-	/**
-	 * @return the onEffect
-	 */
-	public EffectConfiguration getOnEffect( )
-	{
-		return this.onEffect;
-	}
-
-	/**
-	 * @param onEffect
-	 *            the onEffect to set
-	 */
-	public void setOnEffect( final EffectConfiguration onEffect )
-	{
-		this.onEffect = onEffect;
-	}
-
-	@JsonProperty
-	public boolean hasOnEffect( )
-	{
-		return this.onEffect != null;
-	}
-
-	@JsonIgnore
-	public void setHasOnEffect( final boolean unused )
-	{
-		// empty setter to prevent jackson errors
-	}
-
-	@JsonProperty
-	public Long onEffectId( )
-	{
-		return this.onEffect == null ? null : this.onEffect.getId( );
-	}
-
-	/**
-	 * @return the offEffect
-	 */
-	public EffectConfiguration getOffEffect( )
-	{
-		return this.offEffect;
-	}
-
-	/**
-	 * @param onEffect
-	 *            the offEffect to set
-	 */
-	public void setOffEffect( final EffectConfiguration offEffect )
-	{
-		this.offEffect = offEffect;
-	}
-
-	@JsonProperty
-	public boolean hasOffEffect( )
-	{
-		return this.offEffect != null;
-	}
-
-	@JsonIgnore
-	public void setHasOffEffect( final boolean unused )
-	{
-		// empty setter to prevent jackson errors
-	}
-
-	@JsonProperty
-	public Long offEffectId( )
-	{
-		return this.offEffect == null ? null : this.offEffect.getId( );
-	}
-
 	@Override
 	public String toString( )
 	{
@@ -221,8 +136,7 @@ public class ColorProfile extends AbstractModel
 	{
 		final int prime = 31;
 		int result = super.hashCode( );
-		result = prime * result
-				+ Objects.hash( this.blue, this.brightness, this.green, this.offEffect, this.onEffect, this.red );
+		result = prime * result + Objects.hash( this.blue, this.brightness, this.green, this.red );
 		return result;
 	}
 
@@ -237,7 +151,6 @@ public class ColorProfile extends AbstractModel
 			return false;
 		final ColorProfile other = (ColorProfile) obj;
 		return this.blue == other.blue && this.brightness == other.brightness && this.green == other.green
-				&& Objects.equals( this.offEffect, other.offEffect ) && Objects.equals( this.onEffect, other.onEffect )
 				&& this.red == other.red;
 	}
 

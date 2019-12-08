@@ -4,17 +4,18 @@ import java.io.IOException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 
 import de.backenddev.led.apa102.APA102Control;
 import de.backenddev.led.apa102.APA102Strip;
 import de.backenddev.led.apa102.LEDEffects;
 import de.backenddev.led.apa102.LEDStripHelper;
 import de.backenddev.led.stripcontrol.javastripbackend.model.ColorProfile;
-import de.backenddev.led.stripcontrol.javastripbackend.model.EffectConfiguration;
 import de.backenddev.led.stripcontrol.javastripbackend.model.LEDStrip;
 
 public class Apa102Meta
 {
+
 	private static final Logger LOG = LoggerFactory.getLogger( Apa102Meta.class );
 	boolean enabled;
 	int r;
@@ -24,8 +25,8 @@ public class Apa102Meta
 	Long profileId;
 	APA102Control control;
 	APA102Strip strip;
-	EffectConfiguration onEffect;
-	EffectConfiguration offEffect;
+	@Value ( "${strips.effecttime:20}" )
+	private int effectTime;
 
 	public Apa102Meta( final LEDStrip strip, final boolean useNoOp ) throws IOException
 	{
@@ -141,9 +142,7 @@ public class Apa102Meta
 			pbrght = profile.getBrightness( );
 
 		}
-		doEffect( pr, pg, pb, pbrght, type, 20 );
-		// LEDStripHelper.setStripColor( this.strip, pr, pg, pb, pbrght );
-		// this.control.show( this.strip );
+		doEffect( pr, pg, pb, pbrght, type, this.effectTime );
 	}
 
 	private void doEffect( final int r, final int g, final int b, final int brightness, final EffectType effect,
