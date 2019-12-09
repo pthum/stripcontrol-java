@@ -6,12 +6,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.backenddev.led.apa102.APA102Control;
-import de.backenddev.led.apa102.APA102Helper;
+import de.backenddev.led.apa102.APA102Strip;
+import de.backenddev.led.apa102.LEDEffects;
+import de.backenddev.led.apa102.LEDStripHelper;
 import de.backenddev.led.stripcontrol.javastripbackend.model.ColorProfile;
 import de.backenddev.led.stripcontrol.javastripbackend.model.LEDStrip;
 
 public class Apa102Meta
 {
+
 	private static final Logger LOG = LoggerFactory.getLogger( Apa102Meta.class );
 	boolean enabled;
 	int r;
@@ -20,11 +23,15 @@ public class Apa102Meta
 	int brightness;
 	Long profileId;
 	APA102Control control;
+	APA102Strip strip;
+	private final int effectTime;
 
-	public Apa102Meta( final LEDStrip strip, final boolean useNoOp ) throws IOException
+	public Apa102Meta( final LEDStrip strip, final boolean useNoOp, final int effectTime ) throws IOException
 	{
 		this.control = Apa102Factory.createControl( strip, useNoOp );
+		this.strip = Apa102Factory.createStrip( strip );
 		update( strip );
+		this.effectTime = effectTime;
 	}
 
 	public boolean isEnabled( )
@@ -110,7 +117,7 @@ public class Apa102Meta
 	{
 		if ( isInClearedState( ) == false )
 		{
-			this.control.clearStrip( );
+			this.control.clearStrip( this.strip );
 		}
 		this.r = 0;
 		this.g = 0;
@@ -125,15 +132,50 @@ public class Apa102Meta
 		int pg = 0;
 		int pb = 0;
 		int pbrght = 0;
+		final EffectType type = EffectType.CHASE;
 		if ( profile != null )
 		{
 			pr = profile.getRed( );
 			pg = profile.getGreen( );
 			pb = profile.getBlue( );
 			pbrght = profile.getBrightness( );
+
 		}
-		APA102Helper.setStripColor( this.control, pr, pg, pb, pbrght );
-		this.control.show( );
+		doEffect( pr, pg, pb, pbrght, type, this.effectTime );
+	}
+
+	private void doEffect( final int r, final int g, final int b, final int brightness, final EffectType effect,
+			final int stepPauseMs ) throws IOException
+	{
+		LOG.trace( "Doing effect " + effect + " with steps of " + stepPauseMs + " ms" );
+		final APA102Strip newStrip = new APA102Strip( this.strip.getNumLed( ), this.strip.getGlobalBrightness( ),
+				this.strip.getColorConfig( ) );
+		LEDStripHelper.setStripColor( newStrip, r, g, b, brightness );
+		try
+		{
+			switch ( effect )
+			{
+				case CHASE:
+					LEDEffects.chaselight( this.control, this.strip, newStrip, stepPauseMs );
+					break;
+
+				case FADE:
+					LEDEffects.fadeBrightness( this.control, newStrip, stepPauseMs, this.brightness, brightness, 2.0d );
+					break;
+				case LIGHT_UP:
+					LEDEffects.lightUp( this.control, newStrip, stepPauseMs );
+					break;
+				default:
+					LEDStripHelper.setStripColor( this.strip, r, g, b, brightness );
+					this.control.show( this.strip );
+					break;
+			}
+		}
+		catch ( final InterruptedException e )
+		{
+			LOG.error( "Interrupted effect", e );
+		}
+
 	}
 
 	private boolean isEnableStateChange( final LEDStrip strip )

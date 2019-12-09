@@ -1,7 +1,9 @@
 package de.backenddev.led.stripcontrol.javastripbackend.ledhandling;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 
+import de.backenddev.led.apa102.APA102Strip;
 import de.backenddev.led.stripcontrol.javastripbackend.model.ColorProfile;
 import de.backenddev.led.stripcontrol.javastripbackend.model.LEDStrip;
 
@@ -22,11 +24,11 @@ public abstract class AbstractLedHandlingTest
 	protected void checkControl( final Apa102Meta testMeta, final int expR, final int expG, final int expB,
 			final double expBrightness )
 	{
-		final NoOpApa102Control control = (NoOpApa102Control) testMeta.control;
-		assertEquals( "red", expR, control.red );
-		assertEquals( "green", expG, control.green );
-		assertEquals( "blue", expB, control.blue );
-		assertEquals( "brightness", expBrightness, control.brightnessPercent, 0.1d );
+		final APA102Strip control = testMeta.strip;
+		assertThat( control.getPixelData( ) ).allMatch( pixel -> pixel.getRed( ) == expR );
+		assertThat( control.getPixelData( ) ).allMatch( pixel -> pixel.getGreen( ) == expG );
+		assertThat( control.getPixelData( ) ).allMatch( pixel -> pixel.getBlue( ) == expB );
+		assertThat( control.getPixelData( ) ).allMatch( pixel -> pixel.getBrightnessPercent( ) == expBrightness );
 	}
 
 	protected LEDStrip getStrip( final boolean enabled )

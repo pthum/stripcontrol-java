@@ -13,7 +13,7 @@ import de.backenddev.led.stripcontrol.javastripbackend.model.ColorProfile;
 import de.backenddev.led.stripcontrol.javastripbackend.repository.ColorProfileRepository;
 
 @Service
-public class ColorProfileServiceImpl implements ColorProfileService
+public class ColorProfileServiceImpl implements ModelService<ColorProfile>
 {
 	@Autowired
 	private ColorProfileRepository repo;
@@ -22,7 +22,7 @@ public class ColorProfileServiceImpl implements ColorProfileService
 	private ApplicationEventPublisher applicationEventPublisher;
 
 	@Override
-	public ColorProfile saveColorProfile( final ColorProfile profile )
+	public ColorProfile save( final ColorProfile profile )
 	{
 		final Long idBeforeSave = profile != null ? profile.getId( ) : null;
 		final ColorProfile result = this.repo.save( profile );
@@ -36,7 +36,7 @@ public class ColorProfileServiceImpl implements ColorProfileService
 	}
 
 	@Override
-	public void removeColorProfile( final long id )
+	public void remove( final long id )
 	{
 		this.repo.deleteById( id );
 		this.applicationEventPublisher.publishEvent( new StripEvent( this, EventType.DELETE, null, id ) );
@@ -49,7 +49,7 @@ public class ColorProfileServiceImpl implements ColorProfileService
 	}
 
 	@Override
-	public Iterable<ColorProfile> getAllColorProfiles( )
+	public Iterable<ColorProfile> getAll( )
 	{
 		return this.repo.findAll( );
 	}

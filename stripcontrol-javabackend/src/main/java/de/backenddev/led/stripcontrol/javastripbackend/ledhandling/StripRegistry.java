@@ -1,6 +1,7 @@
 package de.backenddev.led.stripcontrol.javastripbackend.ledhandling;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,10 +29,13 @@ public class StripRegistry
 {
 	private static final Logger LOG = LoggerFactory.getLogger( LEDStripController.class );
 
-	Map<Long, Apa102Meta> map;
+	final Map<Long, Apa102Meta> map;
 
 	@Value ( "${strips.enabled}" )
 	private boolean stripsEnabled;
+
+	@Value ( "${strips.effecttime:20}" )
+	private int effectTime;
 
 	public StripRegistry( )
 	{
@@ -41,9 +45,9 @@ public class StripRegistry
 	@EventListener
 	public void handleStripEvent( final StripEvent event )
 	{
-		LOG.debug( event.toString( ) );
 		if ( event != null )
 		{
+			LOG.debug( event.toString( ) );
 			switch ( event.getType( ) )
 			{
 				case SAVE:
@@ -61,9 +65,9 @@ public class StripRegistry
 	@EventListener
 	public void handleProfileEvent( final ProfileEvent event )
 	{
-		LOG.debug( event.toString( ) );
 		if ( event != null )
 		{
+			LOG.debug( event.toString( ) );
 			switch ( event.getType( ) )
 			{
 				case SAVE:
@@ -80,8 +84,8 @@ public class StripRegistry
 
 	private void handleSave( final StripEvent event )
 	{
-		final Apa102Meta control = getOrCreate( event.getStripId( ), event.getStrip( ) );
-		final LEDStrip strip = event.getStrip( );
+		final Apa102Meta control = getOrCreate( event.getId( ), event.getState( ) );
+		final LEDStrip strip = event.getState( );
 		try
 		{
 			control.update( strip );
@@ -96,7 +100,7 @@ public class StripRegistry
 	{
 		try
 		{
-			final Apa102Meta apaStrip = this.map.remove( event.getStripId( ) );
+			final Apa102Meta apaStrip = this.map.remove( event.getId( ) );
 			if ( apaStrip != null )
 			{
 				apaStrip.shutdown( );
@@ -110,41 +114,31 @@ public class StripRegistry
 
 	private void handleSave( final ProfileEvent event )
 	{
-		if ( event == null || event.getProfileId( ) == null )
+		if ( event.getId( ) == null )
 		{
 			/* no action if freshly saved profile */
 			return;
 		}
-		final ColorProfile profile = event.getProfile( );
-		final List<Apa102Meta> matching = this.map.values( ).stream( ).filter( meta -> meta.getProfileId( ) != null
-				&& profile != null && meta.getProfileId( ).equals( profile.getId( ) ) ).collect( Collectors.toList( ) );
-		for ( final Apa102Meta meta : matching )
+		final ColorProfile profile = event.getState( );
+		final List<Apa102Meta> matching = getMetaWithProfileId( profile == null ? null : profile.getId( ) );
+
+		matching.stream( ).filter( meta -> meta.isEnabled( ) ).forEach( meta ->
 		{
 			try
 			{
-				if ( meta.isEnabled( ) )
-				{
-					meta.update( profile );
-				}
+				meta.update( profile );
 			}
 			catch ( final IOException e )
 			{
 				LOG.error( "Couldn't clear state", e );
 			}
-		}
+		} );
 	}
 
 	private void handleDelete( final ProfileEvent event )
 	{
-		final Long profileId = event.getProfileId( );
-		if ( profileId == null )
-		{
-			return;
-		}
-
-		final List<Apa102Meta> matching = this.map.values( ).stream( )
-				.filter( meta -> meta.getProfileId( ) != null && meta.getProfileId( ).equals( profileId ) )
-				.collect( Collectors.toList( ) );
+		final Long profileId = event.getId( );
+		final List<Apa102Meta> matching = getMetaWithProfileId( profileId );
 		for ( final Apa102Meta meta : matching )
 		{
 			try
@@ -158,6 +152,18 @@ public class StripRegistry
 		}
 	}
 
+	private List<Apa102Meta> getMetaWithProfileId( final Long profileId )
+	{
+		if ( profileId == null )
+		{
+			return Collections.emptyList( );
+		}
+		final List<Apa102Meta> matching = this.map.values( ).stream( )
+				.filter( meta -> meta.getProfileId( ) != null && meta.getProfileId( ).equals( profileId ) )
+				.collect( Collectors.toList( ) );
+		return matching;
+	}
+
 	private Apa102Meta getOrCreate( final Long stripId, final LEDStrip strip )
 	{
 		Apa102Meta control = null;
@@ -169,7 +175,7 @@ public class StripRegistry
 		{
 			try
 			{
-				control = new Apa102Meta( strip, !this.stripsEnabled );
+				control = new Apa102Meta( strip, !this.stripsEnabled, this.effectTime );
 				this.map.put( strip.getId( ), control );
 			}
 			catch ( final IOException e )

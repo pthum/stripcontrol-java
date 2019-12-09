@@ -1,16 +1,11 @@
 package de.backenddev.led.stripcontrol.javastripbackend.ledhandling;
 
-import org.springframework.context.ApplicationEvent;
-
 import de.backenddev.led.stripcontrol.javastripbackend.model.LEDStrip;
 
-public class StripEvent extends ApplicationEvent
+public class StripEvent extends Event<LEDStrip>
 {
 
 	private static final long serialVersionUID = -2371775511199519174L;
-	private final EventType type;
-	private final LEDStrip strip;
-	private final Long stripId;
 
 	/**
 	 * 
@@ -25,42 +20,8 @@ public class StripEvent extends ApplicationEvent
 	 *            may be <code>null</code> for a {@link EventType#SAVE} with a new
 	 *            object, otherwise contain the id
 	 */
-	public StripEvent( Object source, EventType type, LEDStrip strip, Long stripId )
+	public StripEvent( final Object source, final EventType type, final LEDStrip strip, final Long stripId )
 	{
-		super( source );
-		this.type = type;
-		this.strip = strip;
-		this.stripId = stripId;
+		super( source, type, strip, stripId );
 	}
-
-	/**
-	 * @return the type
-	 */
-	public EventType getType( )
-	{
-		return type;
-	}
-
-	/**
-	 * @return the strip
-	 */
-	public LEDStrip getStrip( )
-	{
-		return strip;
-	}
-
-	/**
-	 * @return the stripId
-	 */
-	public Long getStripId( )
-	{
-		return stripId;
-	}
-
-	@Override
-	public String toString( )
-	{
-		return "StripEvent [type=" + type + ", strip=" + strip + ", stripId=" + stripId + "]";
-	}
-
 }

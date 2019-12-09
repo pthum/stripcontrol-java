@@ -1,9 +1,8 @@
 package de.backenddev.led.stripcontrol.javastripbackend.model;
 
+import java.util.Objects;
+
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
@@ -13,12 +12,8 @@ import javax.validation.constraints.Min;
  * @author thum
  */
 @Entity
-public class ColorProfile
+public class ColorProfile extends AbstractModel
 {
-	@Id
-	@GeneratedValue ( strategy = GenerationType.AUTO )
-	private Long id;
-
 	@Min ( 0 )
 	@Max ( 255 )
 	private int red;
@@ -59,23 +54,6 @@ public class ColorProfile
 		this.green = green;
 		this.blue = blue;
 		this.brightness = brightness;
-	}
-
-	/**
-	 * @return the id
-	 */
-	public Long getId( )
-	{
-		return this.id;
-	}
-
-	/**
-	 * @param id
-	 *            the id to set
-	 */
-	public void setId( final Long id )
-	{
-		this.id = id;
 	}
 
 	/**
@@ -149,20 +127,16 @@ public class ColorProfile
 	@Override
 	public String toString( )
 	{
-		return "ColorProfile [id=" + this.id + ", red=" + this.red + ", green=" + this.green + ", blue=" + this.blue
-				+ ", brightness=" + this.brightness + "]";
+		return "ColorProfile [id=" + this.getId( ) + ", red=" + this.red + ", green=" + this.green + ", blue="
+				+ this.blue + ", brightness=" + this.brightness + "]";
 	}
 
 	@Override
 	public int hashCode( )
 	{
 		final int prime = 31;
-		int result = 1;
-		result = prime * result + this.blue;
-		result = prime * result + this.brightness;
-		result = prime * result + this.green;
-		result = prime * result + (int) ( this.id ^ ( this.id >>> 32 ) );
-		result = prime * result + this.red;
+		int result = super.hashCode( );
+		result = prime * result + Objects.hash( this.blue, this.brightness, this.green, this.red );
 		return result;
 	}
 
@@ -171,22 +145,13 @@ public class ColorProfile
 	{
 		if ( this == obj )
 			return true;
-		if ( obj == null )
+		if ( !super.equals( obj ) )
 			return false;
 		if ( getClass( ) != obj.getClass( ) )
 			return false;
 		final ColorProfile other = (ColorProfile) obj;
-		if ( this.blue != other.blue )
-			return false;
-		if ( this.brightness != other.brightness )
-			return false;
-		if ( this.green != other.green )
-			return false;
-		if ( this.id != other.id )
-			return false;
-		if ( this.red != other.red )
-			return false;
-		return true;
+		return this.blue == other.blue && this.brightness == other.brightness && this.green == other.green
+				&& this.red == other.red;
 	}
 
 }
