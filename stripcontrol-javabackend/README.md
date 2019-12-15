@@ -1,6 +1,6 @@
 # stripcontrol-javabackend
 
-> Stripcontrol backend application made with spring boot 2.
+> Stripcontrol backend application made with SpringBoot2.
 
 ## Project Build
 ```bash
@@ -25,7 +25,7 @@ docker build -t pthum/stripcontrol:0.0.1-SNAPSHOT -f Dockerfile .
 
 To run the image (on the pi), you can either use the provided docker-compose for convenience or run directly over docker:
 ```bash
-docker run -d -p8080:8080 --cap-add=SYS_RAWIO --privileged --device="/dev/gpiomem:/dev/gpiomem" --volume="/home/pi/scdocker:/stripcontrol/config"
+docker run -d -p8080:8080 --cap-add=SYS_RAWIO --privileged --device="/dev/gpiomem:/dev/gpiomem" --volume="/home/pi/scdocker:/stripcontrol/config" pthum/stripcontrol:0.0.1-SNAPSHOT
 ```
 In both cases, the volume mapping is used to map a directory, which contains the logback.xml (currently required) as well as this is the location for the h2 database file.
 In this current version, it is necessary to run in privileged mode and will hopefully change in future.
