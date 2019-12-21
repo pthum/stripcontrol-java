@@ -8,7 +8,7 @@ RUN apt-get update && apt-get install -y \
     rm -rf /var/lib/apt/lists/*
 
 # should have been this, but git.drogon.net was currently offline
-# so i need to take an unoff mirror m(
+# so i need to take an unofficial mirror 
 #RUN git clone git://git.drogon.net/wiringPi
 
 RUN git clone https://github.com/WiringPi/WiringPi.git && \
@@ -34,4 +34,4 @@ EXPOSE 8080
 ENTRYPOINT ["/stripcontrol/entrypoint.sh"]
 
 HEALTHCHECK --interval=30s --timeout=5s --retries=3 --start-period=10s \
-  CMD wget -q -T 5 --spider http://localhost:8080/actuator/health
+  CMD curl --fail http://localhost:8080/actuator/health || exit 1

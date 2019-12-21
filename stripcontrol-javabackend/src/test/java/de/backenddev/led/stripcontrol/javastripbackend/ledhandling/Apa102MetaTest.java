@@ -47,7 +47,7 @@ public class Apa102MetaTest extends AbstractLedHandlingTest
 
 		/* metadata and control should be equal to strip */
 		checkMeta( testMeta, 100, 100, 100, 100, 1L, false );
-		checkControl( testMeta, 0, 2, 0, 0.0d );
+		checkControl( testMeta, 0, 0, 0, 0.0d );
 	}
 
 	/**

@@ -30,8 +30,8 @@ public class Apa102Meta
 	{
 		this.control = Apa102Factory.createControl( strip, useNoOp );
 		this.strip = Apa102Factory.createStrip( strip );
-		update( strip );
 		this.effectTime = effectTime;
+		setValues( strip );
 	}
 
 	public boolean isEnabled( )
@@ -148,6 +148,9 @@ public class Apa102Meta
 			final int stepPauseMs ) throws IOException
 	{
 		LOG.trace( "Doing effect " + effect + " with steps of " + stepPauseMs + " ms" );
+		// LOG.trace( "Trace: " + Arrays.asList( Thread.currentThread( ).getStackTrace(
+		// ) ).stream( )
+		// .map( Objects::toString ).collect( Collectors.joining( "\n" ) ) );
 		final APA102Strip newStrip = new APA102Strip( this.strip.getNumLed( ), this.strip.getGlobalBrightness( ),
 				this.strip.getColorConfig( ) );
 		LEDStripHelper.setStripColor( newStrip, r, g, b, brightness );
