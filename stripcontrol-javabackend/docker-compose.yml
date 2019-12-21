@@ -3,6 +3,12 @@ services:
   stripcontrol:
     image: pthum/stripcontrol:0.0.1-SNAPSHOT
     privileged: true
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgresql:5432/stripcontrol
+      - STRIPS_ENABLED=true
+      - LOGGING_CONFIG=/stripcontrol/config/logback.xml 
+      - spring_datasource_driverClassName=org.postgresql.Driver
+      - spring_jpa_database-platform=org.hibernate.dialect.PostgreSQLDialect
     ports:
       - '8080:8080'
     expose:
@@ -13,3 +19,15 @@ services:
       - "/dev/gpiomem:/dev/gpiomem"
     volumes:
       - "/home/pi/scdocker:/stripcontrol/config"
+    depends_on:
+        - postgresql
+  postgresql:
+    image: postgres:latest
+    container_name: postgresql
+    volumes:
+        - /home/pi/scdocker/postgres/:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=sa
+      - POSTGRES_DB=stripcontrol
+      - PGDATA=/var/lib/postgresql/data/pgdata
