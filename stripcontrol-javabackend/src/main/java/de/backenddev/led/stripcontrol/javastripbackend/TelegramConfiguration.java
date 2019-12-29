@@ -86,11 +86,14 @@ public class TelegramConfiguration
 						{
 							case LED_ON:
 								LOG.info( "Turning on LED with id " + txtSplit[1] );
-
+								TelegramConfiguration.this.ledService.toggleStrip( Long.parseLong( txtSplit[1] ),
+										true );
 								sendResponse( bot, msg, txtSplit[1], command );
 								break;
 							case LED_OFF:
 								LOG.info( "Turning on LED with id " + txtSplit[1] );
+								TelegramConfiguration.this.ledService.toggleStrip( Long.parseLong( txtSplit[1] ),
+										false );
 								sendResponse( bot, msg, txtSplit[1], command );
 								break;
 							case GET_STRIPS:
