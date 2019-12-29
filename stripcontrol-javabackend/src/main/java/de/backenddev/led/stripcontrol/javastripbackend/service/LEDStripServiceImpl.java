@@ -29,6 +29,20 @@ public class LEDStripServiceImpl implements ModelService<LEDStrip>
 		return result;
 	}
 
+	public LEDStrip toggleStrip( final Long id, final boolean state )
+	{
+		final Optional<LEDStrip> optStrip = this.repo.findById( id );
+		if ( optStrip.isPresent( ) == false )
+		{
+			return null;
+		}
+		final LEDStrip oldStrip = optStrip.get( );
+		oldStrip.setEnabled( state );
+		final LEDStrip result = this.repo.save( oldStrip );
+		this.applicationEventPublisher.publishEvent( new StripEvent( this, EventType.SAVE, result, id ) );
+		return result;
+	}
+
 	@Override
 	public void remove( final long id )
 	{
