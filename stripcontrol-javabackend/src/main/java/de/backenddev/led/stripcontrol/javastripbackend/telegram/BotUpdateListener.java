@@ -51,7 +51,6 @@ public class BotUpdateListener implements UpdatesListener
 				continue;
 			}
 			final BotCommand command = BotCommand.getValueFromMessage( msg.text( ) );
-			final String[] txtSplit = msg.text( ).split( " " );
 
 			if ( command == null )
 			{
@@ -64,7 +63,8 @@ public class BotUpdateListener implements UpdatesListener
 			{
 				case LED_ON:
 				case LED_OFF:
-					if ( txtSplit.length != 2 && StringUtils.isNumeric( txtSplit[1] ) == false )
+					final String[] txtSplit = msg.text( ).split( " " );
+					if ( txtSplit.length != 2 || StringUtils.isNumeric( txtSplit[1] ) == false )
 					{
 						isSendResponse = false;
 						break;
