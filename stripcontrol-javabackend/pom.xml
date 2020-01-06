@@ -63,6 +63,12 @@
 			<artifactId>java-telegram-bot-api</artifactId>
 			<version>4.4.0</version>
 		</dependency>
+		<!-- utils -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+		</dependency>
+
 		<!-- tests -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

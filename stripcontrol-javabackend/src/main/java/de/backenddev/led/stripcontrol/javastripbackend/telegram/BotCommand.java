@@ -39,9 +39,9 @@ public enum BotCommand
 		return this.description;
 	}
 
-	public String getResponseText( final String id )
+	public String getResponseText( final String formatAppend )
 	{
-		return String.format( this.responseText, id );
+		return String.format( this.responseText, formatAppend );
 	}
 
 	public static BotCommand getValueFromMessage( final String message )
