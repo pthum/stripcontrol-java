@@ -1,6 +1,6 @@
 package de.backenddev.led.stripcontrol.javastripbackend.telegram;
 
-import io.micrometer.core.instrument.util.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 public enum BotCommand
 {
