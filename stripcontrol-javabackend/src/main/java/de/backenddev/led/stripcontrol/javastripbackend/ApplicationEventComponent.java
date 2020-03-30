@@ -9,6 +9,8 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
+import com.pengrad.telegrambot.TelegramBot;
+
 import de.backenddev.led.stripcontrol.javastripbackend.ledhandling.EventType;
 import de.backenddev.led.stripcontrol.javastripbackend.ledhandling.StripEvent;
 import de.backenddev.led.stripcontrol.javastripbackend.ledhandling.StripRegistry;
@@ -24,6 +26,9 @@ public class ApplicationEventComponent
 
 	@Autowired
 	private StripRegistry registry;
+
+	@Autowired
+	private TelegramBot telegramBot;
 
 	@EventListener ( ApplicationReadyEvent.class )
 	public void initStripsOnStartup( )
@@ -46,5 +51,11 @@ public class ApplicationEventComponent
 		{
 			this.registry.handleStripEvent( new StripEvent( this, EventType.DELETE, null, strip.getId( ) ) );
 		}
+	}
+
+	@PreDestroy
+	public void disableBot( )
+	{
+		this.telegramBot.removeGetUpdatesListener( );
 	}
 }
