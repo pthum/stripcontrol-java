@@ -27,7 +27,7 @@ public class ApplicationEventComponent
 	@Autowired
 	private StripRegistry registry;
 
-	@Autowired
+	@Autowired ( required = false )
 	private TelegramBot telegramBot;
 
 	@EventListener ( ApplicationReadyEvent.class )
@@ -56,6 +56,9 @@ public class ApplicationEventComponent
 	@PreDestroy
 	public void disableBot( )
 	{
-		this.telegramBot.removeGetUpdatesListener( );
+		if ( this.telegramBot != null )
+		{
+			this.telegramBot.removeGetUpdatesListener( );
+		}
 	}
 }
