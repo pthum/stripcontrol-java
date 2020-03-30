@@ -31,8 +31,8 @@ COPY --from=builder /stripcontrol /stripcontrol
 
 EXPOSE 8080
 
-ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/stripcontrol/stripcontrol.jar"]
+ENTRYPOINT ["java","-Xmx144M", "-Xss256k","-Djava.security.egd=file:/dev/./urandom","-jar","/stripcontrol/stripcontrol.jar"]
 #ENTRYPOINT ["/stripcontrol/entrypoint.sh"]
 
 HEALTHCHECK --interval=30s --timeout=5s --retries=3 --start-period=10s \
-  CMD curl --fail http://localhost:8080/actuator/health || exit 1
+  CMD curl --fail http://localhost:8080/api/health || exit 1
