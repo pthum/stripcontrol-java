@@ -3,6 +3,10 @@ package de.backenddev.led.stripcontrol.javastripbackend;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.google.common.base.Predicate;
+
+import de.backenddev.led.stripcontrol.javastripbackend.controller.MainController;
+import springfox.documentation.RequestHandler;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.spi.DocumentationType;
@@ -16,7 +20,9 @@ public class SwaggerConfig
 	@Bean
 	public Docket api( )
 	{
-		return new Docket( DocumentationType.SWAGGER_2 ).select( ).apis( RequestHandlerSelectors.any( ) )
-				.paths( PathSelectors.any( ) ).build( );
+		final Predicate<RequestHandler> pred = RequestHandlerSelectors
+				.basePackage( MainController.class.getPackage( ).getName( ) );
+		return new Docket( DocumentationType.SWAGGER_2 ).forCodeGeneration( false ).select( ).apis( pred )
+				.paths( PathSelectors.ant( "/api/**" ) ).build( );
 	}
 }
