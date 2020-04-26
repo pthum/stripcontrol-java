@@ -100,8 +100,7 @@ public class LEDStripControllerTest
 		final LEDStrip cp = new LEDStrip( "testStrip", "testdescription", 1, 2, 5, 8000000 );
 		when( this.service.getById( 1 ) ).thenReturn( Optional.of( cp ) );
 		this.mockMvc.perform( get( CP_PATH + "/1" ) ).andExpect( status( ).isOk( ) )
-				.andExpect( content( ).contentType( "application/json;charset=UTF-8" ) )
-				.andExpect( content( ).json( toJson( cp ) ) );
+				.andExpect( content( ).contentType( "application/json" ) ).andExpect( content( ).json( toJson( cp ) ) );
 	}
 
 	/**

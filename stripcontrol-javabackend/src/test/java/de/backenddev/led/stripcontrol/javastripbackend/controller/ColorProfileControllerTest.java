@@ -10,7 +10,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrlPattern;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -116,8 +115,7 @@ public class ColorProfileControllerTest
 		final ColorProfile cp = new ColorProfile( 255, 255, 255, 100 );
 		when( this.service.getById( 1 ) ).thenReturn( Optional.of( cp ) );
 		this.mockMvc.perform( get( CP_PATH + "/1" ) ).andExpect( status( ).isOk( ) )
-				.andExpect( content( ).contentType( "application/json;charset=UTF-8" ) )
-				.andExpect( content( ).json( toJson( cp ) ) );
+				.andExpect( content( ).contentType( "application/json" ) ).andExpect( content( ).json( toJson( cp ) ) );
 	}
 
 	/**
