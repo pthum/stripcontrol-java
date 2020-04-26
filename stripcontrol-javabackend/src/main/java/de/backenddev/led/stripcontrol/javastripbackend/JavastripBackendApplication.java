@@ -2,20 +2,20 @@ package de.backenddev.led.stripcontrol.javastripbackend;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
-import org.springframework.boot.autoconfigure.jmx.JmxAutoConfiguration;
-import org.springframework.boot.autoconfigure.security.oauth2.resource.servlet.OAuth2ResourceServerAutoConfiguration;
-import org.springframework.boot.autoconfigure.transaction.jta.JtaAutoConfiguration;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 
-@SpringBootApplication ( exclude = { OAuth2ResourceServerAutoConfiguration.class, JmxAutoConfiguration.class,
-		DataSourceTransactionManagerAutoConfiguration.class, JtaAutoConfiguration.class, } )
+@SpringBootApplication ( scanBasePackages = "com.github.lwaddicor.springstartupanalysis,de.backenddev" )
+@EntityScan ( basePackages = "de.backenddev.led.stripcontrol.javastripbackend.model" )
 public class JavastripBackendApplication
 {
 	public static final String API_BASE = "/api";
 
-	public static void main(String[] args )
+	public static void main( final String[] args )
 	{
-		SpringApplication.run( JavastripBackendApplication.class, args );
+		final SpringApplication app = new SpringApplication( JavastripBackendApplication.class );
+		// app.addInitializers( new ConditionEvaluationReportLoggingListener2(
+		// LogLevel.INFO ) );
+		app.run( args );
 	}
 
 }
