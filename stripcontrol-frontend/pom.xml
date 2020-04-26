@@ -39,7 +39,7 @@
 							<goal>npm</goal>
 						</goals>
 						<configuration>
-							<arguments>install --production</arguments>
+							<arguments>ci --production</arguments>
 						</configuration>
 					</execution>
 					<execution>
