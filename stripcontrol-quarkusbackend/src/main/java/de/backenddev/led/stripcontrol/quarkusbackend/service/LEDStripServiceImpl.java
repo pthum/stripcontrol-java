@@ -1,4 +1,4 @@
-package de.backenddev.led.stripcontrol.javastripbackend.service;
+package de.backenddev.led.stripcontrol.quarkusbackend.service;
 
 import java.util.Optional;
 
@@ -8,9 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import de.backenddev.led.stripcontrol.javastripbackend.ledhandling.EventType;
-import de.backenddev.led.stripcontrol.javastripbackend.ledhandling.StripEvent;
 import de.backenddev.led.stripcontrol.javastripbackend.model.LEDStrip;
-import de.backenddev.led.stripcontrol.javastripbackend.repository.LEDStripRepository;
+import de.backenddev.led.stripcontrol.quarkusbackend.ledhandling.StripEvent;
+import de.backenddev.led.stripcontrol.quarkusbackend.repository.LEDStripRepository;
 import io.vertx.core.eventbus.EventBus;
 
 @Service

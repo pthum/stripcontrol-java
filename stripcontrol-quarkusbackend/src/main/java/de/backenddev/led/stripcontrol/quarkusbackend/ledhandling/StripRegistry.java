@@ -1,4 +1,4 @@
-package de.backenddev.led.stripcontrol.javastripbackend.ledhandling;
+package de.backenddev.led.stripcontrol.quarkusbackend.ledhandling;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -12,6 +12,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import de.backenddev.led.stripcontrol.javastripbackend.ledhandling.Apa102Meta;
+import de.backenddev.led.stripcontrol.javastripbackend.ledhandling.IEvent;
 import de.backenddev.led.stripcontrol.javastripbackend.model.ColorProfile;
 import de.backenddev.led.stripcontrol.javastripbackend.model.LEDStrip;
 

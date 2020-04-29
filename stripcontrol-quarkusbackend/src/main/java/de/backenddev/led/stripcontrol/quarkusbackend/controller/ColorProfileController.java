@@ -1,4 +1,4 @@
-package de.backenddev.led.stripcontrol.javastripbackend.controller;
+package de.backenddev.led.stripcontrol.quarkusbackend.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import de.backenddev.led.stripcontrol.javastripbackend.model.ColorProfile;
-import de.backenddev.led.stripcontrol.javastripbackend.service.ModelService;
+import de.backenddev.led.stripcontrol.quarkusbackend.service.ModelService;
 
 @RestController
 @RequestMapping ( AbstractModelController.API_BASE + "/colorprofile" )

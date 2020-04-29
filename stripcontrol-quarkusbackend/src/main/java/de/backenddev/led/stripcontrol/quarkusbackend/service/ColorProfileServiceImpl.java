@@ -1,4 +1,4 @@
-package de.backenddev.led.stripcontrol.javastripbackend.service;
+package de.backenddev.led.stripcontrol.quarkusbackend.service;
 
 import java.util.Optional;
 
@@ -8,10 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import de.backenddev.led.stripcontrol.javastripbackend.ledhandling.EventType;
-import de.backenddev.led.stripcontrol.javastripbackend.ledhandling.ProfileEvent;
-import de.backenddev.led.stripcontrol.javastripbackend.ledhandling.StripEvent;
 import de.backenddev.led.stripcontrol.javastripbackend.model.ColorProfile;
-import de.backenddev.led.stripcontrol.javastripbackend.repository.ColorProfileRepository;
+import de.backenddev.led.stripcontrol.quarkusbackend.ledhandling.ProfileEvent;
+import de.backenddev.led.stripcontrol.quarkusbackend.ledhandling.StripEvent;
+import de.backenddev.led.stripcontrol.quarkusbackend.repository.ColorProfileRepository;
 import io.vertx.core.eventbus.EventBus;
 
 @Service

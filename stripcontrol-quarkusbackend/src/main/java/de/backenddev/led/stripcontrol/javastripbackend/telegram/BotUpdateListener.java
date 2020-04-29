@@ -19,7 +19,7 @@ import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.response.SendResponse;
 
 import de.backenddev.led.stripcontrol.javastripbackend.model.LEDStrip;
-import de.backenddev.led.stripcontrol.javastripbackend.service.LEDStripServiceImpl;
+import de.backenddev.led.stripcontrol.quarkusbackend.service.LEDStripServiceImpl;
 
 public class BotUpdateListener implements UpdatesListener
 {

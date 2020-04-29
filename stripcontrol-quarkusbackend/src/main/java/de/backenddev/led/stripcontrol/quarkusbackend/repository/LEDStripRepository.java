@@ -1,4 +1,4 @@
-package de.backenddev.led.stripcontrol.javastripbackend.repository;
+package de.backenddev.led.stripcontrol.quarkusbackend.repository;
 
 import java.util.List;
 

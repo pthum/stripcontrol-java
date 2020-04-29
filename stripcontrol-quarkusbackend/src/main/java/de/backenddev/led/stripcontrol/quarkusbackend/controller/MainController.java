@@ -1,4 +1,4 @@
-package de.backenddev.led.stripcontrol.javastripbackend.controller;
+package de.backenddev.led.stripcontrol.quarkusbackend.controller;
 
 import java.util.HashMap;
 import java.util.Map;

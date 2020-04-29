@@ -1,6 +1,9 @@
-package de.backenddev.led.stripcontrol.javastripbackend.ledhandling;
+package de.backenddev.led.stripcontrol.quarkusbackend.ledhandling;
 
 import org.springframework.context.ApplicationEvent;
+
+import de.backenddev.led.stripcontrol.javastripbackend.ledhandling.EventType;
+import de.backenddev.led.stripcontrol.javastripbackend.ledhandling.IEvent;
 
 public abstract class Event<T> extends ApplicationEvent implements IEvent<T>
 {

@@ -1,4 +1,4 @@
-package de.backenddev.led.stripcontrol.javastripbackend;
+package de.backenddev.led.stripcontrol.quarkusbackend;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -9,10 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import de.backenddev.led.stripcontrol.javastripbackend.ledhandling.EventType;
-import de.backenddev.led.stripcontrol.javastripbackend.ledhandling.LEDEventHandler;
-import de.backenddev.led.stripcontrol.javastripbackend.ledhandling.StripEvent;
 import de.backenddev.led.stripcontrol.javastripbackend.model.LEDStrip;
-import de.backenddev.led.stripcontrol.javastripbackend.repository.LEDStripRepository;
+import de.backenddev.led.stripcontrol.quarkusbackend.ledhandling.LEDEventHandler;
+import de.backenddev.led.stripcontrol.quarkusbackend.ledhandling.StripEvent;
+import de.backenddev.led.stripcontrol.quarkusbackend.repository.LEDStripRepository;
 
 @Component
 public class ApplicationEventComponent

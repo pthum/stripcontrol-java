@@ -1,4 +1,4 @@
-package de.backenddev.led.stripcontrol.javastripbackend.controller;
+package de.backenddev.led.stripcontrol.quarkusbackend.controller;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import de.backenddev.led.stripcontrol.javastripbackend.model.AbstractModel;
-import de.backenddev.led.stripcontrol.javastripbackend.service.ModelService;
+import de.backenddev.led.stripcontrol.quarkusbackend.service.ModelService;
 
 public abstract class AbstractModelController<T extends AbstractModel>
 {
