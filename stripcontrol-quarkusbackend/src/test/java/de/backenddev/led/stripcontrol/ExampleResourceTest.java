@@ -1,21 +1,19 @@
 package de.backenddev.led.stripcontrol;
 
-import io.quarkus.test.junit.QuarkusTest;
+import static io.restassured.RestAssured.given;
+
 import org.junit.jupiter.api.Test;
 
-import static io.restassured.RestAssured.given;
-import static org.hamcrest.CoreMatchers.is;
+import io.quarkus.test.junit.QuarkusTest;
 
 @QuarkusTest
-public class ExampleResourceTest {
+public class ExampleResourceTest
+{
 
-    @Test
-    public void testHelloEndpoint() {
-        given()
-          .when().get("/hello")
-          .then()
-             .statusCode(200)
-             .body(is("hello"));
-    }
+	@Test
+	public void testHelloEndpoint( )
+	{
+		given( ).when( ).get( "/api/ledstrip" ).then( ).statusCode( 200 );
+	}
 
 }
