@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 
 @SpringBootApplication ( scanBasePackages = "com.github.lwaddicor.springstartupanalysis,de.backenddev" )
-@EntityScan ( basePackages = "de.backenddev.led.stripcontrol.javastripbackend.model" )
+@EntityScan ( basePackages = "de.backenddev.led.stripcontrol.model" )
 public class JavastripBackendApplication
 {
 	public static final String API_BASE = "/api";
