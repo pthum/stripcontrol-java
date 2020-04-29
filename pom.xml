@@ -27,6 +27,7 @@
 	<modules>
 		<module>stripcontrol-frontend</module>
 		<module>stripcontrol-javabackend</module>
+		<module>stripcontrol-quarkusbackend</module>
 	</modules>
 
 
