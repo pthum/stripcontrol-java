@@ -35,15 +35,10 @@
 		</dependencies>
 	</dependencyManagement>
 	<dependencies>
-		<dependency>
-			<groupId>de.backenddev</groupId>
-			<artifactId>apa102lib</artifactId>
-			<version>${apalib.version}</version>
-		</dependency>
-		<!-- stripcontrol models -->
+		<!-- stripcontrol ledhandling -->
 		<dependency>
 			<groupId>de.backenddev.led.stripcontrol</groupId>
-			<artifactId>stripcontrol-models</artifactId>
+			<artifactId>stripcontrol-ledhandling</artifactId>
 			<version>${stripcontrol.models.version}</version>
 		</dependency>
 		<dependency>

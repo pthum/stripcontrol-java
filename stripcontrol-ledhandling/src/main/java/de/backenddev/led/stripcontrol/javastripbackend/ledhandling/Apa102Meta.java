@@ -31,7 +31,7 @@ public class Apa102Meta
 		this.control = Apa102Factory.createControl( strip, useNoOp );
 		this.strip = Apa102Factory.createStrip( strip );
 		this.effectTime = effectTime;
-		setValues( strip );
+		setValues( strip.isEnabled( ), strip.getProfile( ) );
 	}
 
 	public boolean isEnabled( )
@@ -94,23 +94,14 @@ public class Apa102Meta
 		return this.profileId;
 	}
 
-	public void update( final LEDStrip strip ) throws IOException
+	public void update( final Boolean isStripEnabled, final ColorProfile profile ) throws IOException
 	{
-		if ( isEnableStateChange( strip ) || isEnabled( ) )
+		if ( ( isEnableStateChange( isStripEnabled ) || isEnabled( ) )
+				|| ( isEnabled( ) && ( isColorChange( profile ) || isBrightnessChange( profile ) ) ) )
 		{
-			/* if new state is disabled set to null to clear */
-			changeStripState( strip.isEnabled( ) ? strip.getProfile( ) : null );
+			changeStripState( isStripEnabled == null ? profile : isStripEnabled ? profile : null );
 		}
-		setValues( strip );
-	}
-
-	public void update( final ColorProfile profile ) throws IOException
-	{
-		if ( isEnabled( ) && ( isColorChange( profile ) || isBrightnessChange( profile ) ) )
-		{
-			changeStripState( profile );
-		}
-		setValues( profile );
+		setValues( isStripEnabled, profile );
 	}
 
 	public void shutdown( ) throws IOException
@@ -147,7 +138,7 @@ public class Apa102Meta
 	private void doEffect( final int r, final int g, final int b, final int brightness, final EffectType effect,
 			final int stepPauseMs ) throws IOException
 	{
-		LOG.trace( "Doing effect " + effect + " with steps of " + stepPauseMs + " ms" );
+		LOG.trace( "Doing effect {} with steps of {} ms", effect, stepPauseMs );
 		// LOG.trace( "Trace: " + Arrays.asList( Thread.currentThread( ).getStackTrace(
 		// ) ).stream( )
 		// .map( Objects::toString ).collect( Collectors.joining( "\n" ) ) );
@@ -181,9 +172,9 @@ public class Apa102Meta
 
 	}
 
-	private boolean isEnableStateChange( final LEDStrip strip )
+	private boolean isEnableStateChange( final Boolean isStripEnabled )
 	{
-		return this.enabled != strip.isEnabled( );
+		return isStripEnabled == null ? false : this.enabled != isStripEnabled;
 	}
 
 	private boolean isColorChange( final ColorProfile profile )
@@ -212,14 +203,12 @@ public class Apa102Meta
 		return profile.getBrightness( ) != this.brightness;
 	}
 
-	private void setValues( final LEDStrip strip )
+	private void setValues( final Boolean isStripEnabled, final ColorProfile profile )
 	{
-		this.enabled = strip.isEnabled( );
-		setValues( strip.getProfile( ) );
-	}
-
-	private void setValues( final ColorProfile profile )
-	{
+		if ( isStripEnabled != null )
+		{
+			this.enabled = isStripEnabled;
+		}
 		this.r = profile != null ? profile.getRed( ) : 0;
 		this.g = profile != null ? profile.getGreen( ) : 0;
 		this.b = profile != null ? profile.getBlue( ) : 0;

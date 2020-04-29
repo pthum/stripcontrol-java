@@ -2,7 +2,7 @@ package de.backenddev.led.stripcontrol.javastripbackend.ledhandling;
 
 import org.springframework.context.ApplicationEvent;
 
-public abstract class Event<T> extends ApplicationEvent
+public abstract class Event<T> extends ApplicationEvent implements IEvent<T>
 {
 	private final EventType type;
 	private final T state;
@@ -32,6 +32,7 @@ public abstract class Event<T> extends ApplicationEvent
 	/**
 	 * @return the type
 	 */
+	@Override
 	public EventType getType( )
 	{
 		return this.type;
@@ -40,6 +41,7 @@ public abstract class Event<T> extends ApplicationEvent
 	/**
 	 * @return the id
 	 */
+	@Override
 	public Long getId( )
 	{
 		return this.id;
@@ -48,6 +50,7 @@ public abstract class Event<T> extends ApplicationEvent
 	/**
 	 * @return the oldState
 	 */
+	@Override
 	public T getState( )
 	{
 		return this.state;

@@ -13,7 +13,7 @@ import com.pengrad.telegrambot.TelegramBot;
 
 import de.backenddev.led.stripcontrol.javastripbackend.ledhandling.EventType;
 import de.backenddev.led.stripcontrol.javastripbackend.ledhandling.StripEvent;
-import de.backenddev.led.stripcontrol.javastripbackend.ledhandling.StripRegistry;
+import de.backenddev.led.stripcontrol.javastripbackend.ledhandling.LEDEventHandler;
 import de.backenddev.led.stripcontrol.javastripbackend.model.LEDStrip;
 import de.backenddev.led.stripcontrol.javastripbackend.repository.LEDStripRepository;
 
@@ -25,7 +25,7 @@ public class ApplicationEventComponent
 	private LEDStripRepository repo;
 
 	@Autowired
-	private StripRegistry registry;
+	private LEDEventHandler stripEventHandler;
 
 	@Autowired ( required = false )
 	private TelegramBot telegramBot;
@@ -38,7 +38,7 @@ public class ApplicationEventComponent
 		for ( final LEDStrip strip : allStrips )
 		{
 			LOG.info( "Setting up strip " + strip.getName( ) );
-			this.registry.handleStripEvent( new StripEvent( this, EventType.SAVE, strip, strip.getId( ) ) );
+			this.stripEventHandler.handleStripEvent( new StripEvent( this, EventType.SAVE, strip, strip.getId( ) ) );
 		}
 	}
 
@@ -49,7 +49,7 @@ public class ApplicationEventComponent
 		/* shutdown all strips on shutdown */
 		for ( final LEDStrip strip : allStrips )
 		{
-			this.registry.handleStripEvent( new StripEvent( this, EventType.DELETE, null, strip.getId( ) ) );
+			this.stripEventHandler.handleStripEvent( new StripEvent( this, EventType.DELETE, null, strip.getId( ) ) );
 		}
 	}
 

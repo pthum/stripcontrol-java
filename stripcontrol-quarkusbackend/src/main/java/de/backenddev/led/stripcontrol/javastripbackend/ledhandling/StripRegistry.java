@@ -7,16 +7,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import javax.enterprise.context.ApplicationScoped;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
-import de.backenddev.led.stripcontrol.javastripbackend.controller.LEDStripController;
 import de.backenddev.led.stripcontrol.javastripbackend.model.ColorProfile;
 import de.backenddev.led.stripcontrol.javastripbackend.model.LEDStrip;
-import io.quarkus.vertx.ConsumeEvent;
 
 /**
  * This class is intended to have an overview over the registered strips and
@@ -25,82 +22,58 @@ import io.quarkus.vertx.ConsumeEvent;
  * @author thum
  *
  */
-// @Component
-@ApplicationScoped
+@Component
 public class StripRegistry
 {
-	private static final Logger LOG = LoggerFactory.getLogger( LEDStripController.class );
+	private static final Logger LOG = LoggerFactory.getLogger( StripRegistry.class );
 
+	/** maps */
 	final Map<Long, Apa102Meta> map;
 
 	@Value ( "${strips.enabled}" )
-	boolean stripsEnabled;
+	private boolean stripsEnabled;
 
 	@Value ( "${strips.effecttime:20}" )
-	int effectTime;
+	private int effectTime;
 
 	public StripRegistry( )
 	{
 		this.map = new HashMap<>( );
 	}
 
-	// @EventListener
-	@ConsumeEvent ( value = "StripEvent" )
-	public void handleStripEvent( final StripEvent event )
-	{
-		if ( event != null )
-		{
-			LOG.debug( event.toString( ) );
-			switch ( event.getType( ) )
-			{
-				case SAVE:
-					handleSave( event );
-					break;
-				case DELETE:
-					handleDelete( event );
-					break;
-				default:
-					break;
-			}
-		}
-	}
-
-	// @EventListener
-	@ConsumeEvent ( value = "ProfileEvent" )
-	public void handleProfileEvent( final ProfileEvent event )
-	{
-		if ( event != null )
-		{
-			LOG.debug( event.toString( ) );
-			switch ( event.getType( ) )
-			{
-				case SAVE:
-					handleSave( event );
-					break;
-				case DELETE:
-					handleDelete( event );
-					break;
-				default:
-					break;
-			}
-		}
-	}
-
-	private void handleSave( final StripEvent event )
+	protected void handleSave( final IEvent<LEDStrip> event )
 	{
 		final Apa102Meta control = getOrCreate( event.getId( ), event.getState( ) );
 		final LEDStrip strip = event.getState( );
+		updateMeta( control, strip.isEnabled( ), strip.getProfile( ) );
+	}
+
+	protected void handleSaveProfile( final IEvent<ColorProfile> event )
+	{
+		if ( event.getId( ) == null )
+		{
+			/* no action if freshly saved profile */
+			return;
+		}
+		final ColorProfile profile = event.getState( );
+		final List<Apa102Meta> matching = getMetaWithProfileId( profile == null ? null : profile.getId( ) );
+
+		matching.stream( ).filter( meta -> meta.isEnabled( ) ).forEach( meta -> updateMeta( meta, null, profile ) );
+	}
+
+	private void updateMeta( final Apa102Meta meta, final Boolean isEnabled, final ColorProfile profile )
+	{
 		try
 		{
-			control.update( strip );
+			meta.update( isEnabled, profile );
 		}
 		catch ( final IOException e )
 		{
-			LOG.error( "Couldn't update state", e );
+			LOG.error( "Couldn't clear state", e );
 		}
 	}
 
-	private void handleDelete( final StripEvent event )
+	protected void handleDelete( final IEvent<LEDStrip> event )
 	{
 		try
 		{
@@ -116,30 +89,7 @@ public class StripRegistry
 		}
 	}
 
-	private void handleSave( final ProfileEvent event )
-	{
-		if ( event.getId( ) == null )
-		{
-			/* no action if freshly saved profile */
-			return;
-		}
-		final ColorProfile profile = event.getState( );
-		final List<Apa102Meta> matching = getMetaWithProfileId( profile == null ? null : profile.getId( ) );
-
-		matching.stream( ).filter( meta -> meta.isEnabled( ) ).forEach( meta ->
-		{
-			try
-			{
-				meta.update( profile );
-			}
-			catch ( final IOException e )
-			{
-				LOG.error( "Couldn't clear state", e );
-			}
-		} );
-	}
-
-	private void handleDelete( final ProfileEvent event )
+	protected void handleDeleteProfile( final IEvent<ColorProfile> event )
 	{
 		final Long profileId = event.getId( );
 		final List<Apa102Meta> matching = getMetaWithProfileId( profileId );
@@ -147,7 +97,7 @@ public class StripRegistry
 		{
 			try
 			{
-				meta.update( (ColorProfile) null );
+				meta.update( null, null );
 			}
 			catch ( final IOException e )
 			{

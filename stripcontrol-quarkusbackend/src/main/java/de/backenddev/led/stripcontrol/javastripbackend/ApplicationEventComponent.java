@@ -9,8 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import de.backenddev.led.stripcontrol.javastripbackend.ledhandling.EventType;
+import de.backenddev.led.stripcontrol.javastripbackend.ledhandling.LEDEventHandler;
 import de.backenddev.led.stripcontrol.javastripbackend.ledhandling.StripEvent;
-import de.backenddev.led.stripcontrol.javastripbackend.ledhandling.StripRegistry;
 import de.backenddev.led.stripcontrol.javastripbackend.model.LEDStrip;
 import de.backenddev.led.stripcontrol.javastripbackend.repository.LEDStripRepository;
 
@@ -22,7 +22,7 @@ public class ApplicationEventComponent
 	LEDStripRepository repo;
 
 	@Autowired
-	StripRegistry registry;
+	LEDEventHandler registry;
 
 	// @Autowired ( required = false )
 	// private TelegramBot telegramBot;

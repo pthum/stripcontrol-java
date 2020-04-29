@@ -25,9 +25,14 @@ public class Apa102MetaTest extends AbstractLedHandlingTest
 		checkMeta( testMeta, 0, 0, 0, 0, null, false );
 		checkControl( testMeta, 0, 0, 0, 0.0d );
 
+		/* try to update and check again (should not change) */
+		testMeta.update( strip.isEnabled( ), strip.getProfile( ) );
+		checkMeta( testMeta, 0, 0, 0, 0, null, false );
+		checkControl( testMeta, 0, 0, 0, 0.0d );
+
 		/* set a profile */
 		strip.setProfile( getProfile( 100, 100, 100, 100, 1L ) );
-		testMeta.update( strip );
+		testMeta.update( strip.isEnabled( ), strip.getProfile( ) );
 
 		/* metadata should be equal to strip, control shouldn't have changed */
 		checkMeta( testMeta, 100, 100, 100, 100, 1L, false );
@@ -35,7 +40,14 @@ public class Apa102MetaTest extends AbstractLedHandlingTest
 
 		/* enable the strip */
 		strip.setEnabled( true );
-		testMeta.update( strip );
+		testMeta.update( strip.isEnabled( ), strip.getProfile( ) );
+
+		/* metadata and control should be equal to strip */
+		checkMeta( testMeta, 100, 100, 100, 100, 1L, true );
+		checkControl( testMeta, 100, 100, 100, 100.0d );
+
+		/* try to update and check again (should not change) */
+		testMeta.update( strip.isEnabled( ), strip.getProfile( ) );
 
 		/* metadata and control should be equal to strip */
 		checkMeta( testMeta, 100, 100, 100, 100, 1L, true );
@@ -43,7 +55,7 @@ public class Apa102MetaTest extends AbstractLedHandlingTest
 
 		/* disable the strip again */
 		strip.setEnabled( false );
-		testMeta.update( strip );
+		testMeta.update( strip.isEnabled( ), strip.getProfile( ) );
 
 		/* metadata and control should be equal to strip */
 		checkMeta( testMeta, 100, 100, 100, 100, 1L, false );
@@ -67,7 +79,7 @@ public class Apa102MetaTest extends AbstractLedHandlingTest
 
 		/* set a profile */
 		strip.setProfile( getProfile( 100, 100, 100, 100, 1L ) );
-		testMeta.update( strip );
+		testMeta.update( strip.isEnabled( ), strip.getProfile( ) );
 
 		/* metadata should be equal to strip, control shouldn't have changed */
 		checkMeta( testMeta, 100, 100, 100, 100, 1L, false );
@@ -75,7 +87,7 @@ public class Apa102MetaTest extends AbstractLedHandlingTest
 
 		/* set another profile */
 		strip.setProfile( getProfile( 50, 50, 50, 50, 2L ) );
-		testMeta.update( strip );
+		testMeta.update( strip.isEnabled( ), strip.getProfile( ) );
 
 		/* metadata should be equal to new profile, control shouldn't have changed */
 		checkMeta( testMeta, 50, 50, 50, 50, 2L, false );
@@ -100,12 +112,12 @@ public class Apa102MetaTest extends AbstractLedHandlingTest
 
 		/* set a profile */
 		strip.setProfile( getProfile( 100, 100, 100, 100, 1L ) );
-		testMeta.update( strip );
+		testMeta.update( strip.isEnabled( ), strip.getProfile( ) );
 
 		/* change the profile and update it */
 		final ColorProfile profile = strip.getProfile( );
 		profile.setRed( 20 );
-		testMeta.update( profile );
+		testMeta.update( null, profile );
 
 		/* metadata should be equal to new profile, control shouldn't have changed */
 		checkMeta( testMeta, 20, 100, 100, 100, 1L, false );
@@ -131,12 +143,12 @@ public class Apa102MetaTest extends AbstractLedHandlingTest
 		/* set a profile */
 		strip.setProfile( getProfile( 100, 100, 100, 100, 1L ) );
 		strip.setEnabled( true );
-		testMeta.update( strip );
+		testMeta.update( strip.isEnabled( ), strip.getProfile( ) );
 
 		/* change the profile and update it */
 		final ColorProfile profile = strip.getProfile( );
 		profile.setRed( 20 );
-		testMeta.update( profile );
+		testMeta.update( null, profile );
 
 		/* metadata and control should be equal to new profile */
 		checkMeta( testMeta, 20, 100, 100, 100, 1L, true );
@@ -144,7 +156,7 @@ public class Apa102MetaTest extends AbstractLedHandlingTest
 
 		/* update brightness */
 		profile.setBrightness( 0 );
-		testMeta.update( profile );
+		testMeta.update( null, profile );
 
 		/* metadata and control should be equal to new profile */
 		checkMeta( testMeta, 20, 100, 100, 0, 1L, true );
@@ -173,10 +185,10 @@ public class Apa102MetaTest extends AbstractLedHandlingTest
 		/* set a profile */
 		strip.setProfile( getProfile( 100, 100, 100, 100, profileId ) );
 		strip.setEnabled( true );
-		testMeta.update( strip );
+		testMeta.update( strip.isEnabled( ), strip.getProfile( ) );
 
 		/* delete the profile */
-		testMeta.update( (ColorProfile) null );
+		testMeta.update( null, (ColorProfile) null );
 		checkMeta( testMeta, 0, 0, 0, 0, null, true );
 		checkControl( testMeta, 0, 0, 0, 0.0d );
 	}
@@ -203,10 +215,10 @@ public class Apa102MetaTest extends AbstractLedHandlingTest
 		/* set a profile */
 		strip.setProfile( getProfile( 100, 100, 100, 100, profileId ) );
 		strip.setEnabled( false );
-		testMeta.update( strip );
+		testMeta.update( strip.isEnabled( ), strip.getProfile( ) );
 
 		/* delete the profile */
-		testMeta.update( (ColorProfile) null );
+		testMeta.update( null, (ColorProfile) null );
 		checkMeta( testMeta, 0, 0, 0, 0, null, false );
 		checkControl( testMeta, 0, 0, 0, 0.0d );
 	}
@@ -234,10 +246,10 @@ public class Apa102MetaTest extends AbstractLedHandlingTest
 		/* set a profile */
 		strip.setProfile( getProfile( 0, 0, 0, 100, profileId ) );
 		strip.setEnabled( true );
-		testMeta.update( strip );
+		testMeta.update( strip.isEnabled( ), strip.getProfile( ) );
 
 		/* delete the profile */
-		testMeta.update( (ColorProfile) null );
+		testMeta.update( null, (ColorProfile) null );
 		checkMeta( testMeta, 0, 0, 0, 0, null, true );
 		checkControl( testMeta, 0, 0, 0, 0.0d );
 	}
@@ -265,10 +277,10 @@ public class Apa102MetaTest extends AbstractLedHandlingTest
 		/* set a profile */
 		strip.setProfile( getProfile( 100, 100, 100, 0, profileId ) );
 		strip.setEnabled( false );
-		testMeta.update( strip );
+		testMeta.update( strip.isEnabled( ), strip.getProfile( ) );
 
 		/* delete the profile */
-		testMeta.update( (ColorProfile) null );
+		testMeta.update( null, (ColorProfile) null );
 		checkMeta( testMeta, 0, 0, 0, 0, null, false );
 		checkControl( testMeta, 0, 0, 0, 0.0d );
 	}

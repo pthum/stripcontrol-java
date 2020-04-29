@@ -1,0 +1,26 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>de.backenddev.led.stripcontrol</groupId>
+    <artifactId>stripcontrol-parent</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+  <artifactId>stripcontrol-ledhandling</artifactId>
+  
+  
+  
+  <dependencies>
+  		<!-- led control -->
+		<dependency>
+			<groupId>de.backenddev</groupId>
+			<artifactId>apa102lib</artifactId>
+			<version>${apalib.version}</version>
+		</dependency>
+  		<!-- stripcontrol models -->
+		<dependency>
+			<groupId>de.backenddev.led.stripcontrol</groupId>
+			<artifactId>stripcontrol-models</artifactId>
+			<version>${stripcontrol.models.version}</version>
+		</dependency>
+  </dependencies>
+</project>

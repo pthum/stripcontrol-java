@@ -31,6 +31,7 @@
 		<module>stripcontrol-models</module>
 		<module>stripcontrol-javabackend</module>
 		<module>stripcontrol-quarkusbackend</module>
+		<module>stripcontrol-ledhandling</module>
 	</modules>
 
 

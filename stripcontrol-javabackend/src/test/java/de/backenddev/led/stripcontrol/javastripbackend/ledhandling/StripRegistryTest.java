@@ -33,14 +33,14 @@ public class StripRegistryTest extends AbstractLedHandlingTest
 		final LEDStrip strip = getStrip( false );
 		strip.setId( 1L );
 		/* event would create meta */
-		this.registry.handleStripEvent( new StripEvent( this, EventType.SAVE, strip, null ) );
+		this.registry.handleSave( new StripEvent( this, EventType.SAVE, strip, null ) );
 		final Apa102Meta testMeta = this.registry.map.get( 1L );
 		checkMeta( testMeta, 0, 0, 0, 0, null, false );
 		checkControl( testMeta, 0, 0, 0, 0.0d );
 
 		/* set a profile */
 		strip.setProfile( getProfile( 100, 100, 100, 100, 1L ) );
-		this.registry.handleStripEvent( new StripEvent( this, EventType.SAVE, strip, 1L ) );
+		this.registry.handleSave( new StripEvent( this, EventType.SAVE, strip, 1L ) );
 
 		/* metadata should be equal to strip, control shouldn't have changed */
 		checkMeta( testMeta, 100, 100, 100, 100, 1L, false );
@@ -48,7 +48,7 @@ public class StripRegistryTest extends AbstractLedHandlingTest
 
 		/* enable the strip */
 		strip.setEnabled( true );
-		this.registry.handleStripEvent( new StripEvent( this, EventType.SAVE, strip, 1L ) );
+		this.registry.handleSave( new StripEvent( this, EventType.SAVE, strip, 1L ) );
 
 		/* metadata and control should be equal to strip */
 		checkMeta( testMeta, 100, 100, 100, 100, 1L, true );
@@ -56,7 +56,7 @@ public class StripRegistryTest extends AbstractLedHandlingTest
 
 		/* disable the strip again */
 		strip.setEnabled( false );
-		this.registry.handleStripEvent( new StripEvent( this, EventType.SAVE, strip, 1L ) );
+		this.registry.handleSave( new StripEvent( this, EventType.SAVE, strip, 1L ) );
 
 		/* metadata and control should be equal to strip */
 		checkMeta( testMeta, 100, 100, 100, 100, 1L, false );
@@ -75,14 +75,14 @@ public class StripRegistryTest extends AbstractLedHandlingTest
 		final LEDStrip strip = getStrip( false );
 		strip.setId( 1L );
 		/* event would create meta */
-		this.registry.handleStripEvent( new StripEvent( this, EventType.SAVE, strip, null ) );
+		this.registry.handleSave( new StripEvent( this, EventType.SAVE, strip, null ) );
 		final Apa102Meta testMeta = this.registry.map.get( 1L );
 		checkMeta( testMeta, 0, 0, 0, 0, null, false );
 		checkControl( testMeta, 0, 0, 0, 0.0d );
 
 		/* set a profile */
 		strip.setProfile( getProfile( 100, 100, 100, 100, 1L ) );
-		this.registry.handleStripEvent( new StripEvent( this, EventType.SAVE, strip, 1L ) );
+		this.registry.handleSave( new StripEvent( this, EventType.SAVE, strip, 1L ) );
 
 		/* metadata should be equal to strip, control shouldn't have changed */
 		checkMeta( testMeta, 100, 100, 100, 100, 1L, false );
@@ -90,7 +90,7 @@ public class StripRegistryTest extends AbstractLedHandlingTest
 
 		/* set another profile */
 		strip.setProfile( getProfile( 50, 50, 50, 50, 2L ) );
-		this.registry.handleStripEvent( new StripEvent( this, EventType.SAVE, strip, 1L ) );
+		this.registry.handleSave( new StripEvent( this, EventType.SAVE, strip, 1L ) );
 
 		/* metadata should be equal to new profile, control shouldn't have changed */
 		checkMeta( testMeta, 50, 50, 50, 50, 2L, false );
@@ -110,20 +110,20 @@ public class StripRegistryTest extends AbstractLedHandlingTest
 		final LEDStrip strip = getStrip( false );
 		strip.setId( 1L );
 		/* event would create meta */
-		this.registry.handleStripEvent( new StripEvent( this, EventType.SAVE, strip, null ) );
+		this.registry.handleSave( new StripEvent( this, EventType.SAVE, strip, null ) );
 		final Apa102Meta testMeta = this.registry.map.get( 1L );
 		checkMeta( testMeta, 0, 0, 0, 0, null, false );
 		checkControl( testMeta, 0, 0, 0, 0.0d );
 
 		/* set a profile */
 		strip.setProfile( getProfile( 100, 100, 100, 100, 1L ) );
-		this.registry.handleStripEvent( new StripEvent( this, EventType.SAVE, strip, 1L ) );
+		this.registry.handleSave( new StripEvent( this, EventType.SAVE, strip, 1L ) );
 
 		/* change the profile and update it */
 		final ColorProfile profile = strip.getProfile( );
 		profile.setRed( 20 );
-		testMeta.update( profile );
-		this.registry.handleProfileEvent( new ProfileEvent( this, EventType.SAVE, profile, 1L ) );
+		testMeta.update( null, profile );
+		this.registry.handleSaveProfile( new ProfileEvent( this, EventType.SAVE, profile, 1L ) );
 
 		/* metadata should be equal to new profile, control shouldn't have changed */
 		checkMeta( testMeta, 20, 100, 100, 100, 1L, false );
@@ -143,7 +143,7 @@ public class StripRegistryTest extends AbstractLedHandlingTest
 		final LEDStrip strip = getStrip( false );
 		strip.setId( 1L );
 		/* event would create meta */
-		this.registry.handleStripEvent( new StripEvent( this, EventType.SAVE, strip, null ) );
+		this.registry.handleSave( new StripEvent( this, EventType.SAVE, strip, null ) );
 		final Apa102Meta testMeta = this.registry.map.get( 1L );
 		checkMeta( testMeta, 0, 0, 0, 0, null, false );
 		checkControl( testMeta, 0, 0, 0, 0.0d );
@@ -151,12 +151,12 @@ public class StripRegistryTest extends AbstractLedHandlingTest
 		/* set a profile */
 		strip.setProfile( getProfile( 100, 100, 100, 100, 1L ) );
 		strip.setEnabled( true );
-		this.registry.handleStripEvent( new StripEvent( this, EventType.SAVE, strip, 1L ) );
+		this.registry.handleSave( new StripEvent( this, EventType.SAVE, strip, 1L ) );
 
 		/* change the profile and update it */
 		final ColorProfile profile = strip.getProfile( );
 		profile.setRed( 20 );
-		this.registry.handleProfileEvent( new ProfileEvent( this, EventType.SAVE, profile, 1L ) );
+		this.registry.handleSaveProfile( new ProfileEvent( this, EventType.SAVE, profile, 1L ) );
 
 		/* metadata and control should be equal to new profile */
 		checkMeta( testMeta, 20, 100, 100, 100, 1L, true );
@@ -164,7 +164,7 @@ public class StripRegistryTest extends AbstractLedHandlingTest
 
 		/* update brightness */
 		profile.setBrightness( 0 );
-		this.registry.handleProfileEvent( new ProfileEvent( this, EventType.SAVE, profile, 1L ) );
+		this.registry.handleSaveProfile( new ProfileEvent( this, EventType.SAVE, profile, 1L ) );
 
 		/* metadata and control should be equal to new profile */
 		checkMeta( testMeta, 20, 100, 100, 0, 1L, true );
@@ -186,7 +186,7 @@ public class StripRegistryTest extends AbstractLedHandlingTest
 		final LEDStrip strip = getStrip( false );
 		strip.setId( stripId );
 		/* event would create meta */
-		this.registry.handleStripEvent( new StripEvent( this, EventType.SAVE, strip, null ) );
+		this.registry.handleSave( new StripEvent( this, EventType.SAVE, strip, null ) );
 		final Apa102Meta testMeta = this.registry.map.get( stripId );
 		checkMeta( testMeta, 0, 0, 0, 0, null, false );
 		checkControl( testMeta, 0, 0, 0, 0.0d );
@@ -194,10 +194,10 @@ public class StripRegistryTest extends AbstractLedHandlingTest
 		/* set a profile */
 		strip.setProfile( getProfile( 100, 100, 100, 100, profileId ) );
 		strip.setEnabled( true );
-		this.registry.handleStripEvent( new StripEvent( this, EventType.SAVE, strip, stripId ) );
+		this.registry.handleSave( new StripEvent( this, EventType.SAVE, strip, stripId ) );
 
 		/* delete the strip */
-		this.registry.handleStripEvent( new StripEvent( this, EventType.DELETE, null, stripId ) );
+		this.registry.handleDelete( new StripEvent( this, EventType.DELETE, null, stripId ) );
 		final Apa102Meta shouldBeNullMeta = this.registry.map.get( stripId );
 		assertNull( shouldBeNullMeta );
 	}
@@ -217,7 +217,7 @@ public class StripRegistryTest extends AbstractLedHandlingTest
 		final LEDStrip strip = getStrip( false );
 		strip.setId( stripId );
 		/* event would create meta */
-		this.registry.handleStripEvent( new StripEvent( this, EventType.SAVE, strip, null ) );
+		this.registry.handleSave( new StripEvent( this, EventType.SAVE, strip, null ) );
 		final Apa102Meta testMeta = this.registry.map.get( stripId );
 		checkMeta( testMeta, 0, 0, 0, 0, null, false );
 		checkControl( testMeta, 0, 0, 0, 0.0d );
@@ -225,10 +225,10 @@ public class StripRegistryTest extends AbstractLedHandlingTest
 		/* set a profile */
 		strip.setProfile( getProfile( 100, 100, 100, 100, profileId ) );
 		strip.setEnabled( false );
-		this.registry.handleStripEvent( new StripEvent( this, EventType.SAVE, strip, stripId ) );
+		this.registry.handleSave( new StripEvent( this, EventType.SAVE, strip, stripId ) );
 
 		/* delete the strip */
-		this.registry.handleStripEvent( new StripEvent( this, EventType.DELETE, null, stripId ) );
+		this.registry.handleDelete( new StripEvent( this, EventType.DELETE, null, stripId ) );
 		final Apa102Meta shouldBeNullMeta = this.registry.map.get( stripId );
 		assertNull( shouldBeNullMeta );
 	}
@@ -248,7 +248,7 @@ public class StripRegistryTest extends AbstractLedHandlingTest
 		final LEDStrip strip = getStrip( false );
 		strip.setId( stripId );
 		/* event would create meta */
-		this.registry.handleStripEvent( new StripEvent( this, EventType.SAVE, strip, null ) );
+		this.registry.handleSave( new StripEvent( this, EventType.SAVE, strip, null ) );
 		final Apa102Meta testMeta = this.registry.map.get( stripId );
 		checkMeta( testMeta, 0, 0, 0, 0, null, false );
 		checkControl( testMeta, 0, 0, 0, 0.0d );
@@ -256,10 +256,10 @@ public class StripRegistryTest extends AbstractLedHandlingTest
 		/* set a profile */
 		strip.setProfile( getProfile( 100, 100, 100, 100, profileId ) );
 		strip.setEnabled( true );
-		this.registry.handleStripEvent( new StripEvent( this, EventType.SAVE, strip, stripId ) );
+		this.registry.handleSave( new StripEvent( this, EventType.SAVE, strip, stripId ) );
 
 		/* delete the profile */
-		this.registry.handleProfileEvent( new ProfileEvent( this, EventType.DELETE, null, profileId ) );
+		this.registry.handleDeleteProfile( new ProfileEvent( this, EventType.DELETE, null, profileId ) );
 		final Apa102Meta shouldBeNullMeta = this.registry.map.get( stripId );
 		assertNotNull( shouldBeNullMeta );
 		checkMeta( testMeta, 0, 0, 0, 0, null, true );
@@ -281,7 +281,7 @@ public class StripRegistryTest extends AbstractLedHandlingTest
 		final LEDStrip strip = getStrip( false );
 		strip.setId( stripId );
 		/* event would create meta */
-		this.registry.handleStripEvent( new StripEvent( this, EventType.SAVE, strip, null ) );
+		this.registry.handleSave( new StripEvent( this, EventType.SAVE, strip, null ) );
 		final Apa102Meta testMeta = this.registry.map.get( stripId );
 		checkMeta( testMeta, 0, 0, 0, 0, null, false );
 		checkControl( testMeta, 0, 0, 0, 0.0d );
@@ -289,10 +289,10 @@ public class StripRegistryTest extends AbstractLedHandlingTest
 		/* set a profile */
 		strip.setProfile( getProfile( 100, 100, 100, 100, profileId ) );
 		strip.setEnabled( false );
-		this.registry.handleStripEvent( new StripEvent( this, EventType.SAVE, strip, stripId ) );
+		this.registry.handleSave( new StripEvent( this, EventType.SAVE, strip, stripId ) );
 
 		/* delete the profile */
-		this.registry.handleProfileEvent( new ProfileEvent( this, EventType.DELETE, null, profileId ) );
+		this.registry.handleDeleteProfile( new ProfileEvent( this, EventType.DELETE, null, profileId ) );
 		final Apa102Meta shouldBeNullMeta = this.registry.map.get( stripId );
 		assertNotNull( shouldBeNullMeta );
 		checkMeta( testMeta, 0, 0, 0, 0, null, false );

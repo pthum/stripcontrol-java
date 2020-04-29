@@ -27,16 +27,10 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-		<!-- led control -->
-		<dependency>
-			<groupId>de.backenddev</groupId>
-			<artifactId>apa102lib</artifactId>
-			<version>${apalib.version}</version>
-		</dependency>
 		<!-- stripcontrol models -->
 		<dependency>
 			<groupId>de.backenddev.led.stripcontrol</groupId>
-			<artifactId>stripcontrol-models</artifactId>
+			<artifactId>stripcontrol-ledhandling</artifactId>
 			<version>${stripcontrol.models.version}</version>
 		</dependency>
 		<!-- db connection -->
