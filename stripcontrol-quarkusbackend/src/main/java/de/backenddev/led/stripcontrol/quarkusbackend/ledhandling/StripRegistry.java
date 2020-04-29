@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import de.backenddev.led.stripcontrol.ledhandling.Apa102Meta;
-import de.backenddev.led.stripcontrol.ledhandling.IEvent;
 import de.backenddev.led.stripcontrol.model.ColorProfile;
 import de.backenddev.led.stripcontrol.model.LEDStrip;
 
@@ -43,14 +42,14 @@ public class StripRegistry
 		this.map = new HashMap<>( );
 	}
 
-	protected void handleSave( final IEvent<LEDStrip> event )
+	protected void handleSave( final StripEvent event )
 	{
 		final Apa102Meta control = getOrCreate( event.getId( ), event.getState( ) );
 		final LEDStrip strip = event.getState( );
 		updateMeta( control, strip.isEnabled( ), strip.getProfile( ) );
 	}
 
-	protected void handleSaveProfile( final IEvent<ColorProfile> event )
+	protected void handleSaveProfile( final ProfileEvent event )
 	{
 		if ( event.getId( ) == null )
 		{
@@ -75,7 +74,7 @@ public class StripRegistry
 		}
 	}
 
-	protected void handleDelete( final IEvent<LEDStrip> event )
+	protected void handleDelete( final StripEvent event )
 	{
 		try
 		{
@@ -91,7 +90,7 @@ public class StripRegistry
 		}
 	}
 
-	protected void handleDeleteProfile( final IEvent<ColorProfile> event )
+	protected void handleDeleteProfile( final ProfileEvent event )
 	{
 		final Long profileId = event.getId( );
 		final List<Apa102Meta> matching = getMetaWithProfileId( profileId );

@@ -1,13 +1,11 @@
 package de.backenddev.led.stripcontrol.quarkusbackend.ledhandling;
 
+import javax.enterprise.context.ApplicationScoped;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
-import de.backenddev.led.stripcontrol.ledhandling.IEvent;
-import de.backenddev.led.stripcontrol.model.ColorProfile;
-import de.backenddev.led.stripcontrol.model.LEDStrip;
 import io.quarkus.vertx.ConsumeEvent;
 
 /**
@@ -17,7 +15,7 @@ import io.quarkus.vertx.ConsumeEvent;
  * @author thum
  *
  */
-@Component
+@ApplicationScoped
 public class LEDEventHandler
 {
 	private static final Logger LOG = LoggerFactory.getLogger( LEDEventHandler.class );
@@ -30,7 +28,7 @@ public class LEDEventHandler
 	}
 
 	@ConsumeEvent ( value = "StripEvent" )
-	public void handleStripEvent( final IEvent<LEDStrip> event )
+	public void handleStripEvent( final StripEvent event )
 	{
 		if ( event != null )
 		{
@@ -50,7 +48,7 @@ public class LEDEventHandler
 	}
 
 	@ConsumeEvent ( value = "ProfileEvent" )
-	public void handleProfileEvent( final IEvent<ColorProfile> event )
+	public void handleProfileEvent( final ProfileEvent event )
 	{
 		if ( event != null )
 		{
