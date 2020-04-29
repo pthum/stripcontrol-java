@@ -29,9 +29,9 @@
 	<modules>
 		<module>stripcontrol-frontend</module>
 		<module>stripcontrol-models</module>
+		<module>stripcontrol-ledhandling</module>
 		<module>stripcontrol-javabackend</module>
 		<module>stripcontrol-quarkusbackend</module>
-		<module>stripcontrol-ledhandling</module>
 	</modules>
 
 
