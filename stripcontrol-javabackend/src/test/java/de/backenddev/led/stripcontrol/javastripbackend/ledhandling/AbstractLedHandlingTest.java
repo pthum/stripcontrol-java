@@ -3,6 +3,10 @@ package de.backenddev.led.stripcontrol.javastripbackend.ledhandling;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 
+import java.lang.reflect.Field;
+
+import org.junit.Assert;
+
 import de.backenddev.led.apa102.APA102Strip;
 import de.backenddev.led.stripcontrol.ledhandling.Apa102Meta;
 import de.backenddev.led.stripcontrol.model.ColorProfile;
@@ -25,11 +29,21 @@ public abstract class AbstractLedHandlingTest
 	protected void checkControl( final Apa102Meta testMeta, final int expR, final int expG, final int expB,
 			final double expBrightness )
 	{
-		final APA102Strip control = testMeta.strip;
-		assertThat( control.getPixelData( ) ).allMatch( pixel -> pixel.getRed( ) == expR );
-		assertThat( control.getPixelData( ) ).allMatch( pixel -> pixel.getGreen( ) == expG );
-		assertThat( control.getPixelData( ) ).allMatch( pixel -> pixel.getBlue( ) == expB );
-		assertThat( control.getPixelData( ) ).allMatch( pixel -> pixel.getBrightnessPercent( ) == expBrightness );
+		try
+		{
+			final Field stripField = testMeta.getClass( ).getField( "strip" );
+			stripField.setAccessible( true );
+			final APA102Strip control = (APA102Strip) stripField.get( testMeta );
+			assertThat( control.getPixelData( ) ).allMatch( pixel -> pixel.getRed( ) == expR );
+			assertThat( control.getPixelData( ) ).allMatch( pixel -> pixel.getGreen( ) == expG );
+			assertThat( control.getPixelData( ) ).allMatch( pixel -> pixel.getBlue( ) == expB );
+			assertThat( control.getPixelData( ) ).allMatch( pixel -> pixel.getBrightnessPercent( ) == expBrightness );
+		}
+		catch ( IllegalAccessException | NoSuchFieldException e )
+		{
+			Assert.fail( "Failed to handle the strip field " + e.toString( ) );
+		}
+
 	}
 
 	protected LEDStrip getStrip( final boolean enabled )
