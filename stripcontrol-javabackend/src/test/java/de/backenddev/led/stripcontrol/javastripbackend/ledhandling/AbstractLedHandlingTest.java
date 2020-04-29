@@ -31,7 +31,7 @@ public abstract class AbstractLedHandlingTest
 	{
 		try
 		{
-			final Field stripField = testMeta.getClass( ).getField( "strip" );
+			final Field stripField = testMeta.getClass( ).getDeclaredField( "strip" );
 			stripField.setAccessible( true );
 			final APA102Strip control = (APA102Strip) stripField.get( testMeta );
 			assertThat( control.getPixelData( ) ).allMatch( pixel -> pixel.getRed( ) == expR );
@@ -41,6 +41,7 @@ public abstract class AbstractLedHandlingTest
 		}
 		catch ( IllegalAccessException | NoSuchFieldException e )
 		{
+			e.printStackTrace( );
 			Assert.fail( "Failed to handle the strip field " + e.toString( ) );
 		}
 
