@@ -1,5 +1,6 @@
 package de.backenddev.led.stripcontrol.javastripbackend;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 import org.slf4j.Logger;
@@ -18,17 +19,19 @@ public class ApplicationEventComponent
 {
 	private static final Logger LOG = LoggerFactory.getLogger( ApplicationEventComponent.class );
 	@Autowired
-	private LEDStripRepository repo;
+	LEDStripRepository repo;
 
 	@Autowired
-	private StripRegistry registry;
+	StripRegistry registry;
 
 	// @Autowired ( required = false )
 	// private TelegramBot telegramBot;
 
 	// @EventListener ( ApplicationReadyEvent.class )
+	@PostConstruct
 	public void initStripsOnStartup( )
 	{
+		LOG.info( "Startup event" );
 		final Iterable<LEDStrip> allStrips = this.repo.findAll( );
 		/* initialize all strips on startup */
 		for ( final LEDStrip strip : allStrips )
@@ -41,6 +44,7 @@ public class ApplicationEventComponent
 	@PreDestroy
 	public void disableStripsOnShutdown( )
 	{
+		LOG.info( "Shutdown event" );
 		final Iterable<LEDStrip> allStrips = this.repo.findAll( );
 		/* shutdown all strips on shutdown */
 		for ( final LEDStrip strip : allStrips )
@@ -57,4 +61,5 @@ public class ApplicationEventComponent
 		// this.telegramBot.removeGetUpdatesListener( );
 		// }
 	}
+
 }

@@ -27,10 +27,10 @@ public class LEDStripController extends AbstractModelController<LEDStrip>
 	private static final Logger LOG = LoggerFactory.getLogger( LEDStripController.class );
 
 	@Autowired
-	private ModelService<LEDStrip> service;
+	ModelService<LEDStrip> service;
 
 	@Autowired
-	private ModelService<ColorProfile> cpService;
+	ModelService<ColorProfile> cpService;
 
 	@GetMapping ( "/{id}/profile" )
 	public ResponseEntity<ColorProfile> getLEDStripProfile( @PathVariable final Long id )

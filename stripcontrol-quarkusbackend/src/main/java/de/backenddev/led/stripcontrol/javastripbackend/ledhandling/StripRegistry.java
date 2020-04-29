@@ -7,14 +7,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import javax.enterprise.context.ApplicationScoped;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
 import de.backenddev.led.stripcontrol.javastripbackend.controller.LEDStripController;
 import de.backenddev.led.stripcontrol.javastripbackend.model.ColorProfile;
 import de.backenddev.led.stripcontrol.javastripbackend.model.LEDStrip;
+import io.quarkus.vertx.ConsumeEvent;
 
 /**
  * This class is intended to have an overview over the registered strips and
@@ -23,7 +25,8 @@ import de.backenddev.led.stripcontrol.javastripbackend.model.LEDStrip;
  * @author thum
  *
  */
-@Component
+// @Component
+@ApplicationScoped
 public class StripRegistry
 {
 	private static final Logger LOG = LoggerFactory.getLogger( LEDStripController.class );
@@ -31,10 +34,10 @@ public class StripRegistry
 	final Map<Long, Apa102Meta> map;
 
 	@Value ( "${strips.enabled}" )
-	private boolean stripsEnabled;
+	boolean stripsEnabled;
 
 	@Value ( "${strips.effecttime:20}" )
-	private int effectTime;
+	int effectTime;
 
 	public StripRegistry( )
 	{
@@ -42,6 +45,7 @@ public class StripRegistry
 	}
 
 	// @EventListener
+	@ConsumeEvent ( value = "StripEvent" )
 	public void handleStripEvent( final StripEvent event )
 	{
 		if ( event != null )
@@ -62,6 +66,7 @@ public class StripRegistry
 	}
 
 	// @EventListener
+	@ConsumeEvent ( value = "ProfileEvent" )
 	public void handleProfileEvent( final ProfileEvent event )
 	{
 		if ( event != null )

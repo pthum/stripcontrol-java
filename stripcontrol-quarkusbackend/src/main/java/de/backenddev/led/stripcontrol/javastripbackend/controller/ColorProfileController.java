@@ -16,7 +16,7 @@ public class ColorProfileController extends AbstractModelController<ColorProfile
 	private static final Logger LOG = LoggerFactory.getLogger( ColorProfileController.class );
 
 	@Autowired
-	private ModelService<ColorProfile> service;
+	ModelService<ColorProfile> service;
 
 	@Override
 	ModelService<ColorProfile> getModelService( )

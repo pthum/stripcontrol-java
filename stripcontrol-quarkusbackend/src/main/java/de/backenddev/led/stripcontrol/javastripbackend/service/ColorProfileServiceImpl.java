@@ -2,20 +2,26 @@ package de.backenddev.led.stripcontrol.javastripbackend.service;
 
 import java.util.Optional;
 
+import javax.inject.Inject;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import de.backenddev.led.stripcontrol.javastripbackend.ledhandling.EventType;
+import de.backenddev.led.stripcontrol.javastripbackend.ledhandling.ProfileEvent;
+import de.backenddev.led.stripcontrol.javastripbackend.ledhandling.StripEvent;
 import de.backenddev.led.stripcontrol.javastripbackend.model.ColorProfile;
 import de.backenddev.led.stripcontrol.javastripbackend.repository.ColorProfileRepository;
+import io.vertx.core.eventbus.EventBus;
 
 @Service
 public class ColorProfileServiceImpl implements ModelService<ColorProfile>
 {
 	@Autowired
-	private ColorProfileRepository repo;
+	ColorProfileRepository repo;
 
-	// @Autowired
-	// private ApplicationEventPublisher applicationEventPublisher;
+	@Inject
+	EventBus eventPublisher;
 
 	@Override
 	public ColorProfile save( final ColorProfile profile )
@@ -25,9 +31,7 @@ public class ColorProfileServiceImpl implements ModelService<ColorProfile>
 		/* due to efficiency: only send updates */
 		if ( idBeforeSave != null )
 		{
-			// this.applicationEventPublisher
-			// .publishEvent( new ProfileEvent( this, EventType.SAVE, result, idBeforeSave )
-			// );
+			this.eventPublisher.send( "ProfileEvent", new ProfileEvent( this, EventType.SAVE, result, idBeforeSave ) );
 		}
 		return result;
 	}
@@ -36,8 +40,7 @@ public class ColorProfileServiceImpl implements ModelService<ColorProfile>
 	public void remove( final long id )
 	{
 		this.repo.deleteById( id );
-		// this.applicationEventPublisher.publishEvent( new StripEvent( this,
-		// EventType.DELETE, null, id ) );
+		this.eventPublisher.send( "StripEvent", new StripEvent( this, EventType.DELETE, null, id ) );
 	}
 
 	@Override
