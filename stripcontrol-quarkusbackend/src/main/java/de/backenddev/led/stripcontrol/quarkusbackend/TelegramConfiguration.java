@@ -13,8 +13,8 @@ import org.springframework.context.annotation.Bean;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.request.GetUpdates;
 
-import de.backenddev.led.stripcontrol.javastripbackend.telegram.BotUpdateListener;
 import de.backenddev.led.stripcontrol.quarkusbackend.service.LEDStripServiceImpl;
+import de.backenddev.led.stripcontrol.quarkusbackend.telegram.BotUpdateListener;
 
 //@ConditionalOnProperty ( name = "strips.telegram.botkey" )
 //@Configuration

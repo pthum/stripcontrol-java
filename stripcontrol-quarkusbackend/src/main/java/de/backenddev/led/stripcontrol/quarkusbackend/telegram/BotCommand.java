@@ -1,4 +1,4 @@
-package de.backenddev.led.stripcontrol.javastripbackend.telegram;
+package de.backenddev.led.stripcontrol.quarkusbackend.telegram;
 
 import org.apache.commons.lang3.StringUtils;
 
