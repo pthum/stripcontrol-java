@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import de.backenddev.led.stripcontrol.javastripbackend.model.ColorProfile;
-import de.backenddev.led.stripcontrol.javastripbackend.model.LEDStrip;
+import de.backenddev.led.stripcontrol.model.ColorProfile;
+import de.backenddev.led.stripcontrol.model.LEDStrip;
 import de.backenddev.led.stripcontrol.quarkusbackend.service.ModelService;
 
 @RestController

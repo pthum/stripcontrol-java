@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;
 import de.backenddev.led.stripcontrol.javastripbackend.ledhandling.EventType;
 import de.backenddev.led.stripcontrol.javastripbackend.ledhandling.ProfileEvent;
 import de.backenddev.led.stripcontrol.javastripbackend.ledhandling.StripEvent;
-import de.backenddev.led.stripcontrol.javastripbackend.model.ColorProfile;
 import de.backenddev.led.stripcontrol.javastripbackend.repository.ColorProfileRepository;
+import de.backenddev.led.stripcontrol.model.ColorProfile;
 
 @Service
 public class ColorProfileServiceImpl implements ModelService<ColorProfile>

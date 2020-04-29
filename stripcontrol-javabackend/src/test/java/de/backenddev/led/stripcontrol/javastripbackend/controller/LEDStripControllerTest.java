@@ -23,9 +23,9 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import de.backenddev.led.stripcontrol.javastripbackend.model.ColorProfile;
-import de.backenddev.led.stripcontrol.javastripbackend.model.LEDStrip;
 import de.backenddev.led.stripcontrol.javastripbackend.service.ModelService;
+import de.backenddev.led.stripcontrol.model.ColorProfile;
+import de.backenddev.led.stripcontrol.model.LEDStrip;
 
 @RunWith ( SpringRunner.class )
 @WebMvcTest ( LEDStripController.class )

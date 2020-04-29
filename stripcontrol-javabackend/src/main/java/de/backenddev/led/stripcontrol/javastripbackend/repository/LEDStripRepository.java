@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.data.repository.CrudRepository;
 
-import de.backenddev.led.stripcontrol.javastripbackend.model.LEDStrip;
+import de.backenddev.led.stripcontrol.model.LEDStrip;
 
 public interface LEDStripRepository extends CrudRepository<LEDStrip, Long>
 {

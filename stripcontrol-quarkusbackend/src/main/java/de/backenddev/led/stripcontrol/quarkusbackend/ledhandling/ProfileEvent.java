@@ -1,7 +1,7 @@
 package de.backenddev.led.stripcontrol.quarkusbackend.ledhandling;
 
 import de.backenddev.led.stripcontrol.javastripbackend.ledhandling.EventType;
-import de.backenddev.led.stripcontrol.javastripbackend.model.ColorProfile;
+import de.backenddev.led.stripcontrol.model.ColorProfile;
 
 public class ProfileEvent extends Event<ColorProfile>
 {

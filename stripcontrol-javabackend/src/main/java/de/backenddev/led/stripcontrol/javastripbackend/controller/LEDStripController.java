@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import de.backenddev.led.stripcontrol.javastripbackend.JavastripBackendApplication;
-import de.backenddev.led.stripcontrol.javastripbackend.model.ColorProfile;
-import de.backenddev.led.stripcontrol.javastripbackend.model.LEDStrip;
 import de.backenddev.led.stripcontrol.javastripbackend.service.ModelService;
+import de.backenddev.led.stripcontrol.model.ColorProfile;
+import de.backenddev.led.stripcontrol.model.LEDStrip;
 
 @RestController
 @RequestMapping ( JavastripBackendApplication.API_BASE + "/ledstrip" )

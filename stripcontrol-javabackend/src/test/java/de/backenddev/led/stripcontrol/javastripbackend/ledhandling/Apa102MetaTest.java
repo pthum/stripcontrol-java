@@ -4,8 +4,8 @@ import java.io.IOException;
 
 import org.junit.Test;
 
-import de.backenddev.led.stripcontrol.javastripbackend.model.ColorProfile;
-import de.backenddev.led.stripcontrol.javastripbackend.model.LEDStrip;
+import de.backenddev.led.stripcontrol.model.ColorProfile;
+import de.backenddev.led.stripcontrol.model.LEDStrip;
 
 public class Apa102MetaTest extends AbstractLedHandlingTest
 {

@@ -9,7 +9,7 @@ import de.backenddev.led.apa102.APA102Control;
 import de.backenddev.led.apa102.APA102Strip;
 import de.backenddev.led.apa102.ColorConfig;
 import de.backenddev.led.apa102.NoOpAPA102Control;
-import de.backenddev.led.stripcontrol.javastripbackend.model.LEDStrip;
+import de.backenddev.led.stripcontrol.model.LEDStrip;
 
 public class Apa102Factory
 {

@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import de.backenddev.led.stripcontrol.javastripbackend.model.AbstractModel;
 import de.backenddev.led.stripcontrol.javastripbackend.service.ModelService;
+import de.backenddev.led.stripcontrol.model.AbstractModel;
 
 public abstract class AbstractModelController<T extends AbstractModel>
 {

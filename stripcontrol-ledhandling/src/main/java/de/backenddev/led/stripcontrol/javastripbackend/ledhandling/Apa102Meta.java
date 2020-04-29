@@ -9,8 +9,8 @@ import de.backenddev.led.apa102.APA102Control;
 import de.backenddev.led.apa102.APA102Strip;
 import de.backenddev.led.apa102.LEDEffects;
 import de.backenddev.led.apa102.LEDStripHelper;
-import de.backenddev.led.stripcontrol.javastripbackend.model.ColorProfile;
-import de.backenddev.led.stripcontrol.javastripbackend.model.LEDStrip;
+import de.backenddev.led.stripcontrol.model.ColorProfile;
+import de.backenddev.led.stripcontrol.model.LEDStrip;
 
 public class Apa102Meta
 {

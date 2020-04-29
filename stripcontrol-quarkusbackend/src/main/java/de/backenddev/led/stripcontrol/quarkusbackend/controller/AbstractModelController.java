@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import de.backenddev.led.stripcontrol.javastripbackend.model.AbstractModel;
+import de.backenddev.led.stripcontrol.model.AbstractModel;
 import de.backenddev.led.stripcontrol.quarkusbackend.service.ModelService;
 
 public abstract class AbstractModelController<T extends AbstractModel>

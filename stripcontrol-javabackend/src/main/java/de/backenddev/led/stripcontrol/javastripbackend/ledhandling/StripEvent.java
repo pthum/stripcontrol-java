@@ -1,6 +1,6 @@
 package de.backenddev.led.stripcontrol.javastripbackend.ledhandling;
 
-import de.backenddev.led.stripcontrol.javastripbackend.model.LEDStrip;
+import de.backenddev.led.stripcontrol.model.LEDStrip;
 
 public class StripEvent extends Event<LEDStrip>
 {

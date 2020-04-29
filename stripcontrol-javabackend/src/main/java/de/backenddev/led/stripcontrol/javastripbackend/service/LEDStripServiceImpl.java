@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 
 import de.backenddev.led.stripcontrol.javastripbackend.ledhandling.EventType;
 import de.backenddev.led.stripcontrol.javastripbackend.ledhandling.StripEvent;
-import de.backenddev.led.stripcontrol.javastripbackend.model.LEDStrip;
 import de.backenddev.led.stripcontrol.javastripbackend.repository.LEDStripRepository;
+import de.backenddev.led.stripcontrol.model.LEDStrip;
 
 @Service
 public class LEDStripServiceImpl implements ModelService<LEDStrip>

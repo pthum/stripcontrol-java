@@ -1,4 +1,4 @@
-package de.backenddev.led.stripcontrol.javastripbackend.model;
+package de.backenddev.led.stripcontrol.model;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;

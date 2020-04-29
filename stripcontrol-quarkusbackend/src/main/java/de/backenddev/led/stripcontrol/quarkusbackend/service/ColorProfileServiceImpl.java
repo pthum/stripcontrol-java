@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import de.backenddev.led.stripcontrol.javastripbackend.ledhandling.EventType;
-import de.backenddev.led.stripcontrol.javastripbackend.model.ColorProfile;
+import de.backenddev.led.stripcontrol.model.ColorProfile;
 import de.backenddev.led.stripcontrol.quarkusbackend.ledhandling.ProfileEvent;
 import de.backenddev.led.stripcontrol.quarkusbackend.ledhandling.StripEvent;
 import de.backenddev.led.stripcontrol.quarkusbackend.repository.ColorProfileRepository;
