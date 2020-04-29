@@ -1,6 +1,6 @@
 package de.backenddev.led.stripcontrol.quarkusbackend.ledhandling;
 
-import de.backenddev.led.stripcontrol.javastripbackend.ledhandling.EventType;
+import de.backenddev.led.stripcontrol.ledhandling.EventType;
 import de.backenddev.led.stripcontrol.model.LEDStrip;
 
 public class StripEvent extends Event<LEDStrip>

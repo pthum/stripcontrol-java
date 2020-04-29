@@ -2,6 +2,9 @@ package de.backenddev.led.stripcontrol.javastripbackend.ledhandling;
 
 import org.springframework.context.ApplicationEvent;
 
+import de.backenddev.led.stripcontrol.ledhandling.EventType;
+import de.backenddev.led.stripcontrol.ledhandling.IEvent;
+
 public abstract class Event<T> extends ApplicationEvent implements IEvent<T>
 {
 	private final EventType type;

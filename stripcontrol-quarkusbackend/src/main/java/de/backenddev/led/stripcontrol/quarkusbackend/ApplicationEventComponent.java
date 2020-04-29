@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import de.backenddev.led.stripcontrol.javastripbackend.ledhandling.EventType;
+import de.backenddev.led.stripcontrol.ledhandling.EventType;
 import de.backenddev.led.stripcontrol.model.LEDStrip;
 import de.backenddev.led.stripcontrol.quarkusbackend.ledhandling.LEDEventHandler;
 import de.backenddev.led.stripcontrol.quarkusbackend.ledhandling.StripEvent;

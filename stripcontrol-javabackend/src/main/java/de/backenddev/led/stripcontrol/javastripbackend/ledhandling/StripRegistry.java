@@ -12,6 +12,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import de.backenddev.led.stripcontrol.ledhandling.Apa102Meta;
+import de.backenddev.led.stripcontrol.ledhandling.IEvent;
 import de.backenddev.led.stripcontrol.model.ColorProfile;
 import de.backenddev.led.stripcontrol.model.LEDStrip;
 

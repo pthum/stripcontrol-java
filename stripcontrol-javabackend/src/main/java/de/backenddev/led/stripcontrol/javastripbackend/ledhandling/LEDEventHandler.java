@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
+import de.backenddev.led.stripcontrol.ledhandling.IEvent;
 import de.backenddev.led.stripcontrol.model.ColorProfile;
 import de.backenddev.led.stripcontrol.model.LEDStrip;
 

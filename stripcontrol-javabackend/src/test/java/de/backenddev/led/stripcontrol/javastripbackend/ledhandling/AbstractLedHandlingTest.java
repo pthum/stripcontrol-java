@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 
 import de.backenddev.led.apa102.APA102Strip;
+import de.backenddev.led.stripcontrol.ledhandling.Apa102Meta;
 import de.backenddev.led.stripcontrol.model.ColorProfile;
 import de.backenddev.led.stripcontrol.model.LEDStrip;
 

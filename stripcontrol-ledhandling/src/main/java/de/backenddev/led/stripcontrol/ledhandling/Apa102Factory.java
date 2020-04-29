@@ -1,4 +1,4 @@
-package de.backenddev.led.stripcontrol.javastripbackend.ledhandling;
+package de.backenddev.led.stripcontrol.ledhandling;
 
 import java.io.IOException;
 

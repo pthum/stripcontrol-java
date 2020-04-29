@@ -11,10 +11,10 @@ import org.springframework.stereotype.Component;
 
 import com.pengrad.telegrambot.TelegramBot;
 
-import de.backenddev.led.stripcontrol.javastripbackend.ledhandling.EventType;
 import de.backenddev.led.stripcontrol.javastripbackend.ledhandling.StripEvent;
 import de.backenddev.led.stripcontrol.javastripbackend.ledhandling.LEDEventHandler;
 import de.backenddev.led.stripcontrol.javastripbackend.repository.LEDStripRepository;
+import de.backenddev.led.stripcontrol.ledhandling.EventType;
 import de.backenddev.led.stripcontrol.model.LEDStrip;
 
 @Component

@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.junit.Test;
 
+import de.backenddev.led.stripcontrol.ledhandling.Apa102Meta;
 import de.backenddev.led.stripcontrol.model.ColorProfile;
 import de.backenddev.led.stripcontrol.model.LEDStrip;
 

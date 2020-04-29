@@ -1,5 +1,6 @@
 package de.backenddev.led.stripcontrol.javastripbackend.ledhandling;
 
+import de.backenddev.led.stripcontrol.ledhandling.EventType;
 import de.backenddev.led.stripcontrol.model.ColorProfile;
 
 public class ProfileEvent extends Event<ColorProfile>

@@ -7,7 +7,7 @@ import javax.inject.Inject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import de.backenddev.led.stripcontrol.javastripbackend.ledhandling.EventType;
+import de.backenddev.led.stripcontrol.ledhandling.EventType;
 import de.backenddev.led.stripcontrol.model.LEDStrip;
 import de.backenddev.led.stripcontrol.quarkusbackend.ledhandling.StripEvent;
 import de.backenddev.led.stripcontrol.quarkusbackend.repository.LEDStripRepository;
