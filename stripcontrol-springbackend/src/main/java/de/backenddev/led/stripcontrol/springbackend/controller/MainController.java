@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import de.backenddev.led.stripcontrol.springbackend.JavastripBackendApplication;
+import de.backenddev.led.stripcontrol.springbackend.SpringBackendApplication;
 
 /**
  * Main controller for the health endpoint
@@ -20,7 +20,7 @@ import de.backenddev.led.stripcontrol.springbackend.JavastripBackendApplication;
  *
  */
 @RestController
-@RequestMapping ( JavastripBackendApplication.API_BASE + "/" )
+@RequestMapping ( SpringBackendApplication.API_BASE + "/" )
 public class MainController
 {
 	private static final Logger LOG = LoggerFactory.getLogger( LEDStripController.class );

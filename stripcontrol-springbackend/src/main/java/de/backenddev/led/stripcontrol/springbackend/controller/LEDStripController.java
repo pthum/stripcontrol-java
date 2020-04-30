@@ -18,11 +18,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import de.backenddev.led.stripcontrol.model.ColorProfile;
 import de.backenddev.led.stripcontrol.model.LEDStrip;
-import de.backenddev.led.stripcontrol.springbackend.JavastripBackendApplication;
+import de.backenddev.led.stripcontrol.springbackend.SpringBackendApplication;
 import de.backenddev.led.stripcontrol.springbackend.service.ModelService;
 
 @RestController
-@RequestMapping ( JavastripBackendApplication.API_BASE + "/ledstrip" )
+@RequestMapping ( SpringBackendApplication.API_BASE + "/ledstrip" )
 public class LEDStripController extends AbstractModelController<LEDStrip>
 {
 	private static final Logger LOG = LoggerFactory.getLogger( LEDStripController.class );

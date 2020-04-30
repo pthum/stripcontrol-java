@@ -7,11 +7,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import de.backenddev.led.stripcontrol.model.ColorProfile;
-import de.backenddev.led.stripcontrol.springbackend.JavastripBackendApplication;
+import de.backenddev.led.stripcontrol.springbackend.SpringBackendApplication;
 import de.backenddev.led.stripcontrol.springbackend.service.ModelService;
 
 @RestController
-@RequestMapping ( JavastripBackendApplication.API_BASE + "/colorprofile" )
+@RequestMapping ( SpringBackendApplication.API_BASE + "/colorprofile" )
 public class ColorProfileController extends AbstractModelController<ColorProfile>
 {
 	private static final Logger LOG = LoggerFactory.getLogger( ColorProfileController.class );
