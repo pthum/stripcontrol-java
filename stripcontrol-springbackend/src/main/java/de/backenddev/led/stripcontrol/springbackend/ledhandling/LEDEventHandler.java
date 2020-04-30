@@ -7,6 +7,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import de.backenddev.led.stripcontrol.ledhandling.IEvent;
+import de.backenddev.led.stripcontrol.ledhandling.StripRegistry;
 import de.backenddev.led.stripcontrol.model.ColorProfile;
 import de.backenddev.led.stripcontrol.model.LEDStrip;
 

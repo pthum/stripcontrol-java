@@ -18,6 +18,12 @@ import com.pengrad.telegrambot.request.GetUpdates;
 import de.backenddev.led.stripcontrol.springbackend.service.LEDStripServiceImpl;
 import de.backenddev.led.stripcontrol.springbackend.telegram.BotUpdateListener;
 
+/**
+ * This class configures the telegram integration
+ * 
+ * @author thum
+ *
+ */
 @ConditionalOnProperty ( name = "strips.telegram.botkey" )
 @Configuration
 public class TelegramConfiguration

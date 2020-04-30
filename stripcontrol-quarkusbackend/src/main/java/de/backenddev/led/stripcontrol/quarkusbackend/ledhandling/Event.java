@@ -1,8 +1,9 @@
 package de.backenddev.led.stripcontrol.quarkusbackend.ledhandling;
 
 import de.backenddev.led.stripcontrol.ledhandling.EventType;
+import de.backenddev.led.stripcontrol.ledhandling.IEvent;
 
-public abstract class Event<T>
+public abstract class Event<T> implements IEvent<T>
 {
 	private final EventType type;
 	private final T state;
@@ -31,6 +32,7 @@ public abstract class Event<T>
 	/**
 	 * @return the type
 	 */
+	@Override
 	public EventType getType( )
 	{
 		return this.type;
@@ -39,6 +41,7 @@ public abstract class Event<T>
 	/**
 	 * @return the id
 	 */
+	@Override
 	public Long getId( )
 	{
 		return this.id;
@@ -47,6 +50,7 @@ public abstract class Event<T>
 	/**
 	 * @return the oldState
 	 */
+	@Override
 	public T getState( )
 	{
 		return this.state;

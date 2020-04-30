@@ -1,4 +1,4 @@
-package de.backenddev.led.stripcontrol.springbackend.ledhandling;
+package de.backenddev.led.stripcontrol.ledhandling;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -9,11 +9,7 @@ import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
-import de.backenddev.led.stripcontrol.ledhandling.Apa102Meta;
-import de.backenddev.led.stripcontrol.ledhandling.IEvent;
 import de.backenddev.led.stripcontrol.model.ColorProfile;
 import de.backenddev.led.stripcontrol.model.LEDStrip;
 
@@ -24,33 +20,32 @@ import de.backenddev.led.stripcontrol.model.LEDStrip;
  * @author thum
  *
  */
-@Component
 public class StripRegistry
 {
 	private static final Logger LOG = LoggerFactory.getLogger( StripRegistry.class );
 
 	/** maps */
-	final Map<Long, Apa102Meta> map;
+	protected final Map<Long, Apa102Meta> map;
 
-	@Value ( "${strips.enabled}" )
-	private boolean stripsEnabled;
+	private final boolean stripsEnabled;
 
-	@Value ( "${strips.effecttime:20}" )
-	private int effectTime;
+	private final int effectTime;
 
-	public StripRegistry( )
+	public StripRegistry( final boolean stripsEnabled, final int effectTime )
 	{
 		this.map = new HashMap<>( );
+		this.stripsEnabled = stripsEnabled;
+		this.effectTime = effectTime;
 	}
 
-	protected void handleSave( final IEvent<LEDStrip> event )
+	public void handleSave( final IEvent<LEDStrip> event )
 	{
 		final Apa102Meta control = getOrCreate( event.getId( ), event.getState( ) );
 		final LEDStrip strip = event.getState( );
 		updateMeta( control, strip.isEnabled( ), strip.getProfile( ) );
 	}
 
-	protected void handleSaveProfile( final IEvent<ColorProfile> event )
+	public void handleSaveProfile( final IEvent<ColorProfile> event )
 	{
 		if ( event.getId( ) == null )
 		{
@@ -75,7 +70,7 @@ public class StripRegistry
 		}
 	}
 
-	protected void handleDelete( final IEvent<LEDStrip> event )
+	public void handleDelete( final IEvent<LEDStrip> event )
 	{
 		try
 		{
@@ -91,7 +86,7 @@ public class StripRegistry
 		}
 	}
 
-	protected void handleDeleteProfile( final IEvent<ColorProfile> event )
+	public void handleDeleteProfile( final IEvent<ColorProfile> event )
 	{
 		final Long profileId = event.getId( );
 		final List<Apa102Meta> matching = getMetaWithProfileId( profileId );

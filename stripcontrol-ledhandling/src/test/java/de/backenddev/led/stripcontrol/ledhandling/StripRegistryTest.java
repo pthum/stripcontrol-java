@@ -1,15 +1,26 @@
-package de.backenddev.led.stripcontrol.springbackend.ledhandling;
+package de.backenddev.led.stripcontrol.ledhandling;
+
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import java.io.IOException;
+import java.util.Map;
 
+import org.junit.Before;
 import org.junit.Test;
 
-import de.backenddev.led.stripcontrol.ledhandling.Apa102Meta;
 import de.backenddev.led.stripcontrol.model.ColorProfile;
 import de.backenddev.led.stripcontrol.model.LEDStrip;
 
-public class Apa102MetaTest extends AbstractLedHandlingTest
+public class StripRegistryTest extends AbstractLedHandlingTest
 {
+	private TestStripRegistry registry;
+
+	@Before
+	public void setupTest( )
+	{
+		this.registry = new TestStripRegistry( false, 0 );
+	}
 
 	/**
 	 * Case: Create a strip (save), set profile, enable and disable
@@ -21,19 +32,16 @@ public class Apa102MetaTest extends AbstractLedHandlingTest
 	{
 		/* create a strip */
 		final LEDStrip strip = getStrip( false );
+		strip.setId( 1L );
 		/* event would create meta */
-		final Apa102Meta testMeta = new Apa102Meta( strip, true, 0 );
-		checkMeta( testMeta, 0, 0, 0, 0, null, false );
-		checkControl( testMeta, 0, 0, 0, 0.0d );
-
-		/* try to update and check again (should not change) */
-		testMeta.update( strip.isEnabled( ), strip.getProfile( ) );
+		this.registry.handleSave( new StripEvent( this, EventType.SAVE, strip, null ) );
+		final Apa102Meta testMeta = this.registry.getMap( ).get( 1L );
 		checkMeta( testMeta, 0, 0, 0, 0, null, false );
 		checkControl( testMeta, 0, 0, 0, 0.0d );
 
 		/* set a profile */
 		strip.setProfile( getProfile( 100, 100, 100, 100, 1L ) );
-		testMeta.update( strip.isEnabled( ), strip.getProfile( ) );
+		this.registry.handleSave( new StripEvent( this, EventType.SAVE, strip, 1L ) );
 
 		/* metadata should be equal to strip, control shouldn't have changed */
 		checkMeta( testMeta, 100, 100, 100, 100, 1L, false );
@@ -41,14 +49,7 @@ public class Apa102MetaTest extends AbstractLedHandlingTest
 
 		/* enable the strip */
 		strip.setEnabled( true );
-		testMeta.update( strip.isEnabled( ), strip.getProfile( ) );
-
-		/* metadata and control should be equal to strip */
-		checkMeta( testMeta, 100, 100, 100, 100, 1L, true );
-		checkControl( testMeta, 100, 100, 100, 100.0d );
-
-		/* try to update and check again (should not change) */
-		testMeta.update( strip.isEnabled( ), strip.getProfile( ) );
+		this.registry.handleSave( new StripEvent( this, EventType.SAVE, strip, 1L ) );
 
 		/* metadata and control should be equal to strip */
 		checkMeta( testMeta, 100, 100, 100, 100, 1L, true );
@@ -56,7 +57,7 @@ public class Apa102MetaTest extends AbstractLedHandlingTest
 
 		/* disable the strip again */
 		strip.setEnabled( false );
-		testMeta.update( strip.isEnabled( ), strip.getProfile( ) );
+		this.registry.handleSave( new StripEvent( this, EventType.SAVE, strip, 1L ) );
 
 		/* metadata and control should be equal to strip */
 		checkMeta( testMeta, 100, 100, 100, 100, 1L, false );
@@ -73,14 +74,16 @@ public class Apa102MetaTest extends AbstractLedHandlingTest
 	{
 		/* create a strip */
 		final LEDStrip strip = getStrip( false );
+		strip.setId( 1L );
 		/* event would create meta */
-		final Apa102Meta testMeta = new Apa102Meta( strip, true, 0 );
+		this.registry.handleSave( new StripEvent( this, EventType.SAVE, strip, null ) );
+		final Apa102Meta testMeta = this.registry.getMap( ).get( 1L );
 		checkMeta( testMeta, 0, 0, 0, 0, null, false );
 		checkControl( testMeta, 0, 0, 0, 0.0d );
 
 		/* set a profile */
 		strip.setProfile( getProfile( 100, 100, 100, 100, 1L ) );
-		testMeta.update( strip.isEnabled( ), strip.getProfile( ) );
+		this.registry.handleSave( new StripEvent( this, EventType.SAVE, strip, 1L ) );
 
 		/* metadata should be equal to strip, control shouldn't have changed */
 		checkMeta( testMeta, 100, 100, 100, 100, 1L, false );
@@ -88,7 +91,7 @@ public class Apa102MetaTest extends AbstractLedHandlingTest
 
 		/* set another profile */
 		strip.setProfile( getProfile( 50, 50, 50, 50, 2L ) );
-		testMeta.update( strip.isEnabled( ), strip.getProfile( ) );
+		this.registry.handleSave( new StripEvent( this, EventType.SAVE, strip, 1L ) );
 
 		/* metadata should be equal to new profile, control shouldn't have changed */
 		checkMeta( testMeta, 50, 50, 50, 50, 2L, false );
@@ -106,19 +109,22 @@ public class Apa102MetaTest extends AbstractLedHandlingTest
 	{
 		/* create a strip */
 		final LEDStrip strip = getStrip( false );
+		strip.setId( 1L );
 		/* event would create meta */
-		final Apa102Meta testMeta = new Apa102Meta( strip, true, 0 );
+		this.registry.handleSave( new StripEvent( this, EventType.SAVE, strip, null ) );
+		final Apa102Meta testMeta = this.registry.getMap( ).get( 1L );
 		checkMeta( testMeta, 0, 0, 0, 0, null, false );
 		checkControl( testMeta, 0, 0, 0, 0.0d );
 
 		/* set a profile */
 		strip.setProfile( getProfile( 100, 100, 100, 100, 1L ) );
-		testMeta.update( strip.isEnabled( ), strip.getProfile( ) );
+		this.registry.handleSave( new StripEvent( this, EventType.SAVE, strip, 1L ) );
 
 		/* change the profile and update it */
 		final ColorProfile profile = strip.getProfile( );
 		profile.setRed( 20 );
 		testMeta.update( null, profile );
+		this.registry.handleSaveProfile( new ProfileEvent( this, EventType.SAVE, profile, 1L ) );
 
 		/* metadata should be equal to new profile, control shouldn't have changed */
 		checkMeta( testMeta, 20, 100, 100, 100, 1L, false );
@@ -136,20 +142,22 @@ public class Apa102MetaTest extends AbstractLedHandlingTest
 	{
 		/* create a strip */
 		final LEDStrip strip = getStrip( false );
+		strip.setId( 1L );
 		/* event would create meta */
-		final Apa102Meta testMeta = new Apa102Meta( strip, true, 0 );
+		this.registry.handleSave( new StripEvent( this, EventType.SAVE, strip, null ) );
+		final Apa102Meta testMeta = this.registry.getMap( ).get( 1L );
 		checkMeta( testMeta, 0, 0, 0, 0, null, false );
 		checkControl( testMeta, 0, 0, 0, 0.0d );
 
 		/* set a profile */
 		strip.setProfile( getProfile( 100, 100, 100, 100, 1L ) );
 		strip.setEnabled( true );
-		testMeta.update( strip.isEnabled( ), strip.getProfile( ) );
+		this.registry.handleSave( new StripEvent( this, EventType.SAVE, strip, 1L ) );
 
 		/* change the profile and update it */
 		final ColorProfile profile = strip.getProfile( );
 		profile.setRed( 20 );
-		testMeta.update( null, profile );
+		this.registry.handleSaveProfile( new ProfileEvent( this, EventType.SAVE, profile, 1L ) );
 
 		/* metadata and control should be equal to new profile */
 		checkMeta( testMeta, 20, 100, 100, 100, 1L, true );
@@ -157,11 +165,73 @@ public class Apa102MetaTest extends AbstractLedHandlingTest
 
 		/* update brightness */
 		profile.setBrightness( 0 );
-		testMeta.update( null, profile );
+		this.registry.handleSaveProfile( new ProfileEvent( this, EventType.SAVE, profile, 1L ) );
 
 		/* metadata and control should be equal to new profile */
 		checkMeta( testMeta, 20, 100, 100, 0, 1L, true );
 		checkControl( testMeta, 20, 100, 100, 0.0d );
+	}
+
+	/**
+	 * Case: Create a strip (save), set a profile and delete strip (while strip is
+	 * enabled)
+	 * 
+	 * @throws IOException
+	 */
+	@Test
+	public void testCreateStripProfileAndDeleteStrip_Enabled( ) throws IOException
+	{
+		final long stripId = 1L;
+		final long profileId = 2L;
+		/* create a strip */
+		final LEDStrip strip = getStrip( false );
+		strip.setId( stripId );
+		/* event would create meta */
+		this.registry.handleSave( new StripEvent( this, EventType.SAVE, strip, null ) );
+		final Apa102Meta testMeta = this.registry.getMap( ).get( stripId );
+		checkMeta( testMeta, 0, 0, 0, 0, null, false );
+		checkControl( testMeta, 0, 0, 0, 0.0d );
+
+		/* set a profile */
+		strip.setProfile( getProfile( 100, 100, 100, 100, profileId ) );
+		strip.setEnabled( true );
+		this.registry.handleSave( new StripEvent( this, EventType.SAVE, strip, stripId ) );
+
+		/* delete the strip */
+		this.registry.handleDelete( new StripEvent( this, EventType.DELETE, null, stripId ) );
+		final Apa102Meta shouldBeNullMeta = this.registry.getMap( ).get( stripId );
+		assertNull( shouldBeNullMeta );
+	}
+
+	/**
+	 * Case: Create a strip (save), set a profile and delete strip (while strip is
+	 * disabled)
+	 * 
+	 * @throws IOException
+	 */
+	@Test
+	public void testCreateStripProfileAndDeleteStrip_Disabled( ) throws IOException
+	{
+		final long stripId = 1L;
+		final long profileId = 2L;
+		/* create a strip */
+		final LEDStrip strip = getStrip( false );
+		strip.setId( stripId );
+		/* event would create meta */
+		this.registry.handleSave( new StripEvent( this, EventType.SAVE, strip, null ) );
+		final Apa102Meta testMeta = this.registry.getMap( ).get( stripId );
+		checkMeta( testMeta, 0, 0, 0, 0, null, false );
+		checkControl( testMeta, 0, 0, 0, 0.0d );
+
+		/* set a profile */
+		strip.setProfile( getProfile( 100, 100, 100, 100, profileId ) );
+		strip.setEnabled( false );
+		this.registry.handleSave( new StripEvent( this, EventType.SAVE, strip, stripId ) );
+
+		/* delete the strip */
+		this.registry.handleDelete( new StripEvent( this, EventType.DELETE, null, stripId ) );
+		final Apa102Meta shouldBeNullMeta = this.registry.getMap( ).get( stripId );
+		assertNull( shouldBeNullMeta );
 	}
 
 	/**
@@ -179,17 +249,20 @@ public class Apa102MetaTest extends AbstractLedHandlingTest
 		final LEDStrip strip = getStrip( false );
 		strip.setId( stripId );
 		/* event would create meta */
-		final Apa102Meta testMeta = new Apa102Meta( strip, true, 0 );
+		this.registry.handleSave( new StripEvent( this, EventType.SAVE, strip, null ) );
+		final Apa102Meta testMeta = this.registry.getMap( ).get( stripId );
 		checkMeta( testMeta, 0, 0, 0, 0, null, false );
 		checkControl( testMeta, 0, 0, 0, 0.0d );
 
 		/* set a profile */
 		strip.setProfile( getProfile( 100, 100, 100, 100, profileId ) );
 		strip.setEnabled( true );
-		testMeta.update( strip.isEnabled( ), strip.getProfile( ) );
+		this.registry.handleSave( new StripEvent( this, EventType.SAVE, strip, stripId ) );
 
 		/* delete the profile */
-		testMeta.update( null, (ColorProfile) null );
+		this.registry.handleDeleteProfile( new ProfileEvent( this, EventType.DELETE, null, profileId ) );
+		final Apa102Meta shouldBeNullMeta = this.registry.getMap( ).get( stripId );
+		assertNotNull( shouldBeNullMeta );
 		checkMeta( testMeta, 0, 0, 0, 0, null, true );
 		checkControl( testMeta, 0, 0, 0, 0.0d );
 	}
@@ -209,81 +282,87 @@ public class Apa102MetaTest extends AbstractLedHandlingTest
 		final LEDStrip strip = getStrip( false );
 		strip.setId( stripId );
 		/* event would create meta */
-		final Apa102Meta testMeta = new Apa102Meta( strip, true, 0 );
+		this.registry.handleSave( new StripEvent( this, EventType.SAVE, strip, null ) );
+		final Apa102Meta testMeta = this.registry.getMap( ).get( stripId );
 		checkMeta( testMeta, 0, 0, 0, 0, null, false );
 		checkControl( testMeta, 0, 0, 0, 0.0d );
 
 		/* set a profile */
 		strip.setProfile( getProfile( 100, 100, 100, 100, profileId ) );
 		strip.setEnabled( false );
-		testMeta.update( strip.isEnabled( ), strip.getProfile( ) );
+		this.registry.handleSave( new StripEvent( this, EventType.SAVE, strip, stripId ) );
 
 		/* delete the profile */
-		testMeta.update( null, (ColorProfile) null );
+		this.registry.handleDeleteProfile( new ProfileEvent( this, EventType.DELETE, null, profileId ) );
+		final Apa102Meta shouldBeNullMeta = this.registry.getMap( ).get( stripId );
+		assertNotNull( shouldBeNullMeta );
 		checkMeta( testMeta, 0, 0, 0, 0, null, false );
 		checkControl( testMeta, 0, 0, 0, 0.0d );
 	}
 
-	/**
-	 * Case: Create a strip (save), set a profile which has no color and delete
-	 * profile (while strip is
-	 * enabled)
-	 * 
-	 * @throws IOException
-	 */
-	@Test
-	public void testCreateStripProfileNoColorAndDeleteProfile_Enabled( ) throws IOException
+	public static class TestStripRegistry extends StripRegistry
 	{
-		final long stripId = 1L;
-		final long profileId = 2L;
-		/* create a strip */
-		final LEDStrip strip = getStrip( false );
-		strip.setId( stripId );
-		/* event would create meta */
-		final Apa102Meta testMeta = new Apa102Meta( strip, true, 0 );
-		checkMeta( testMeta, 0, 0, 0, 0, null, false );
-		checkControl( testMeta, 0, 0, 0, 0.0d );
+		public TestStripRegistry( final boolean stripsEnabled, final int effectTime )
+		{
+			super( stripsEnabled, effectTime );
+		}
 
-		/* set a profile */
-		strip.setProfile( getProfile( 0, 0, 0, 100, profileId ) );
-		strip.setEnabled( true );
-		testMeta.update( strip.isEnabled( ), strip.getProfile( ) );
-
-		/* delete the profile */
-		testMeta.update( null, (ColorProfile) null );
-		checkMeta( testMeta, 0, 0, 0, 0, null, true );
-		checkControl( testMeta, 0, 0, 0, 0.0d );
+		public Map<Long, Apa102Meta> getMap( )
+		{
+			return this.map;
+		}
 	}
 
-	/**
-	 * Case: Create a strip (save), set a profile which has no brightness and delete
-	 * profile (while strip is
-	 * disabled)
-	 * 
-	 * @throws IOException
-	 */
-	@Test
-	public void testCreateStripProfileNoBrightnessAndDeleteProfile_Disabled( ) throws IOException
+	public static class Event<T> implements IEvent<T>
 	{
-		final long stripId = 1L;
-		final long profileId = 2L;
-		/* create a strip */
-		final LEDStrip strip = getStrip( false );
-		strip.setId( stripId );
-		/* event would create meta */
-		final Apa102Meta testMeta = new Apa102Meta( strip, true, 0 );
-		checkMeta( testMeta, 0, 0, 0, 0, null, false );
-		checkControl( testMeta, 0, 0, 0, 0.0d );
+		private final EventType type;
+		private final Long id;
+		private final T state;
 
-		/* set a profile */
-		strip.setProfile( getProfile( 100, 100, 100, 0, profileId ) );
-		strip.setEnabled( false );
-		testMeta.update( strip.isEnabled( ), strip.getProfile( ) );
+		public Event( final EventType type, final Long id, final T state )
+		{
+			this.type = type;
+			this.id = id;
+			this.state = state;
+		}
 
-		/* delete the profile */
-		testMeta.update( null, (ColorProfile) null );
-		checkMeta( testMeta, 0, 0, 0, 0, null, false );
-		checkControl( testMeta, 0, 0, 0, 0.0d );
+		@Override
+		public EventType getType( )
+		{
+			return this.type;
+		}
+
+		@Override
+		public Long getId( )
+		{
+			return this.id;
+		}
+
+		@Override
+		public T getState( )
+		{
+			return this.state;
+		}
+
 	}
 
+	public static class StripEvent extends Event<LEDStrip>
+	{
+
+		public StripEvent( final Object source, final EventType type, final LEDStrip state, final Long id )
+		{
+			super( type, id, state );
+		}
+
+	}
+
+	public static class ProfileEvent extends Event<ColorProfile>
+	{
+
+		public ProfileEvent( final Object source, final EventType type, final ColorProfile state, final Long id )
+		{
+			super( type, id, state );
+		}
+
+	}
 }
