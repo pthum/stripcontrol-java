@@ -38,7 +38,7 @@ import { mapMutations, mapGetters } from 'vuex'
 
 export default {
   name: 'color-form',
-  props: [ 'formProfileName' ],
+  props: ['formProfileName'],
   computed: {
     red () {
       return this.findColorProfile(this.formProfileName).red

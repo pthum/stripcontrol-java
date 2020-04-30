@@ -17,7 +17,7 @@ import { EventType } from './constant-contig'
 
 export default {
   name: 'colorprofile-select',
-  props: [ 'selectProfileName', 'selectId', 'preselected' ],
+  props: ['selectProfileName', 'selectId', 'preselected'],
   created () {
     this.id = this.preselected
   },

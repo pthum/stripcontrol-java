@@ -70,7 +70,7 @@ import { mapGetters } from 'vuex'
 
 export default {
   name: 'strip-form',
-  props: [ 'formStripName' ],
+  props: ['formStripName'],
   computed: {
     name: {
       get () {

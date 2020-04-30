@@ -16,7 +16,7 @@ import { EventType } from './constant-contig'
 
 export default {
   name: 'ledstrip-select',
-  props: [ 'selectStripName', 'preselected' ],
+  props: ['selectStripName', 'preselected'],
   created () {
     this.id = this.preselected
   },
