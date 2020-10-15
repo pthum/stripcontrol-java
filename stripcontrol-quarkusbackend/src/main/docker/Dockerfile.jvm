@@ -22,9 +22,9 @@
 #
 ###
 ### base image
-FROM  adoptopenjdk:11-jdk-hotspot as builder
+FROM adoptopenjdk:11-jdk-hotspot as builder
 
-ARG RUN_JAVA_VERSION=1.3.5
+ARG RUN_JAVA_VERSION=1.3.8
 
 RUN apt-get update && apt-get install -y \
     git-core \
@@ -45,7 +45,6 @@ ADD ./stripcontrol/ /stripcontrol
 RUN set -eux; \
     chown -R 0.0 /stripcontrol; \
     chmod 0666 /stripcontrol/*.jar; \
-    chmod 0777 /stripcontrol/*.sh; \
     curl https://repo1.maven.org/maven2/io/fabric8/run-java-sh/${RUN_JAVA_VERSION}/run-java-sh-${RUN_JAVA_VERSION}-sh.sh -o /stripcontrol/run-java.sh; \
     chmod 540 /stripcontrol/run-java.sh;
 
