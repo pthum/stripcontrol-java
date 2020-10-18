@@ -29,7 +29,8 @@ public class QuarkusBackendConfiguration
 	@Produces
 	public StripRegistry stripRegistry( )
 	{
-		LOG.info( "Creating StripRegistry with stripsEnabled: {} and effectTime: {} ms" );
+		LOG.info( "Creating StripRegistry with stripsEnabled: {} and effectTime: {} ms", this.stripsEnabled,
+				this.effectTime );
 		return new StripRegistry( this.stripsEnabled, this.effectTime );
 	}
 
