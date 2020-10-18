@@ -1,0 +1,29 @@
+strips:
+  enabled: false
+  effecttime: 20
+
+debug: false
+
+quarkus:
+  http:
+    port: 8082
+  log:
+    category:
+      "de.backenddev":
+        level: DEBUG
+
+# Configures the AMQP broker credentials.
+amqp-username: quarkus
+amqp-password: quarkus
+
+
+mp:
+  messaging:
+    incoming:
+      ledstrip:
+        connector: smallrye-amqp
+        address: ledstrip
+      profile:
+        connector: smallrye-amqp
+        address: profile
+

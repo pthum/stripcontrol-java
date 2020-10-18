@@ -65,4 +65,11 @@ public abstract class Event<T> implements IEvent<T>
 		return gson.toJson( this );
 	}
 
+	public static <Z> Z fromJson( final String json, final Class<Z> clazz )
+	{
+		final Gson gson = new Gson( );
+		return gson.fromJson( json, clazz );
+
+	}
+
 }

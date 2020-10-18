@@ -1,11 +1,12 @@
 package de.backenddev.led.stripcontrol.quarkusbackend.ledhandling;
 
 import de.backenddev.led.stripcontrol.ledhandling.EventType;
-import de.backenddev.led.stripcontrol.model.ColorProfile;
+import de.backenddev.led.stripcontrol.model.LEDStrip;
 
-public class ProfileEvent extends Event<ColorProfile>
+public class StripEvent extends Event<LEDStrip>
 {
-	private static final long serialVersionUID = -6436182964039671435L;
+
+	private static final long serialVersionUID = -2371775511199519174L;
 
 	/**
 	 * 
@@ -13,16 +14,15 @@ public class ProfileEvent extends Event<ColorProfile>
 	 *            the source, must not be <code>null</code>
 	 * @param type
 	 *            the {@link EventType}
-	 * @param profile
+	 * @param strip
 	 *            may be <code>null</code> for a {@link EventType#DELETE} event or
 	 *            the object AFTER save
-	 * @param profileId
+	 * @param stripId
 	 *            may be <code>null</code> for a {@link EventType#SAVE} with a new
 	 *            object, otherwise contain the id
 	 */
-	public ProfileEvent( final Object source, final EventType type, final ColorProfile profile, final Long profileId )
+	public StripEvent( final Object source, final EventType type, final LEDStrip strip, final Long stripId )
 	{
-		super( source, type, profile, profileId );
+		super( source, type, strip, stripId );
 	}
-
 }

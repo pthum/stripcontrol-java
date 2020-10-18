@@ -9,10 +9,10 @@ import org.springframework.stereotype.Service;
 
 import de.backenddev.led.stripcontrol.ledhandling.EventType;
 import de.backenddev.led.stripcontrol.model.ColorProfile;
+import de.backenddev.led.stripcontrol.quarkusbackend.aqmp.LEDSender;
 import de.backenddev.led.stripcontrol.quarkusbackend.ledhandling.ProfileEvent;
 import de.backenddev.led.stripcontrol.quarkusbackend.ledhandling.StripEvent;
 import de.backenddev.led.stripcontrol.quarkusbackend.repository.ColorProfileRepository;
-import io.vertx.core.eventbus.EventBus;
 
 @Service
 public class ColorProfileServiceImpl implements ModelService<ColorProfile>
@@ -21,7 +21,7 @@ public class ColorProfileServiceImpl implements ModelService<ColorProfile>
 	ColorProfileRepository repo;
 
 	@Inject
-	EventBus eventPublisher;
+	LEDSender ledSender;
 
 	@Override
 	public ColorProfile save( final ColorProfile profile )
@@ -31,7 +31,7 @@ public class ColorProfileServiceImpl implements ModelService<ColorProfile>
 		/* due to efficiency: only send updates */
 		if ( idBeforeSave != null )
 		{
-			this.eventPublisher.send( "ProfileEvent", new ProfileEvent( this, EventType.SAVE, result, idBeforeSave ) );
+			this.ledSender.send( new ProfileEvent( this, EventType.SAVE, result, idBeforeSave ) );
 		}
 		return result;
 	}
@@ -40,7 +40,7 @@ public class ColorProfileServiceImpl implements ModelService<ColorProfile>
 	public void remove( final long id )
 	{
 		this.repo.deleteById( id );
-		this.eventPublisher.send( "StripEvent", new StripEvent( this, EventType.DELETE, null, id ) );
+		this.ledSender.send( new StripEvent( this, EventType.DELETE, null, id ) );
 	}
 
 	@Override

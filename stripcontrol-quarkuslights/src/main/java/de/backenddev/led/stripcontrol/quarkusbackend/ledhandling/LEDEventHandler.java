@@ -2,12 +2,12 @@ package de.backenddev.led.stripcontrol.quarkusbackend.ledhandling;
 
 import javax.enterprise.context.ApplicationScoped;
 
+import org.eclipse.microprofile.reactive.messaging.Incoming;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import de.backenddev.led.stripcontrol.ledhandling.StripRegistry;
-import io.quarkus.vertx.ConsumeEvent;
 
 /**
  * This class is intended to have an overview over the registered strips and
@@ -28,9 +28,11 @@ public class LEDEventHandler
 	{
 	}
 
-	@ConsumeEvent ( value = "StripEvent" )
-	public void handleStripEvent( final StripEvent event )
+	@Incoming ( "ledstrip" )
+	public void handleStripEvent( final String eventString )
 	{
+		LOG.info( "Got stripevent {}", eventString );
+		final StripEvent event = Event.fromJson( eventString, StripEvent.class );
 		if ( event != null )
 		{
 			LOG.debug( event.toString( ) );
@@ -48,9 +50,11 @@ public class LEDEventHandler
 		}
 	}
 
-	@ConsumeEvent ( value = "ProfileEvent" )
-	public void handleProfileEvent( final ProfileEvent event )
+	@Incoming ( "profile" )
+	public void handleProfileEvent( final String eventString )
 	{
+		LOG.info( "Got profileevents" );
+		final ProfileEvent event = Event.fromJson( eventString, ProfileEvent.class );
 		if ( event != null )
 		{
 			LOG.debug( event.toString( ) );
