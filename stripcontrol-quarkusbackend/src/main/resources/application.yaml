@@ -1,0 +1,55 @@
+strips:
+  enabled: false
+  effecttime: 20
+#  predefinedStrips: 
+#    - '{ "name": "flur","description": "", "misoPin": 13, "sclkPin": 6,"numLeds": 30,"speedHz": 8000000,"enabled": false,"hasProfile": true}'
+#    - '{"name": "schlaf","description": "","misoPin": 20,"sclkPin": 16,"numLeds": 30,"speedHz": 8000000,"enabled": false,"hasProfile": true}'
+#    - '{"name": "wohn","description": "","misoPin": 26,"sclkPin": 19,"numLeds": 30,"speedHz": 8000000,"enabled": false,"hasProfile": true}'
+#    - '{"name": "kueche","description": "","misoPin": 10,"sclkPin": 11,"numLeds": 30,"speedHz": 8000000,"enabled": false,"hasProfile": true}'
+#  predefinedProfiles: 
+#    - '{"red": 66,"green": 13,"blue": 0,"brightness": 43}'
+#    - '{"red": 255,"green": 136,"blue": 0,"brightness": 100}'
+#    - '{"red": 255,"green": 134,"blue": 5,"brightness": 72}'
+
+debug: false
+
+quarkus:
+  log:
+    category:
+      "de.backenddev":
+        level: DEBUG
+  hibernate-orm:
+    #ensure same naming as in spring application
+    physical-naming-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+    implicit-naming-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
+    database:
+      generation: update
+  datasource:
+    username: sa
+    password: password
+    db-kind: postgresql
+    jdbc:
+      url: jdbc:postgresql://localhost:5432/stripcontrol
+      min-size: 4
+      max-size: 16
+    
+
+"%dev":
+  quarkus:
+    hibernate-orm:
+      database:
+        generation: create-drop
+    datasource:
+      db-kind: h2
+      jdbc:
+        url: jdbc:h2:mem:testdb
+
+"%test":
+  quarkus:
+    hibernate-orm:
+      database:
+        generation: create-drop
+    datasource:
+      db-kind: h2
+      jdbc:
+        url: jdbc:h2:mem:testdb
