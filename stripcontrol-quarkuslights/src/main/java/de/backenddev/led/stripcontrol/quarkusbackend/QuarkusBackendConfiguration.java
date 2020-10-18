@@ -4,6 +4,8 @@ import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Produces;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import de.backenddev.led.stripcontrol.ledhandling.StripRegistry;
 
@@ -16,6 +18,7 @@ import de.backenddev.led.stripcontrol.ledhandling.StripRegistry;
 @Dependent
 public class QuarkusBackendConfiguration
 {
+	private static final Logger LOG = LoggerFactory.getLogger( QuarkusBackendConfiguration.class );
 
 	@ConfigProperty ( name = "strips.enabled" )
 	boolean stripsEnabled;
@@ -26,6 +29,7 @@ public class QuarkusBackendConfiguration
 	@Produces
 	public StripRegistry stripRegistry( )
 	{
+		LOG.info( "Creating StripRegistry with stripsEnabled: {} and effectTime: {} ms" );
 		return new StripRegistry( this.stripsEnabled, this.effectTime );
 	}
 

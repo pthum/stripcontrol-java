@@ -5,11 +5,9 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.enterprise.context.Dependent;
-import javax.enterprise.inject.Produces;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
-import de.backenddev.led.stripcontrol.ledhandling.StripRegistry;
 import de.backenddev.led.stripcontrol.model.ColorProfile;
 import de.backenddev.led.stripcontrol.model.LEDStrip;
 
@@ -22,23 +20,10 @@ import de.backenddev.led.stripcontrol.model.LEDStrip;
 @Dependent
 public class QuarkusBackendConfiguration
 {
-
-	@ConfigProperty ( name = "strips.enabled" )
-	boolean stripsEnabled;
-
-	@ConfigProperty ( name = "strips.effecttime" )
-	int effectTime;
-
 	@ConfigProperty ( name = "strips.predefinedStrips" )
 	Optional<List<LEDStrip>> predefinedStrips;
 	@ConfigProperty ( name = "strips.predefinedProfiles" )
 	Optional<List<ColorProfile>> predefinedProfiles;
-
-	@Produces
-	public StripRegistry stripRegistry( )
-	{
-		return new StripRegistry( this.stripsEnabled, this.effectTime );
-	}
 
 	/**
 	 * @return the predefinedStrips
