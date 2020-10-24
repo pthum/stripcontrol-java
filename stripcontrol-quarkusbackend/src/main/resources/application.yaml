@@ -56,20 +56,20 @@ quarkus:
       db-kind: h2
       jdbc:
         url: jdbc:h2:mem:testdb
-        
-        
-# Configures the AMQP broker credentials.
-amqp-username: quarkus
-amqp-password: quarkus
-
 
 mp:
   messaging:
     outgoing:
       ledstrip:
-        connector: smallrye-amqp
-        address: ledstrip
+        type: smallrye-mqtt
+        topic: ledstrip
+        host: host.docker.internal
+        port: 1883
+        auto-generated-client-id: true
       profile:
-        connector: smallrye-amqp
-        address: profile
+        type: smallrye-mqtt
+        topic: profile
+        host: host.docker.internal
+        port: 1883
+        auto-generated-client-id: true
 

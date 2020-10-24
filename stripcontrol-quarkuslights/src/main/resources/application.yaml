@@ -12,18 +12,19 @@ quarkus:
       "de.backenddev":
         level: DEBUG
 
-# Configures the AMQP broker credentials.
-amqp-username: quarkus
-amqp-password: quarkus
-
-
 mp:
   messaging:
     incoming:
       ledstrip:
-        connector: smallrye-amqp
-        address: ledstrip
+        type: smallrye-mqtt
+        topic: ledstrip
+        host: host.docker.internal
+        port: 1883
+        auto-generated-client-id: true
       profile:
-        connector: smallrye-amqp
-        address: profile
+        type: smallrye-mqtt
+        topic: profile
+        host: host.docker.internal
+        port: 1883
+        auto-generated-client-id: true
 
