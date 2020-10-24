@@ -29,10 +29,10 @@ public class LEDEventHandler
 	}
 
 	@Incoming ( "ledstrip" )
-	public void handleStripEvent( final String eventString )
+	public void handleStripEvent( final byte[] eventString )
 	{
-		LOG.info( "Got stripevent {}", eventString );
 		final StripEvent event = Event.fromJson( eventString, StripEvent.class );
+		LOG.info( "Got stripevent {}", event );
 		if ( event != null )
 		{
 			LOG.debug( event.toString( ) );
@@ -51,7 +51,7 @@ public class LEDEventHandler
 	}
 
 	@Incoming ( "profile" )
-	public void handleProfileEvent( final String eventString )
+	public void handleProfileEvent( final byte[] eventString )
 	{
 		LOG.info( "Got profileevents" );
 		final ProfileEvent event = Event.fromJson( eventString, ProfileEvent.class );
