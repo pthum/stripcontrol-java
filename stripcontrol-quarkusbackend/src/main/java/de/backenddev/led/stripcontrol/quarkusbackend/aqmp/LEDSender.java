@@ -12,21 +12,20 @@ import de.backenddev.led.stripcontrol.quarkusbackend.ledhandling.StripEvent;
 @ApplicationScoped
 public class LEDSender
 {
-
 	@Inject
 	@Channel ( "profile" )
-	Emitter<ProfileEvent> emitter;
+	Emitter<String> emitter;
 	@Inject
 	@Channel ( "ledstrip" )
-	Emitter<StripEvent> stripEmitter;
+	Emitter<String> stripEmitter;
 
 	public void send( final ProfileEvent event )
 	{
-		this.emitter.send( event );
+		this.emitter.send( event.toString( ) );
 	}
 
 	public void send( final StripEvent event )
 	{
-		this.stripEmitter.send( event );
+		this.stripEmitter.send( event.toString( ) );
 	}
 }
