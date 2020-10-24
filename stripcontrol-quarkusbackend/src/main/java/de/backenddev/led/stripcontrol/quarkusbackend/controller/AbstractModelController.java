@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import de.backenddev.led.stripcontrol.model.AbstractModel;
+import de.backenddev.led.stripcontrol.quarkusbackend.TimerUtil;
 import de.backenddev.led.stripcontrol.quarkusbackend.service.ModelService;
 
 public abstract class AbstractModelController<T extends AbstractModel>
@@ -55,15 +56,18 @@ public abstract class AbstractModelController<T extends AbstractModel>
 	@PutMapping ( "/{id}" )
 	public ResponseEntity<Object> update( @PathVariable final Long id, @Valid @RequestBody final T updateObject )
 	{
+		final TimerUtil timer = new TimerUtil( "REST-UpdateObject" );
 		final Optional<T> optDbObject = getModelService( ).getById( id );
 		if ( optDbObject.isPresent( ) == false )
 		{
 			return ResponseEntity.notFound( ).build( );
 		}
+		timer.logAndUpdate( "Get DB Object" );
 		final T dbObject = optDbObject.get( );
 		updateObject.setId( dbObject.getId( ) );
 		prepareUpdateObjectBeforeSave( updateObject, dbObject );
 		getModelService( ).save( updateObject );
+		timer.logAndUpdate( "Update DB Object" );
 		return ResponseEntity.ok( ).build( );
 	}
 
