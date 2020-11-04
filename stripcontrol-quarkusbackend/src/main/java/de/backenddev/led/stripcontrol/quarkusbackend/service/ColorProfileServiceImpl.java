@@ -2,10 +2,8 @@ package de.backenddev.led.stripcontrol.quarkusbackend.service;
 
 import java.util.Optional;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import de.backenddev.led.stripcontrol.ledhandling.EventType;
 import de.backenddev.led.stripcontrol.model.ColorProfile;
@@ -14,10 +12,10 @@ import de.backenddev.led.stripcontrol.quarkusbackend.ledhandling.ProfileEvent;
 import de.backenddev.led.stripcontrol.quarkusbackend.ledhandling.StripEvent;
 import de.backenddev.led.stripcontrol.quarkusbackend.repository.ColorProfileRepository;
 
-@Service
+@ApplicationScoped
 public class ColorProfileServiceImpl implements ModelService<ColorProfile>
 {
-	@Autowired
+	@Inject
 	ColorProfileRepository repo;
 
 	@Inject

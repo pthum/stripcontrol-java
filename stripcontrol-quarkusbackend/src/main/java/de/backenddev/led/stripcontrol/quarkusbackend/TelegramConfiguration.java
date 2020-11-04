@@ -4,11 +4,11 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import javax.inject.Inject;
+
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.request.GetUpdates;
@@ -16,21 +16,20 @@ import com.pengrad.telegrambot.request.GetUpdates;
 import de.backenddev.led.stripcontrol.quarkusbackend.service.LEDStripServiceImpl;
 import de.backenddev.led.stripcontrol.quarkusbackend.telegram.BotUpdateListener;
 
-//@ConditionalOnProperty ( name = "strips.telegram.botkey" )
-//@Configuration
+// Not Implemented ATM
 public class TelegramConfiguration
 {
 	private static final Logger LOG = LoggerFactory.getLogger( TelegramConfiguration.class );
-	@Value ( "${strips.telegram.botkey:}" )
+
+	@ConfigProperty ( name = "strips.telegram.botkey" )
 	private String botkey;
 
-	@Value ( "${strips.telegram.allowedUserIds:}" )
+	@ConfigProperty ( name = "strips.telegram.allowedUserIds" )
 	private String allowedUserIds;
 
-	@Autowired
+	@Inject
 	private LEDStripServiceImpl ledService;
 
-	@Bean
 	public TelegramBot telegramBot( )
 	{
 		LOG.info( "botkey: " + this.botkey );

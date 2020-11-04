@@ -2,11 +2,11 @@ package de.backenddev.led.stripcontrol.quarkusbackend;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import de.backenddev.led.stripcontrol.ledhandling.EventType;
 import de.backenddev.led.stripcontrol.model.LEDStrip;
@@ -14,14 +14,14 @@ import de.backenddev.led.stripcontrol.quarkusbackend.aqmp.LEDSender;
 import de.backenddev.led.stripcontrol.quarkusbackend.ledhandling.StripEvent;
 import de.backenddev.led.stripcontrol.quarkusbackend.repository.LEDStripRepository;
 
-@Component
+@ApplicationScoped
 public class ApplicationEventComponent
 {
 	private static final Logger LOG = LoggerFactory.getLogger( ApplicationEventComponent.class );
-	@Autowired
+	@Inject
 	LEDStripRepository repo;
 
-	@Autowired
+	@Inject
 	LEDSender registry;
 
 	// @Autowired ( required = false )
@@ -36,7 +36,7 @@ public class ApplicationEventComponent
 		/* initialize all strips on startup */
 		for ( final LEDStrip strip : allStrips )
 		{
-			LOG.info( "Setting up strip " + strip.getName( ) );
+			LOG.info( "Setting up strip {}", strip.getName( ) );
 			this.registry.send( new StripEvent( this, EventType.SAVE, strip, strip.getId( ) ) );
 		}
 	}
