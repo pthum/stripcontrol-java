@@ -3,8 +3,6 @@ package de.backenddev.led.stripcontrol.quarkusbackend;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.backenddev.led.stripcontrol.quarkusbackend.startup.StartupDBPreparator;
-
 /**
  * Timer utility to track time
  * 
@@ -13,7 +11,7 @@ import de.backenddev.led.stripcontrol.quarkusbackend.startup.StartupDBPreparator
  */
 public class TimerUtil
 {
-	private static final Logger LOG = LoggerFactory.getLogger( StartupDBPreparator.class );
+	private static final Logger LOG = LoggerFactory.getLogger( TimerUtil.class );
 	private static final double NS_TO_MS_FACTOR = 1000000.0d;
 	private long start;
 	private CharSequence name;
