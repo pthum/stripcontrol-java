@@ -15,7 +15,7 @@ debug: true
 
 quarkus:
   log:
-    level: DEBUG
+    level: INFO
     category:
       "de.backenddev":
         level: DEBUG
