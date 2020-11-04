@@ -1,10 +1,10 @@
 package de.backenddev.led.stripcontrol.quarkusbackend.ledhandling;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import de.backenddev.led.stripcontrol.ledhandling.StripRegistry;
 import io.quarkus.vertx.ConsumeEvent;
@@ -21,7 +21,7 @@ public class LEDEventHandler
 {
 	private static final Logger LOG = LoggerFactory.getLogger( LEDEventHandler.class );
 
-	@Autowired
+	@Inject
 	StripRegistry registry;
 
 	public LEDEventHandler( )
