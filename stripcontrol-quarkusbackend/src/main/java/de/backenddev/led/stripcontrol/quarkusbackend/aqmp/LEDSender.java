@@ -5,6 +5,8 @@ import javax.inject.Inject;
 
 import org.eclipse.microprofile.reactive.messaging.Channel;
 import org.eclipse.microprofile.reactive.messaging.Emitter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import de.backenddev.led.stripcontrol.quarkusbackend.ledhandling.ProfileEvent;
 import de.backenddev.led.stripcontrol.quarkusbackend.ledhandling.StripEvent;
@@ -12,6 +14,7 @@ import de.backenddev.led.stripcontrol.quarkusbackend.ledhandling.StripEvent;
 @ApplicationScoped
 public class LEDSender
 {
+	private static final Logger LOG = LoggerFactory.getLogger( LEDSender.class );
 	@Inject
 	@Channel ( "profile" )
 	Emitter<String> emitter;
@@ -21,11 +24,25 @@ public class LEDSender
 
 	public void send( final ProfileEvent event )
 	{
-		this.emitter.send( event.toString( ) );
+		try
+		{
+			this.emitter.send( event.toString( ) );
+		}
+		catch ( final Exception e )
+		{
+			LOG.error( "Failed to send ProfileEvent", e );
+		}
 	}
 
 	public void send( final StripEvent event )
 	{
-		this.stripEmitter.send( event.toString( ) );
+		try
+		{
+			this.stripEmitter.send( event.toString( ) );
+		}
+		catch ( final Exception e )
+		{
+			LOG.error( "Failed to send StripEvent", e );
+		}
 	}
 }
