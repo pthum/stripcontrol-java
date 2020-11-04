@@ -27,6 +27,7 @@ public class LEDSender
 		try
 		{
 			this.emitter.send( event.toString( ) );
+			LOG.debug( "Sending event {}", event );
 		}
 		catch ( final Exception e )
 		{
@@ -39,6 +40,7 @@ public class LEDSender
 		try
 		{
 			this.stripEmitter.send( event.toString( ) );
+			LOG.debug( "Sending event {}", event );
 		}
 		catch ( final Exception e )
 		{
