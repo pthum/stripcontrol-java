@@ -2,8 +2,9 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import { store } from './store/store'
-import { LayoutPlugin, NavbarPlugin, ButtonPlugin, ButtonGroupPlugin, ModalPlugin, FormPlugin, FormInputPlugin, TooltipPlugin } from 'bootstrap-vue'
+import { LayoutPlugin, ToastPlugin, NavbarPlugin, ButtonPlugin, ButtonGroupPlugin, ModalPlugin, FormPlugin, FormInputPlugin, TooltipPlugin } from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faSync } from '@fortawesome/free-solid-svg-icons/faSync'
 import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash'
@@ -20,6 +21,7 @@ Vue.config.productionTip = false
 
 // Bootstrap
 Vue.use(NavbarPlugin)
+Vue.use(ToastPlugin)
 Vue.use(LayoutPlugin)
 Vue.use(ButtonPlugin)
 Vue.use(ButtonGroupPlugin)
