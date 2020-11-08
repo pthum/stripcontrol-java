@@ -3,7 +3,7 @@
     <b-dropdown v-model="selected" class="selectpicker" variant="dark" :text="stringSelected">
       <b-dropdown-item v-if="storedBackendProfiles.length === 0" disabled>No profiles available</b-dropdown-item>
       <b-dropdown-item v-else v-for="profile in storedBackendProfiles" :key="profile.id" :value="profile" @click="handleSelection(profile)">
-        <div class="foo" :style="{backgroundColor: getHexColor(profile) }">&nbsp;</div><font-awesome-icon icon="sun"></font-awesome-icon>: {{profile.brightness}}
+        <div class="foo" :style="{backgroundColor: getHexColor(profile) }">&nbsp;</div>&#x2600;: {{profile.brightness}}
       </b-dropdown-item>
     </b-dropdown>
   </div>
@@ -28,7 +28,7 @@ export default {
   },
   computed: {
     selected () {
-      return this.storedBackendProfiles.find(profile => profile.id === this.id)
+      return this.getColorProfileById(this.id)
     },
     stringSelected () {
       if (typeof this.selected === 'undefined' || typeof this.selected.id === 'undefined') {
@@ -38,7 +38,8 @@ export default {
       return this.getHexColor(this.selected) + ', \u2600:' + brightness
     },
     ...mapGetters({
-      storedBackendProfiles: 'backendProfiles'
+      storedBackendProfiles: 'backendProfiles',
+      getColorProfileById: 'getColorProfileById'
     })
   },
   methods: {
