@@ -29,7 +29,7 @@ public class ColorProfileServiceImpl implements ModelService<ColorProfile>
 		/* due to efficiency: only send updates */
 		if ( idBeforeSave != null )
 		{
-			this.ledSender.send( new ProfileEvent( this, EventType.SAVE, result, idBeforeSave ) );
+			this.ledSender.send( new ProfileEvent( EventType.SAVE, result, idBeforeSave ) );
 		}
 		return result;
 	}
@@ -38,7 +38,7 @@ public class ColorProfileServiceImpl implements ModelService<ColorProfile>
 	public void remove( final long id )
 	{
 		this.repo.deleteById( id );
-		this.ledSender.send( new StripEvent( this, EventType.DELETE, null, id ) );
+		this.ledSender.send( new StripEvent( EventType.DELETE, null, id ) );
 	}
 
 	@Override

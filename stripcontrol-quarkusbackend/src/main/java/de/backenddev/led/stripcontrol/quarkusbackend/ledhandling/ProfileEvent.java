@@ -20,9 +20,9 @@ public class ProfileEvent extends Event<ColorProfile>
 	 *            may be <code>null</code> for a {@link EventType#SAVE} with a new
 	 *            object, otherwise contain the id
 	 */
-	public ProfileEvent( final Object source, final EventType type, final ColorProfile profile, final Long profileId )
+	public ProfileEvent( final EventType type, final ColorProfile profile, final Long profileId )
 	{
-		super( source, type, profile, profileId );
+		super( type, profile, profileId );
 	}
 
 }

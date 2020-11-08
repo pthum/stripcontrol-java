@@ -37,7 +37,7 @@ public class ApplicationEventComponent
 		for ( final LEDStrip strip : allStrips )
 		{
 			LOG.info( "Setting up strip {}", strip.getName( ) );
-			this.registry.send( new StripEvent( this, EventType.SAVE, strip, strip.getId( ) ) );
+			this.registry.send( new StripEvent( EventType.SAVE, strip, strip.getId( ) ) );
 		}
 	}
 
@@ -49,7 +49,7 @@ public class ApplicationEventComponent
 		/* shutdown all strips on shutdown */
 		for ( final LEDStrip strip : allStrips )
 		{
-			this.registry.send( new StripEvent( this, EventType.DELETE, null, strip.getId( ) ) );
+			this.registry.send( new StripEvent( EventType.DELETE, null, strip.getId( ) ) );
 		}
 	}
 

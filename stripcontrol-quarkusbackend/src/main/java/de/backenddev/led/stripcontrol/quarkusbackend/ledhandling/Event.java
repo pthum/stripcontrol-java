@@ -24,7 +24,7 @@ public abstract class Event<T> implements IEvent<T>
 	 *            may be <code>null</code> for a {@link EventType#SAVE} with a new
 	 *            object, otherwise contain the id
 	 */
-	public Event( final Object source, final EventType type, final T state, final Long id )
+	public Event( final EventType type, final T state, final Long id )
 	{
 		this.type = type;
 		this.state = state;

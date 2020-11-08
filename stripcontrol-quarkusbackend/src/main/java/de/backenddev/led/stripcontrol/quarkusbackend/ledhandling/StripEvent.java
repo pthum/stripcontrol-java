@@ -21,8 +21,8 @@ public class StripEvent extends Event<LEDStrip>
 	 *            may be <code>null</code> for a {@link EventType#SAVE} with a new
 	 *            object, otherwise contain the id
 	 */
-	public StripEvent( final Object source, final EventType type, final LEDStrip strip, final Long stripId )
+	public StripEvent( final EventType type, final LEDStrip strip, final Long stripId )
 	{
-		super( source, type, strip, stripId );
+		super( type, strip, stripId );
 	}
 }
