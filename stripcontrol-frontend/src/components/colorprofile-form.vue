@@ -6,7 +6,7 @@
     <b-container fluid>
       <form v-on:submit.prevent="saveEntry">
           <b-row class="my-1">
-              <b-col sm="3"><label><font-awesome-icon icon="sun"> </font-awesome-icon></label></b-col>
+              <b-col sm="3"><label> &#x2600;</label></b-col>
               <b-col sm="8"><b-form-input id="brightnessValue" type="range" min="0" max="100" :value="brightness" @input="handleBrightness"/></b-col>
               <b-col sm="1">{{ brightness }}</b-col>
           </b-row>
