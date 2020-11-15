@@ -19,6 +19,7 @@ quarkus:
       "de.backenddev":
         level: DEBUG
   hibernate-orm:
+    dialect: de.backenddev.led.stripcontrol.quarkusbackend.repository.SQLiteDialect
     #ensure same naming as in spring application
     physical-naming-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
     implicit-naming-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
@@ -27,9 +28,10 @@ quarkus:
   datasource:
     username: sa
     password: password
-    db-kind: postgresql
+    db-kind: other
     jdbc:
-      url: jdbc:postgresql://localhost:5432/stripcontrol
+      driver: org.sqlite.JDBC
+      url: jdbc:sqlite:stripcontrol.sqlite
       min-size: 4
       max-size: 16
     
@@ -38,11 +40,12 @@ quarkus:
   quarkus:
     hibernate-orm:
       database:
-        generation: create-drop
+        generation: update
     datasource:
-      db-kind: h2
+      db-kind: other
       jdbc:
-        url: jdbc:h2:mem:testdb
+        driver: org.sqlite.JDBC
+        url: jdbc:sqlite:stripcontrol.sqlite
 
 "%test":
   quarkus:
@@ -52,4 +55,5 @@ quarkus:
     datasource:
       db-kind: h2
       jdbc:
-        url: jdbc:h2:mem:testdb
+        driver: org.sqlite.JDBC
+        url: jdbc:sqlite:stripcontrol.sqlite
