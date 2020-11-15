@@ -1,6 +1,6 @@
 package de.backenddev.led.stripcontrol.springbackend;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -15,11 +15,8 @@ import de.backenddev.led.stripcontrol.ledhandling.StripRegistry;
 @Configuration
 public class SpringBackendConfiguration
 {
-	@Value ( "${strips.enabled}" )
-	private boolean stripsEnabled;
-
-	@Value ( "${strips.effecttime:20}" )
-	private int effectTime;
+	@Autowired
+	private StripConfig config;
 
 	/**
 	 * 
@@ -28,6 +25,6 @@ public class SpringBackendConfiguration
 	@Bean
 	public StripRegistry stripRegistry( )
 	{
-		return new StripRegistry( this.stripsEnabled, this.effectTime );
+		return new StripRegistry( this.config.isEnabled( ), this.config.getEffectTime( ) );
 	}
 }

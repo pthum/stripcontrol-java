@@ -1,0 +1,19 @@
+#spring.datasource.url=jdbc:postgresql://localhost:5432/stripcontrol
+#spring.datasource.driver-class-name=org.postgresql.Driver
+#spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
+spring:
+  datasouce:
+    hikari:
+      maximum-pool-size: 4
+  h2:
+    console:
+      enabled: false
+  devtools:
+    add-properties: false
+  jmx:
+    enabled: false
+  aop:
+    auto: false
+  jpa:
+    open-in-view: false
+debug: false

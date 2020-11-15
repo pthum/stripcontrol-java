@@ -1,0 +1,25 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driverClassName: org.h2.Driver
+    username: sa
+    password: password
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl: auto=update
+    console:
+      enabled: true
+
+strips:
+  enabled: false
+  effecttime: 20
+  predefinedStrips:
+    - '{"name": "flur","description": "", "misoPin": 13, "sclkPin": 6,"numLeds": 30,"speedHz": 8000000,"enabled": false,"hasProfile": true}'
+    - '{"name": "schlaf","description": "","misoPin": 20,"sclkPin": 16,"numLeds": 30,"speedHz": 8000000,"enabled": false,"hasProfile": true}'
+    - '{"name": "wohn","description": "","misoPin": 26,"sclkPin": 19,"numLeds": 30,"speedHz": 8000000,"enabled": false,"hasProfile": true}'
+    - '{"name": "kueche","description": "","misoPin": 10,"sclkPin": 11,"numLeds": 30,"speedHz": 8000000,"enabled": false,"hasProfile": true}'
+  predefinedProfiles: 
+    - '{"red": 66,"green": 13,"blue": 0,"brightness": 43}'
+    - '{"red": 255,"green": 136,"blue": 0,"brightness": 100}'
+    - '{"red": 255,"green": 134,"blue": 5,"brightness": 72}'
