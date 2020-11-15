@@ -17,7 +17,10 @@
 	</properties>
 
 	<dependencies>
-
+		<dependency>
+			<groupId>org.xerial</groupId>
+			<artifactId>sqlite-jdbc</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>com.github.lwaddicor</groupId>
 			<artifactId>spring-startup-analysis</artifactId>
