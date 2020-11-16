@@ -1,8 +1,12 @@
 package de.backenddev.led.stripcontrol.springbackend;
 
-import org.springframework.beans.factory.annotation.Value;
+import javax.sql.DataSource;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 import de.backenddev.led.stripcontrol.ledhandling.StripRegistry;
 
@@ -15,11 +19,11 @@ import de.backenddev.led.stripcontrol.ledhandling.StripRegistry;
 @Configuration
 public class SpringBackendConfiguration
 {
-	@Value ( "${strips.enabled}" )
-	private boolean stripsEnabled;
+	@Autowired
+	private StripConfig config;
 
-	@Value ( "${strips.effecttime:20}" )
-	private int effectTime;
+	@Autowired
+	Environment env;
 
 	/**
 	 * 
@@ -28,6 +32,17 @@ public class SpringBackendConfiguration
 	@Bean
 	public StripRegistry stripRegistry( )
 	{
-		return new StripRegistry( this.stripsEnabled, this.effectTime );
+		return new StripRegistry( this.config.isEnabled( ), this.config.getEffectTime( ) );
+	}
+
+	@Bean
+	public DataSource dataSource( )
+	{
+		final DriverManagerDataSource dataSource = new DriverManagerDataSource( );
+		dataSource.setDriverClassName( this.env.getProperty( "spring.datasource.driverClassName" ) );
+		dataSource.setUrl( this.env.getProperty( "spring.datasource.url" ) );
+		dataSource.setUsername( this.env.getProperty( "spring.datasource.user" ) );
+		dataSource.setPassword( this.env.getProperty( "spring.datasource.password" ) );
+		return dataSource;
 	}
 }

@@ -8,5 +8,7 @@ import de.backenddev.led.stripcontrol.model.LEDStrip;
 
 public interface LEDStripRepository extends CrudRepository<LEDStrip, Long>
 {
-	public List<LEDStrip> findByEnabled(final boolean enabled );
+	public List<LEDStrip> findByEnabled( final boolean enabled );
+
+	public List<LEDStrip> findByMisoPinAndSclkPin( final int misoPin, final int sclkPin );
 }
