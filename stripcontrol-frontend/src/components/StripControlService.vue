@@ -18,7 +18,7 @@
           </b-col>
           <b-col>
             <b-button :variant="getVariantEnabled(strip)" @click="toggleEnabled(strip)">
-              <div v-if="strip.enabled" ><b>&#x2600;</b></div>
+              <font-awesome-icon v-if="strip.enabled" icon="sun"></font-awesome-icon>
               <font-awesome-icon v-else icon="lightbulb"></font-awesome-icon>
             </b-button>
           </b-col>

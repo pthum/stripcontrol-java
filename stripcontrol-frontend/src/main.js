@@ -12,9 +12,10 @@ import { faEdit } from '@fortawesome/free-solid-svg-icons/faEdit'
 import { faPlusSquare } from '@fortawesome/free-solid-svg-icons/faPlusSquare'
 import { faPalette } from '@fortawesome/free-solid-svg-icons/faPalette'
 import { faLightbulb } from '@fortawesome/free-solid-svg-icons/faLightbulb'
+import { faSun } from '@fortawesome/free-solid-svg-icons/faSun'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-library.add(faSync, faTrash, faEdit, faPlusSquare, faPalette, faLightbulb)
+library.add(faSync, faTrash, faEdit, faPlusSquare, faPalette, faLightbulb, faSun)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 Vue.config.productionTip = false
