@@ -1,0 +1,30 @@
+strips:
+  enabled: false
+  effecttime: 20
+
+debug: false
+
+quarkus:
+  http:
+    port: 8082
+  log:
+    category:
+      "de.backenddev":
+        level: DEBUG
+
+mp:
+  messaging:
+    incoming:
+      ledstrip:
+        type: smallrye-mqtt
+        topic: ledstrip
+        host: host.docker.internal
+        port: 1883
+        auto-generated-client-id: true
+      profile:
+        type: smallrye-mqtt
+        topic: profile
+        host: host.docker.internal
+        port: 1883
+        auto-generated-client-id: true
+

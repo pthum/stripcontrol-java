@@ -24,5 +24,4 @@ public class ProfileEvent extends Event<ColorProfile>
 	{
 		super( type, profile, profileId );
 	}
-
 }

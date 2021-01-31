@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import de.backenddev.led.stripcontrol.ledhandling.EventType;
 import de.backenddev.led.stripcontrol.model.LEDStrip;
-import de.backenddev.led.stripcontrol.quarkusbackend.ledhandling.LEDEventHandler;
+import de.backenddev.led.stripcontrol.quarkusbackend.aqmp.LEDSender;
 import de.backenddev.led.stripcontrol.quarkusbackend.ledhandling.StripEvent;
 import de.backenddev.led.stripcontrol.quarkusbackend.repository.LEDStripRepository;
 
@@ -22,7 +22,7 @@ public class ApplicationEventComponent
 	LEDStripRepository repo;
 
 	@Inject
-	LEDEventHandler registry;
+	LEDSender registry;
 
 	// @Autowired ( required = false )
 	// private TelegramBot telegramBot;
@@ -37,7 +37,7 @@ public class ApplicationEventComponent
 		for ( final LEDStrip strip : allStrips )
 		{
 			LOG.info( "Setting up strip {}", strip.getName( ) );
-			this.registry.handleStripEvent( new StripEvent( this, EventType.SAVE, strip, strip.getId( ) ) );
+			this.registry.send( new StripEvent( EventType.SAVE, strip, strip.getId( ) ) );
 		}
 	}
 
@@ -49,7 +49,7 @@ public class ApplicationEventComponent
 		/* shutdown all strips on shutdown */
 		for ( final LEDStrip strip : allStrips )
 		{
-			this.registry.handleStripEvent( new StripEvent( this, EventType.DELETE, null, strip.getId( ) ) );
+			this.registry.send( new StripEvent( EventType.DELETE, null, strip.getId( ) ) );
 		}
 	}
 

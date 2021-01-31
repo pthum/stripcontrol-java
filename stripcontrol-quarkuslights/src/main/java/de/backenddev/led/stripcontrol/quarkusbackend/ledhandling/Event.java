@@ -1,5 +1,7 @@
 package de.backenddev.led.stripcontrol.quarkusbackend.ledhandling;
 
+import java.nio.charset.StandardCharsets;
+
 import com.google.gson.Gson;
 
 import de.backenddev.led.stripcontrol.ledhandling.EventType;
@@ -63,6 +65,19 @@ public abstract class Event<T> implements IEvent<T>
 	{
 		final Gson gson = new Gson( );
 		return gson.toJson( this );
+	}
+
+	public static <Z> Z fromJson( final String json, final Class<Z> clazz )
+	{
+		final Gson gson = new Gson( );
+		return gson.fromJson( json, clazz );
+	}
+
+	public static <Z> Z fromJson( final byte[] json, final Class<Z> clazz )
+	{
+		final Gson gson = new Gson( );
+
+		return gson.fromJson( new String( json, StandardCharsets.UTF_8 ), clazz );
 	}
 
 }
