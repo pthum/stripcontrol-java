@@ -139,9 +139,6 @@ public class Apa102Meta
 			final int stepPauseMs ) throws IOException
 	{
 		LOG.trace( "Doing effect {} with steps of {} ms", effect, stepPauseMs );
-		// LOG.trace( "Trace: " + Arrays.asList( Thread.currentThread( ).getStackTrace(
-		// ) ).stream( )
-		// .map( Objects::toString ).collect( Collectors.joining( "\n" ) ) );
 		final APA102Strip newStrip = new APA102Strip( this.strip.getNumLed( ), this.strip.getGlobalBrightness( ),
 				this.strip.getColorConfig( ) );
 		LEDStripHelper.setStripColor( newStrip, r, g, b, brightness );
