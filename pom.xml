@@ -27,11 +27,8 @@
 	</properties>
 
 	<modules>
-		<module>stripcontrol-frontend</module>
 		<module>stripcontrol-models</module>
 		<module>stripcontrol-ledhandling</module>
-		<module>stripcontrol-springbackend</module>
-		<module>stripcontrol-quarkusbackend</module>
 		<module>stripcontrol-quarkuslights</module>
 	</modules>
 
