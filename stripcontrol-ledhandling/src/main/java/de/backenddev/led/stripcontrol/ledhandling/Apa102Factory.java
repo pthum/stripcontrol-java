@@ -17,13 +17,16 @@ public class Apa102Factory
 
 	public static APA102Control createControl( final LEDStrip strip, final boolean dummyImpl ) throws IOException
 	{
-		APA102Control apaStrip = null;
+		APA102Control apaStrip = new NoOpAPA102Control( );
 		final int misoPin = strip.getMisoPin( );
 		final int sclkPin = strip.getSclkPin( );
 		final int speed = strip.getSpeedHz( );
 		try
 		{
-			apaStrip = dummyImpl ? new NoOpAPA102Control( ) : new APA102Control( misoPin, sclkPin, speed );
+			if ( dummyImpl == false )
+			{
+				apaStrip = new APA102Control( misoPin, sclkPin, speed );
+			}
 		}
 		catch ( final IOException e )
 		{
@@ -44,14 +47,12 @@ public class Apa102Factory
 
 	public static APA102Strip createStrip( final LEDStrip strip )
 	{
-		APA102Strip apaStrip = null;
 		final int numLEDs = strip.getNumLeds( );
 		/*
 		 * always set global brightness to max value, as we change the brightness for
 		 * each pixel individually (as percent)
 		 */
 		final int globalBrightness = 100;
-		apaStrip = new APA102Strip( numLEDs, globalBrightness, ColorConfig.RGB );
-		return apaStrip;
+		return new APA102Strip( numLEDs, globalBrightness, ColorConfig.RGB );
 	}
 }
