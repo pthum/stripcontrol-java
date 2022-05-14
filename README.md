@@ -1,7 +1,7 @@
 # Stripcontrol-java
 
 This repository contains (current) java implementations for the stripcontrol project.
-
+For more information about the whole project, see the [main repository](https://github.com/pthum/stripcontrol)
 
 ## Project Overview
 In the current state, there are several sub-projects in this project.
