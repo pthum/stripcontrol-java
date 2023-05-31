@@ -11,7 +11,7 @@ def tag
 node {
 
   def mvnt = tool name: 'Maven39', type: 'maven'
-  def jvt = tool name: 'openjdk11', type: 'jdk'
+  def jvt = tool name: 'openjdk17', type: 'jdk'
   stage("prepare") {
       tag = buildUtil.cleanCheckout() 
   }
