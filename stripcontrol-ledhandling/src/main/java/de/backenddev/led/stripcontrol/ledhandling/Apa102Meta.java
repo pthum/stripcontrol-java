@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 import de.backenddev.led.apa102.APA102Control;
 import de.backenddev.led.apa102.APA102Strip;
 import de.backenddev.led.apa102.LEDEffects;
-import de.backenddev.led.apa102.LEDStripHelper;
 import de.backenddev.led.stripcontrol.model.ColorProfile;
 import de.backenddev.led.stripcontrol.model.LEDStrip;
 
@@ -130,7 +129,6 @@ public class Apa102Meta
 			pg = profile.getGreen( );
 			pb = profile.getBlue( );
 			pbrght = profile.getBrightness( );
-
 		}
 		doEffect( pr, pg, pb, pbrght, type, this.effectTime );
 	}
@@ -141,7 +139,7 @@ public class Apa102Meta
 		LOG.trace( "Doing effect {} with steps of {} ms", effect, stepPauseMs );
 		final APA102Strip newStrip = new APA102Strip( this.strip.getNumLed( ), this.strip.getGlobalBrightness( ),
 				this.strip.getColorConfig( ) );
-		LEDStripHelper.setStripColor( newStrip, r, g, b, brightness );
+		newStrip.applyToAllPixels( ( i, p ) -> p.setPixel( r, g, b, brightness ) );
 		try
 		{
 			switch ( effect )
@@ -157,7 +155,7 @@ public class Apa102Meta
 					LEDEffects.lightUp( this.control, newStrip, stepPauseMs );
 					break;
 				default:
-					LEDStripHelper.setStripColor( this.strip, r, g, b, brightness );
+					this.strip.applyToAllPixels( ( i, p ) -> p.setPixel( r, g, b, brightness ) );
 					this.control.show( this.strip );
 					break;
 			}

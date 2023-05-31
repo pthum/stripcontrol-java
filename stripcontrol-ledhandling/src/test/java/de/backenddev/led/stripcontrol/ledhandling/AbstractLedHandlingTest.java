@@ -8,7 +8,6 @@ import java.lang.reflect.Field;
 import org.junit.Assert;
 
 import de.backenddev.led.apa102.APA102Strip;
-import de.backenddev.led.stripcontrol.ledhandling.Apa102Meta;
 import de.backenddev.led.stripcontrol.model.ColorProfile;
 import de.backenddev.led.stripcontrol.model.LEDStrip;
 
