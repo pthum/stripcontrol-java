@@ -4,8 +4,8 @@ properties([
     parameters([booleanParam('deployParam')])
   ])
 def serviceName = "stripcontrol-quarkuslights"
-def deploy = params.deployParam
 def buildUtil = new de.backenddev.jshared.BuildUtil(this)
+def deploy = params.deployParam || buildUtil.isMainBranch(env.BRANCH_NAME)
 def tag
 
 node {
@@ -33,7 +33,7 @@ node {
   }
 
   stage("deploy") {
-    if(buildUtil.hasBranchDeployConfiguration() && params.deployParam){
+    if(buildUtil.hasBranchDeployConfiguration() && deploy){
       buildUtil.deployImageRemotely(serviceName, tag)
     }
   }
