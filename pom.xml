@@ -14,8 +14,10 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<java.version>1.8</java.version>
-		<apalib.version>0.0.2-SNAPSHOT</apalib.version>
+		<java.version>17</java.version>
+		<maven.compiler.source>17</maven.compiler.source>
+		<maven.compiler.target>17</maven.compiler.target>
+		<apalib.version>0.48</apalib.version>
 		<stripcontrol.models.version>0.0.1-SNAPSHOT</stripcontrol.models.version>
 	</properties>
 

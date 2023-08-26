@@ -4,15 +4,18 @@
 	xmlns="http://maven.apache.org/POM/4.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>de.backenddev.led.stripcontrol</groupId>
 	<artifactId>stripcontrol-quarkuslights</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
-
+	
+	<parent>
+		<groupId>de.backenddev.led.stripcontrol</groupId>
+		<artifactId>stripcontrol-parent</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
 	<properties>
 		<compiler-plugin.version>3.8.1</compiler-plugin.version>
 		<maven.compiler.parameters>true</maven.compiler.parameters>
-		<maven.compiler.source>11</maven.compiler.source>
-		<maven.compiler.target>11</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<quarkus-plugin.version>2.7.5.Final</quarkus-plugin.version>
@@ -20,7 +23,6 @@
 		<quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
 		<quarkus.platform.version>2.7.5.Final</quarkus.platform.version>
 		<surefire-plugin.version>2.22.1</surefire-plugin.version>
-		<apalib.version>0.0.2-SNAPSHOT</apalib.version>
 		<stripcontrol.models.version>0.0.1-SNAPSHOT</stripcontrol.models.version>
 	</properties>
 	<dependencyManagement>
@@ -95,7 +97,7 @@
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>0.8.5</version>
+				<version>0.8.9</version>
 				<executions>
 					<execution>
 						<goals>
@@ -147,4 +149,5 @@
 			</properties>
 		</profile>
 	</profiles>
+
 </project>
